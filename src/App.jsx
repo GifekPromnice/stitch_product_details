@@ -10,6 +10,7 @@ import Features from './screens/Features';
 import Welcome from './screens/Welcome';
 import Chat from './screens/Chat';
 import AddListing from './screens/AddListing';
+import Negotiate from './screens/Negotiate';
 import Layout from './components/Layout';
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
                     <Route path="/wallet" element={<Wallet />} />
                     <Route path="/chat" element={<Layout><Chat /></Layout>} />
                     <Route path="/add-listing" element={<AddListing />} />
+                    <Route path="/negotiate/:id" element={<Negotiate />} />
                     {/* Tu dodamy więcej ścieżek */}
                     <Route path="*" element={<div className="p-10 text-center">Screen in development</div>} />
                 </Routes>

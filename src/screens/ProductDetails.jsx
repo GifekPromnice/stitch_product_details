@@ -222,7 +222,10 @@ const ProductDetails = () => {
                 >
                     <span className="material-symbols-outlined">chat_bubble</span>
                 </button>
-                <button className="flex items-center justify-center w-12 h-12 rounded-2xl bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300">
+                <button
+                    onClick={() => navigate(`/negotiate/${id}`)}
+                    className="flex items-center justify-center w-12 h-12 rounded-2xl bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300"
+                >
                     <span className="material-symbols-outlined">gavel</span>
                 </button>
                 <button
