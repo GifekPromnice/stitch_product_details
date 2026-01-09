@@ -57,6 +57,15 @@ export const SettingsProvider = ({ children }) => {
             'home.banner': 'Modern Furniture',
             'home.bannerSub': 'For your dream home',
 
+            // Search
+            'search.title': 'What are you looking for?',
+            'search.browseByCategory': 'Browse by category',
+            'search.recentSearches': 'Recent Searches',
+            'search.clearAll': 'Clear all',
+            'search.suggestions': 'Suggestions',
+            'search.noResults': 'No products found for',
+            'search.viewAll': 'View all results',
+
             // Profile / Settings
             'profile.title': 'Settings',
             'profile.account': 'Account',
@@ -145,6 +154,10 @@ export const SettingsProvider = ({ children }) => {
             'cat.shelves': 'Shelves',
             'cat.rugs': 'Rugs',
             'cat.decor': 'Decor',
+            'cat.kitchens': 'Kitchens',
+            'cat.wardrobes': 'Wardrobes',
+            'cat.lamps': 'Lamps',
+            'cat.drawers': 'Drawers',
 
             // Conditions
             'cond.new': 'Like New',
@@ -186,6 +199,15 @@ export const SettingsProvider = ({ children }) => {
             'home.searchPlaceholder': 'Szukaj mebli...',
             'home.banner': 'Nowoczesne Meble',
             'home.bannerSub': 'Do Twojego wymarzonego domu',
+
+            // Search
+            'search.title': 'Czego szukasz?',
+            'search.browseByCategory': 'Przeglądaj wg kategorii',
+            'search.recentSearches': 'Ostatnie wyszukiwania',
+            'search.clearAll': 'Wyczyść',
+            'search.suggestions': 'Sugestie',
+            'search.noResults': 'Nie znaleziono produktów dla',
+            'search.viewAll': 'Zobacz wszystkie wyniki',
 
             // Profile / Settings
             'profile.title': 'Ustawienia',
@@ -275,6 +297,10 @@ export const SettingsProvider = ({ children }) => {
             'cat.shelves': 'Regały',
             'cat.rugs': 'Dywany',
             'cat.decor': 'Dekoracje',
+            'cat.kitchens': 'Kuchnie',
+            'cat.wardrobes': 'Szafy',
+            'cat.lamps': 'Lampy',
+            'cat.drawers': 'Komody',
 
             // Conditions
             'cond.new': 'Jak nowy',

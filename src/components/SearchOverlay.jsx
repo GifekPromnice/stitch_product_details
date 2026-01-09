@@ -1,15 +1,17 @@
 import { useState } from 'react';
+import { useSettings } from '../context/SettingsContext';
 
 const SearchOverlay = ({ isOpen, onClose, searchQuery, setSearchQuery, products = [] }) => {
+    const { t } = useSettings();
     if (!isOpen) return null;
 
     const categories = [
-        { name: 'Sofas', icon: 'chair' },
-        { name: 'Lamps', icon: 'table_lamp' },
-        { name: 'Kitchens', icon: 'countertops' },
-        { name: 'Drawers', icon: 'shelves' },
-        { name: 'Wardrobes', icon: 'door_sliding' },
-        { name: 'Tables', icon: 'table_restaurant' },
+        { name: t('cat.sofas'), icon: 'chair' },
+        { name: t('cat.lamps'), icon: 'table_lamp' },
+        { name: t('cat.kitchens'), icon: 'countertops' },
+        { name: t('cat.drawers'), icon: 'shelves' },
+        { name: t('cat.wardrobes'), icon: 'door_sliding' },
+        { name: t('cat.tables'), icon: 'table_restaurant' },
     ];
 
     const recentSearches = [
@@ -48,7 +50,7 @@ const SearchOverlay = ({ isOpen, onClose, searchQuery, setSearchQuery, products 
                         <input
                             autoFocus
                             className="block w-full h-full pl-12 pr-10 rounded-full bg-secondary dark:bg-white/10 border-2 border-primary/50 focus:border-primary text-on-surface-light dark:text-white placeholder:text-text-sub dark:placeholder-gray-400 focus:ring-0 transition-colors text-base"
-                            placeholder="Search furniture..."
+                            placeholder={t('home.searchPlaceholder')}
                             type="text"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
@@ -72,8 +74,8 @@ const SearchOverlay = ({ isOpen, onClose, searchQuery, setSearchQuery, products 
                 {!searchQuery ? (
                     <>
                         <div className="mb-6 animate-in fade-in duration-500">
-                            <h2 className="text-2xl font-bold tracking-tight text-on-surface-light dark:text-white">What are you looking for?</h2>
-                            <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">Browse by category</p>
+                            <h2 className="text-2xl font-bold tracking-tight text-on-surface-light dark:text-white">{t('search.title')}</h2>
+                            <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">{t('search.browseByCategory')}</p>
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
@@ -93,8 +95,8 @@ const SearchOverlay = ({ isOpen, onClose, searchQuery, setSearchQuery, products 
 
                         <div className="mt-8 pt-6 border-t border-gray-100 dark:border-white/10">
                             <div className="flex items-center justify-between mb-4">
-                                <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Recent Searches</h3>
-                                <button className="text-sm text-primary font-medium hover:text-primary-dark">Clear all</button>
+                                <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{t('search.recentSearches')}</h3>
+                                <button className="text-sm text-primary font-medium hover:text-primary-dark">{t('search.clearAll')}</button>
                             </div>
                             <div className="flex flex-wrap gap-2">
                                 {recentSearches.map((term) => (
@@ -112,7 +114,7 @@ const SearchOverlay = ({ isOpen, onClose, searchQuery, setSearchQuery, products 
                 ) : (
                     <div className="animate-in fade-in duration-300">
                         <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Suggestions</h3>
+                            <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{t('search.suggestions')}</h3>
                         </div>
                         <div className="space-y-1">
                             {suggestions.length > 0 ? (
@@ -131,7 +133,7 @@ const SearchOverlay = ({ isOpen, onClose, searchQuery, setSearchQuery, products 
                                     </button>
                                 ))
                             ) : (
-                                <p className="text-gray-500 py-4 text-center">No products found for "{searchQuery}"</p>
+                                <p className="text-gray-500 py-4 text-center">{t('search.noResults')} "{searchQuery}"</p>
                             )}
                         </div>
 
@@ -139,7 +141,7 @@ const SearchOverlay = ({ isOpen, onClose, searchQuery, setSearchQuery, products 
                             onClick={onClose}
                             className="mt-6 w-full h-12 rounded-full bg-primary text-white font-semibold shadow-soft hover:bg-primary-dark transition-all active:scale-95"
                         >
-                            View all results
+                            {t('search.viewAll')}
                         </button>
                     </div>
                 )}
