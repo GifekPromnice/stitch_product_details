@@ -1,30 +1,43 @@
 import { useNavigate } from 'react-router-dom';
+import { useSettings } from '../context/SettingsContext';
 
 const Profile = () => {
     const navigate = useNavigate();
+    const { theme, toggleTheme, language, toggleLanguage, t } = useSettings();
 
     const menuItems = [
         {
-            category: 'Account',
+            category: t('profile.account'),
             items: [
-                { name: 'Personal Information', icon: 'person', onClick: () => navigate('/personal-information') },
-                { name: 'Password & Security', icon: 'lock', onClick: () => navigate('/password-security') },
-                { name: 'Payment Methods', icon: 'credit_card', onClick: () => navigate('/wallet') },
+                { name: t('profile.personalInfo'), icon: 'person', onClick: () => navigate('/personal-information') },
+                { name: t('profile.passwordSecurity'), icon: 'lock', onClick: () => navigate('/password-security') },
+                { name: t('profile.paymentMethods'), icon: 'credit_card', onClick: () => navigate('/wallet') },
             ]
         },
         {
-            category: 'Preferences',
+            category: t('profile.preferences'),
             items: [
-                { name: 'Notifications', icon: 'notifications', isToggle: true, defaultOn: true },
-                { name: 'Dark Mode', icon: 'dark_mode', isToggle: true, defaultOn: false },
-                { name: 'Language', icon: 'language', value: 'English' },
+                { name: t('profile.notifications'), icon: 'notifications', isToggle: true, defaultOn: true },
+                {
+                    name: t('profile.darkMode'),
+                    icon: 'dark_mode',
+                    isToggle: true,
+                    defaultOn: theme === 'dark',
+                    onToggle: toggleTheme
+                },
+                {
+                    name: t('profile.language'),
+                    icon: 'language',
+                    value: language === 'en' ? 'English' : 'Polski',
+                    onClick: toggleLanguage
+                },
             ]
         },
         {
-            category: 'Support',
+            category: t('profile.support'),
             items: [
-                { name: 'Help Center', icon: 'help' },
-                { name: 'Privacy Policy', icon: 'policy' },
+                { name: t('profile.helpCenter'), icon: 'help' },
+                { name: t('profile.privacyPolicy'), icon: 'policy' },
             ]
         }
     ];
@@ -36,7 +49,7 @@ const Profile = () => {
                     className="flex size-10 items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
                     <span className="material-symbols-outlined text-[24px]">arrow_back_ios_new</span>
                 </button>
-                <h2 className="text-lg font-bold leading-tight tracking-tight flex-1 text-center pr-10">Settings</h2>
+                <h2 className="text-lg font-bold leading-tight tracking-tight flex-1 text-center pr-10">{t('profile.title')}</h2>
             </header>
 
             <main className="flex flex-col gap-4 px-4 overflow-y-auto">
@@ -55,7 +68,7 @@ const Profile = () => {
                         <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">alex.johnson@email.com</p>
                         <div className="mt-2 inline-flex items-center gap-1 bg-primary/10 dark:bg-primary/20 px-3 py-1 rounded-full text-primary">
                             <span className="material-symbols-outlined text-[14px]">verified</span>
-                            <p className="text-xs font-semibold">Member since 2023</p>
+                            <p className="text-xs font-semibold">{t('profile.memberSince')} 2023</p>
                         </div>
                     </div>
                 </div>
@@ -68,14 +81,14 @@ const Profile = () => {
                             {group.items.map((item, i) => (
                                 <button
                                     key={i}
-                                    onClick={item.onClick}
+                                    onClick={item.isToggle ? item.onToggle : item.onClick}
                                     className="flex items-center gap-4 p-4 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors text-left w-full group"
                                 >
                                     <div className="flex items-center justify-center rounded-lg bg-primary/10 text-primary shrink-0 size-10 group-hover:bg-primary group-hover:text-white transition-colors duration-300">
                                         <span className="material-symbols-outlined">{item.icon}</span>
                                     </div>
                                     <div className="flex-1 min-w-0">
-                                        <p className="text-base font-medium truncate">{item.name}</p>
+                                        <p className="text-base font-medium truncate text-gray-900 dark:text-white">{item.name}</p>
                                     </div>
                                     {item.isToggle ? (
                                         <div className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out ${item.defaultOn ? 'bg-primary' : 'bg-gray-200 dark:bg-gray-700'}`}>
@@ -96,14 +109,14 @@ const Profile = () => {
                 ))}
 
                 {/* Log Out */}
-                <div className="flex flex-col gap-4 mt-4">
+                <div className="flex flex-col gap-4 mt-4 text-center pb-8">
                     <button onClick={() => navigate('/')}
                         className="w-full bg-white dark:bg-[#2C2E2D] text-red-500 font-semibold py-4 rounded-xl shadow-sm hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors flex items-center justify-center gap-2">
                         <span className="material-symbols-outlined">logout</span>
-                        Log Out
+                        {t('profile.logout')}
                     </button>
                     <p className="text-center text-xs text-gray-500 dark:text-gray-400">
-                        Again v2.4.0 (Build 302)
+                        Again v2.5.0 (Build 305)
                     </p>
                 </div>
             </main>
@@ -112,3 +125,4 @@ const Profile = () => {
 };
 
 export default Profile;
+

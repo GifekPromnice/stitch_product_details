@@ -1,15 +1,17 @@
 import { Link, useLocation } from 'react-router-dom';
+import { useSettings } from '../context/SettingsContext';
 
 const Layout = ({ children }) => {
     const location = useLocation();
     const currentPath = location.pathname;
+    const { t } = useSettings();
 
     const navItems = [
-        { name: 'Home', icon: 'home', path: '/home' },
-        { name: 'Favorite', icon: 'favorite', path: '/favorites' },
-        { name: 'Add', icon: 'add', path: '/add-listing', isAction: true },
-        { name: 'Inbox', icon: 'chat_bubble', path: '/chat' },
-        { name: 'Profile', icon: 'person', path: '/profile' },
+        { name: t('nav.home'), icon: 'home', path: '/home' },
+        { name: t('nav.favorite'), icon: 'favorite', path: '/favorites' },
+        { name: t('nav.add'), icon: 'add', path: '/add-listing', isAction: true },
+        { name: t('nav.inbox'), icon: 'chat_bubble', path: '/chat' },
+        { name: t('nav.profile'), icon: 'person', path: '/profile' },
     ];
 
     return (

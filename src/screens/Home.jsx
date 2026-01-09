@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SearchOverlay from '../components/SearchOverlay';
+import { useSettings } from '../context/SettingsContext';
 
 const Home = () => {
     const navigate = useNavigate();
+    const { t, formatPrice } = useSettings();
     const [searchQuery, setSearchQuery] = useState('');
     const [activeCategory, setActiveCategory] = useState('all');
     const [favorites, setFavorites] = useState(() => {
@@ -52,7 +54,7 @@ const Home = () => {
                         <span className="material-symbols-outlined text-text-sub dark:text-gray-400 mr-3">search</span>
                         <input
                             className="flex-1 bg-transparent border-none p-0 text-text-main dark:text-white placeholder:text-text-sub focus:ring-0 text-base font-medium leading-normal cursor-pointer"
-                            placeholder="Search vintage chairs..."
+                            placeholder={t('home.searchPlaceholder')}
                             type="text"
                             value={searchQuery}
                             readOnly
@@ -72,7 +74,7 @@ const Home = () => {
                 products={products}
             />
 
-            <main className="w-full max-w-md mx-auto pt-24 px-3 text-text-main dark:text-gray-100">
+            <main className="w-full max-w-md mx-auto pt-24 px-3 text-text-main dark:text-gray-100 pb-20">
                 <div className="flex gap-2 overflow-x-auto no-scrollbar pb-4 -mx-3 px-3">
                     {categories.map(cat => (
                         <button
@@ -104,7 +106,7 @@ const Home = () => {
                                     </button>
                                 </div>
                                 <div className="flex flex-col gap-0.5 px-1">
-                                    <h3 className="text-primary dark:text-primary text-base font-bold tracking-tight">${product.price}</h3>
+                                    <h3 className="text-primary dark:text-primary text-base font-bold tracking-tight">{formatPrice(product.price)}</h3>
                                     <p className="text-text-main dark:text-gray-100 text-[13px] font-semibold leading-tight line-clamp-2">{product.title}</p>
                                     <p className="text-text-sub dark:text-gray-400 text-[11px] font-normal mt-0.5">{product.location}</p>
                                 </div>
