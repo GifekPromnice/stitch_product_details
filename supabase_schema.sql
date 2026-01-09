@@ -12,7 +12,9 @@ CREATE TABLE IF NOT EXISTS products (
     rating NUMERIC(3, 1) DEFAULT 0,
     reviews_count INTEGER DEFAULT 0,
     is_new BOOLEAN DEFAULT FALSE,
+    is_new BOOLEAN DEFAULT FALSE,
     description TEXT,
+    tags TEXT[] DEFAULT '{}',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
@@ -103,3 +105,27 @@ CREATE POLICY "Users can update own products." ON products FOR UPDATE USING (aut
 
 DROP POLICY IF EXISTS "Users can delete own products." ON products;
 CREATE POLICY "Users can delete own products." ON products FOR DELETE USING (auth.uid() = user_id);
+
+-- Migration: Add tags column if it doesn't exist (safe re-run)
+ALTER TABLE products ADD COLUMN IF NOT EXISTS tags TEXT[] DEFAULT '{}';
+
+
+-- 4. SEARCH FUNCTION (PostgreSQL RPC)
+-- This function allows searching across multiple columns (title, description, tags)
+CREATE OR REPLACE FUNCTION search_products(keyword text)
+RETURNS SETOF products AS $$
+BEGIN
+    RETURN QUERY
+    SELECT *
+    FROM products
+    WHERE 
+      title ILIKE '%' || keyword || '%' OR
+      description ILIKE '%' || keyword || '%' OR
+      keyword = ANY(tags) OR
+      EXISTS (
+        SELECT 1 
+        FROM unnest(tags) tag 
+        WHERE tag ILIKE '%' || keyword || '%'
+      );
+END;
+$$ LANGUAGE plpgsql;

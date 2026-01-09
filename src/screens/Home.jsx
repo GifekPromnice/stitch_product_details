@@ -25,20 +25,31 @@ const Home = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             setLoading(true);
-            const { data, error } = await supabase
-                .from('products')
-                .select('*');
+            let query = supabase.from('products').select('*');
 
-            if (error) {
-                console.error('Error fetching products:', error);
+            // IF search query exists, use the RPC function 'search_products'
+            if (searchQuery.trim().length > 0) {
+                // We need to fetch via RPC if searching
+                const { data, error } = await supabase.rpc('search_products', { keyword: searchQuery });
+                if (!error) {
+                    setProducts(data || []);
+                } else {
+                    console.error("Search error:", error);
+                }
             } else {
-                setProducts(data || []);
+                // Normal fetch
+                const { data, error } = await query;
+                if (error) {
+                    console.error('Error fetching products:', error);
+                } else {
+                    setProducts(data || []);
+                }
             }
             setLoading(false);
         };
 
         fetchProducts();
-    }, []);
+    }, [searchQuery]); // Re-run when searchQuery changes
 
     const categories = ['all', 'new arrivals', 'sofas', 'lighting', 'tables', 'rugs'];
 
@@ -49,8 +60,10 @@ const Home = () => {
     };
 
     const filteredProducts = products.filter(p =>
-        (activeCategory === 'all' || p.category === activeCategory || activeCategory === 'new arrivals') &&
-        p.title.toLowerCase().includes(searchQuery.toLowerCase())
+        (activeCategory === 'all' || p.category === activeCategory || activeCategory === 'new arrivals')
+        // Title filtering is now handled by the backend RPC search_products, but we can keep client-side backup/refinement if needed,
+        // or rely solely on Supabase for the search part.
+        // For 'new arrivals', we might just filter by date in real app, here it's static.
     );
 
     return (

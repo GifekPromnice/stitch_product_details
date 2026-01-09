@@ -3,6 +3,7 @@ import { useState, useRef } from 'react';
 import { useSettings } from '../context/SettingsContext';
 import { supabase } from '../supabaseClient';
 import { useAuth } from '../context/AuthContext';
+import { analyzeImageWithAI } from '../utils/aiService';
 
 const AddListing = () => {
     const navigate = useNavigate();
@@ -23,6 +24,7 @@ const AddListing = () => {
     const [image, setImage] = useState(null); // Default empty
     const [imageFile, setImageFile] = useState(null);
     const [isPublishing, setIsPublishing] = useState(false);
+    const [isAnalyzing, setIsAnalyzing] = useState(false);
 
     const removeTag = (tagToRemove) => {
         setTags(tags.filter(tag => tag !== tagToRemove));
@@ -40,12 +42,37 @@ const AddListing = () => {
         }
     };
 
-    const handleImageUpload = (e) => {
+    const handleImageUpload = async (e) => {
         const file = e.target.files[0];
         if (file) {
             setImageFile(file);
             const objectUrl = URL.createObjectURL(file);
             setImage(objectUrl);
+
+            // Analyze Text/Content via Mock AI
+            setIsAnalyzing(true);
+            try {
+                const aiData = await analyzeImageWithAI(file);
+
+                // Auto-fill logic
+                if (aiData) {
+                    setTitle(aiData.title || title);
+                    setPrice(aiData.price || price);
+                    setCategory(aiData.category || category);
+                    setCondition(aiData.condition || condition);
+                    setColor(aiData.color || color);
+                    setDescription(aiData.description || description);
+
+                    // Merge tags intelligently
+                    const newTags = aiData.tags || [];
+                    const uniqueTags = [...new Set([...tags, ...newTags])];
+                    setTags(uniqueTags);
+                }
+            } catch (err) {
+                console.error("AI Analysis failed", err);
+            } finally {
+                setIsAnalyzing(false);
+            }
         }
     };
 
@@ -106,7 +133,8 @@ const AddListing = () => {
                     is_new: condition === 'new',
                     rating: 0,
                     reviews_count: 0,
-                    user_id: user.id
+                    user_id: user.id,
+                    tags: tags // Add tags to database
                 }
             ]);
 
@@ -166,6 +194,12 @@ const AddListing = () => {
                                 <div className="absolute top-3 left-3 bg-black/40 backdrop-blur-md px-2.5 py-1 rounded-lg">
                                     <span className="text-white text-xs font-medium">{t('addListing.coverPhoto')}</span>
                                 </div>
+                                {isAnalyzing && (
+                                    <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center flex-col gap-2 z-10 animate-in fade-in duration-300">
+                                        <span className="material-symbols-outlined animate-spin text-white text-3xl">auto_awesome</span>
+                                        <span className="text-white text-sm font-semibold bg-white/20 px-3 py-1 rounded-full backdrop-blur-md">AI Analyzing...</span>
+                                    </div>
+                                )}
                                 <button
                                     onClick={(e) => { e.stopPropagation(); triggerFileInput(); }}
                                     className="absolute top-3 right-3 bg-white/90 text-neutral-900 rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity shadow-sm"
@@ -337,7 +371,7 @@ const AddListing = () => {
                     animation: shimmer 2s infinite;
                 }
             `}} />
-        </div>
+        </div >
     );
 };
 export default AddListing;
