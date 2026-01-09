@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useSettings } from '../context/SettingsContext';
 import { supabase } from '../supabaseClient';
 import { useAuth } from '../context/AuthContext';
@@ -8,19 +8,19 @@ const AddListing = () => {
     const navigate = useNavigate();
     const { user } = useAuth();
     const { t } = useSettings();
+    const fileInputRef = useRef(null);
+
     const [title, setTitle] = useState('');
     const [price, setPrice] = useState('');
     const [description, setDescription] = useState('');
     const [tags, setTags] = useState([]);
     const [newTag, setNewTag] = useState('');
     const [category, setCategory] = useState('sofas');
-    const [condition, setCondition] = useState('Good');
-    const [color, setColor] = useState('');
+    const [condition, setCondition] = useState('good');
+    const [color, setColor] = useState('black');
     const [location, setLocation] = useState('');
+    const [image, setImage] = useState(null); // Default empty
     const [isPublishing, setIsPublishing] = useState(false);
-
-    // Mock header image for now, in a real app this would upload to Storage
-    const [image, setImage] = useState('https://lh3.googleusercontent.com/aida-public/AB6AXuB1bJa07M_itzQ3gijYycsG9oGVRVVSuSAZit6l6miQivb3H0WOacRz5BwHX5xoFBELd3LhglqwFM5Ti2CiM1pgzcqtj9Bni49PN8Olt5NtflrNOAXTOc_GuRPUXx5z3hi4XV1WhMuVTlNjuIwX_DaawLv34G2roRxvrl2JL3QUE0PPiQ72P-SWKCWRLneJJzh5d-VVtEdAFc9rC--h1zjsbTLl_eZxNSIwPCZxGgbrA5wcpousBbmDsMy3lGMdSnKiverwpu2xEmuQ');
 
     const removeTag = (tagToRemove) => {
         setTags(tags.filter(tag => tag !== tagToRemove));
@@ -32,6 +32,18 @@ const AddListing = () => {
             setTags([...tags, newTag.trim()]);
             setNewTag('');
         }
+    };
+
+    const handleImageUpload = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const objectUrl = URL.createObjectURL(file);
+            setImage(objectUrl);
+        }
+    };
+
+    const triggerFileInput = () => {
+        fileInputRef.current.click();
     };
 
     const handlePublish = async () => {
@@ -56,10 +68,10 @@ const AddListing = () => {
                     price: parseFloat(price),
                     description,
                     category,
-                    image,
+                    image, // In a real app, upload file to storage and use that URL
                     location,
-                    aspect: '4/3', // Default aspect ratio
-                    is_new: condition === 'Like New',
+                    aspect: '4/3',
+                    is_new: condition === 'new',
                     rating: 0,
                     reviews_count: 0,
                     user_id: user.id
@@ -87,44 +99,75 @@ const AddListing = () => {
                     <span className="material-symbols-outlined text-[24px]">close</span>
                 </button>
                 <h1 className="text-base font-bold text-neutral-900 dark:text-white">{t('addListing.title')}</h1>
-                <button className="text-primary font-semibold text-sm hover:opacity-80 transition-opacity">
-                    {t('addListing.saveDraft')}
+                <button className="text-primary hover:opacity-80 transition-opacity flex items-center justify-center size-10 rounded-full hover:bg-primary/10">
+                    <span className="material-symbols-outlined text-[24px]">save</span>
                 </button>
             </header>
 
             <main className="flex-1 flex flex-col gap-6 px-4 pt-4 overflow-y-auto no-scrollbar">
                 {/* Photo Section */}
                 <section className="flex flex-col gap-3 shrink-0">
-                    <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-neutral-200 dark:bg-neutral-800 shadow-sm group">
-                        <img
-                            alt="Main listing photo"
-                            className="h-full w-full object-cover"
-                            src={image}
+                    <div
+                        onClick={!image ? triggerFileInput : undefined}
+                        className={`relative w-full aspect-[4/3] rounded-2xl overflow-hidden shadow-sm group transition-all ${!image ? 'bg-neutral-100 dark:bg-neutral-800 border-2 border-dashed border-neutral-300 dark:border-neutral-600 cursor-pointer hover:border-primary hover:bg-primary/5' : 'bg-neutral-200 dark:bg-neutral-800'
+                            }`}
+                    >
+                        {image ? (
+                            <>
+                                <img
+                                    alt="Main listing photo"
+                                    className="h-full w-full object-cover"
+                                    src={image}
+                                />
+                                <div className="absolute top-3 left-3 bg-black/40 backdrop-blur-md px-2.5 py-1 rounded-lg">
+                                    <span className="text-white text-xs font-medium">{t('addListing.coverPhoto')}</span>
+                                </div>
+                                <button
+                                    onClick={(e) => { e.stopPropagation(); triggerFileInput(); }}
+                                    className="absolute top-3 right-3 bg-white/90 text-neutral-900 rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity shadow-sm"
+                                >
+                                    <span className="material-symbols-outlined text-[20px]">edit</span>
+                                </button>
+                            </>
+                        ) : (
+                            <div className="flex flex-col items-center justify-center h-full text-neutral-400 gap-2">
+                                <span className="material-symbols-outlined text-4xl">add_a_photo</span>
+                                <span className="text-sm font-medium">{t('addListing.addPhoto')}</span>
+                            </div>
+                        )}
+                        <input
+                            type="file"
+                            ref={fileInputRef}
+                            onChange={handleImageUpload}
+                            accept="image/*"
+                            hidden
                         />
-                        <div className="absolute top-3 left-3 bg-black/40 backdrop-blur-md px-2.5 py-1 rounded-lg">
-                            <span className="text-white text-xs font-medium">{t('addListing.coverPhoto')}</span>
-                        </div>
-                        <button className="absolute top-3 right-3 bg-white/90 text-neutral-900 rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity shadow-sm">
-                            <span className="material-symbols-outlined text-[20px]">edit</span>
-                        </button>
                     </div>
 
                     <div className="flex gap-3 overflow-x-auto no-scrollbar py-1">
-                        <button className="flex flex-col items-center justify-center size-20 shrink-0 rounded-xl bg-primary/5 border-2 border-dashed border-primary/30 text-primary hover:bg-primary/10 hover:border-primary transition-all">
+                        <button
+                            onClick={triggerFileInput}
+                            className="flex flex-col items-center justify-center size-20 shrink-0 rounded-xl bg-primary/5 border-2 border-dashed border-primary/30 text-primary hover:bg-primary/10 hover:border-primary transition-all"
+                        >
                             <span className="material-symbols-outlined text-[24px]">add_photo_alternate</span>
                             <span className="text-[10px] font-bold mt-1">{t('addListing.addPhoto')}</span>
                         </button>
-                        {/* Example thumbnail */}
-                        <div className="relative size-20 shrink-0 rounded-xl overflow-hidden border border-neutral-200 dark:border-white/10 group shadow-sm">
-                            <img
-                                className="h-full w-full object-cover"
-                                src={image}
-                                alt="Thumbnail"
-                            />
-                            <button className="absolute top-1 right-1 bg-black/50 text-white rounded-full p-0.5 opacity-100 backdrop-blur-sm hover:bg-black/70 transition-colors">
-                                <span className="material-symbols-outlined text-[12px]">close</span>
-                            </button>
-                        </div>
+
+                        {image && (
+                            <div className="relative size-20 shrink-0 rounded-xl overflow-hidden border border-neutral-200 dark:border-white/10 group shadow-sm">
+                                <img
+                                    className="h-full w-full object-cover"
+                                    src={image}
+                                    alt="Thumbnail"
+                                />
+                                <button
+                                    onClick={() => setImage(null)}
+                                    className="absolute top-1 right-1 bg-black/50 text-white rounded-full p-0.5 opacity-100 backdrop-blur-sm hover:bg-black/70 transition-colors"
+                                >
+                                    <span className="material-symbols-outlined text-[12px]">close</span>
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </section>
 
@@ -181,9 +224,9 @@ const AddListing = () => {
                         <label className="flex flex-col gap-1.5 group">
                             <span className="text-neutral-500 dark:text-neutral-400 text-xs font-medium uppercase tracking-wider px-1">{t('addListing.field.price')}</span>
                             <div className="relative">
-                                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-500 font-medium">$</span>
+                                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-500 font-medium">{t('currency')}</span>
                                 <input
-                                    className="block w-full rounded-xl border-neutral-300 dark:border-neutral-700 bg-white dark:bg-[#232524] text-neutral-900 dark:text-white h-12 pl-8 pr-4 text-base font-medium focus:border-primary focus:ring-1 focus:ring-primary transition-all shadow-sm"
+                                    className="block w-full rounded-xl border-neutral-300 dark:border-neutral-700 bg-white dark:bg-[#232524] text-neutral-900 dark:text-white h-12 pl-10 pr-4 text-base font-medium focus:border-primary focus:ring-1 focus:ring-primary transition-all shadow-sm"
                                     type="number"
                                     value={price}
                                     onChange={(e) => setPrice(e.target.value)}
@@ -197,13 +240,9 @@ const AddListing = () => {
                                 onChange={(e) => setCategory(e.target.value)}
                                 className="form-select block w-full rounded-xl border-neutral-300 dark:border-neutral-700 bg-white dark:bg-[#232524] text-neutral-900 dark:text-white h-12 pl-4 pr-10 text-base font-medium focus:border-primary focus:ring-1 focus:ring-primary transition-all shadow-sm"
                             >
-                                <option value="sofas">Sofas</option>
-                                <option value="tables">Tables</option>
-                                <option value="lighting">Lighting</option>
-                                <option value="chairs">Chairs</option>
-                                <option value="shelves">Shelves</option>
-                                <option value="rugs">Rugs</option>
-                                <option value="decor">Decor</option>
+                                {['sofas', 'tables', 'lighting', 'chairs', 'shelves', 'rugs', 'decor'].map(cat => (
+                                    <option key={cat} value={cat}>{t(`cat.${cat}`)}</option>
+                                ))}
                             </select>
                         </label>
                     </div>
@@ -216,20 +255,22 @@ const AddListing = () => {
                                 onChange={(e) => setCondition(e.target.value)}
                                 className="form-select block w-full rounded-xl border-neutral-300 dark:border-neutral-700 bg-white dark:bg-[#232524] text-neutral-900 dark:text-white h-12 pl-4 pr-10 text-base font-medium focus:border-primary focus:ring-1 focus:ring-primary transition-all shadow-sm"
                             >
-                                <option value="Like New">Like New</option>
-                                <option value="Good">Good</option>
-                                <option value="Fair">Fair</option>
-                                <option value="Used">Used</option>
+                                {['new', 'good', 'fair', 'used'].map(c => (
+                                    <option key={c} value={c}>{t(`cond.${c}`)}</option>
+                                ))}
                             </select>
                         </label>
                         <label className="flex flex-col gap-1.5 w-1/3 group">
                             <span className="text-neutral-500 dark:text-neutral-400 text-xs font-medium uppercase tracking-wider px-1">{t('addListing.field.color')}</span>
-                            <input
-                                className="block w-full rounded-xl border-neutral-300 dark:border-neutral-700 bg-white dark:bg-[#232524] text-neutral-900 dark:text-white h-12 px-4 text-base font-medium focus:border-primary focus:ring-1 focus:ring-primary transition-all shadow-sm"
-                                type="text"
+                            <select
                                 value={color}
                                 onChange={(e) => setColor(e.target.value)}
-                            />
+                                className="form-select block w-full rounded-xl border-neutral-300 dark:border-neutral-700 bg-white dark:bg-[#232524] text-neutral-900 dark:text-white h-12 pl-4 pr-10 text-base font-medium focus:border-primary focus:ring-1 focus:ring-primary transition-all shadow-sm"
+                            >
+                                {['black', 'white', 'gray', 'beige', 'brown', 'red', 'blue', 'green', 'yellow', 'other'].map(c => (
+                                    <option key={c} value={c}>{t(`col.${c}`)}</option>
+                                ))}
+                            </select>
                         </label>
                     </div>
 
@@ -282,5 +323,4 @@ const AddListing = () => {
         </div>
     );
 };
-
 export default AddListing;

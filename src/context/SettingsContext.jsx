@@ -117,6 +117,33 @@ export const SettingsProvider = ({ children }) => {
             'addListing.locationPlaceholder': 'Zip code or Neighborhood',
             'addListing.publish': 'Publish Listing',
             'addListing.publishing': 'Publishing...',
+
+            // Categories
+            'cat.sofas': 'Sofas',
+            'cat.tables': 'Tables',
+            'cat.lighting': 'Lighting',
+            'cat.chairs': 'Chairs',
+            'cat.shelves': 'Shelves',
+            'cat.rugs': 'Rugs',
+            'cat.decor': 'Decor',
+
+            // Conditions
+            'cond.new': 'Like New',
+            'cond.good': 'Good',
+            'cond.fair': 'Fair',
+            'cond.used': 'Used',
+
+            // Colors
+            'col.black': 'Black',
+            'col.white': 'White',
+            'col.gray': 'Gray',
+            'col.beige': 'Beige',
+            'col.brown': 'Brown',
+            'col.red': 'Red',
+            'col.blue': 'Blue',
+            'col.green': 'Green',
+            'col.yellow': 'Yellow',
+            'col.other': 'Other',
         },
         pl: {
             // Navigation
@@ -191,6 +218,33 @@ export const SettingsProvider = ({ children }) => {
             'addListing.locationPlaceholder': 'Kod pocztowy lub dzielnica',
             'addListing.publish': 'Opublikuj',
             'addListing.publishing': 'Publikowanie...',
+
+            // Categories
+            'cat.sofas': 'Sofy',
+            'cat.tables': 'Stoły',
+            'cat.lighting': 'Oświetlenie',
+            'cat.chairs': 'Krzesła',
+            'cat.shelves': 'Regały',
+            'cat.rugs': 'Dywany',
+            'cat.decor': 'Dekoracje',
+
+            // Conditions
+            'cond.new': 'Jak nowy',
+            'cond.good': 'Dobry',
+            'cond.fair': 'Dostateczny',
+            'cond.used': 'Używany',
+
+            // Colors
+            'col.black': 'Czarny',
+            'col.white': 'Biały',
+            'col.gray': 'Szary',
+            'col.beige': 'Beżowy',
+            'col.brown': 'Brązowy',
+            'col.red': 'Czerwony',
+            'col.blue': 'Niebieski',
+            'col.green': 'Zielony',
+            'col.yellow': 'Żółty',
+            'col.other': 'Inny',
         }
     };
 
