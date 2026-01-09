@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Add Listing - Edit Details</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#698679",
+                        "background-light": "#f7f7f7",
+                        "background-dark": "#181a19",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display text-neutral-900 antialiased selection:bg-primary/30 bg-background-light dark:bg-background-dark">
+<div class="relative flex min-h-screen w-full flex-col pb-24">
+<header class="sticky top-0 z-40 flex items-center justify-between px-4 py-3 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-md border-b border-neutral-200 dark:border-white/10">
+<button class="flex size-10 items-center justify-center rounded-full text-neutral-900 dark:text-white hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined text-[24px]">close</span>
+</button>
+<h1 class="text-base font-bold text-neutral-900 dark:text-white">New Listing</h1>
+<button class="text-primary font-semibold text-sm hover:opacity-80 transition-opacity">
+                Save Draft
+            </button>
+</header>
+<main class="flex-1 flex flex-col gap-6 px-4 pt-4">
+<section class="flex flex-col gap-3">
+<div class="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-neutral-200 dark:bg-neutral-800 shadow-sm group">
+<img alt="Main listing photo" class="h-full w-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1bJa07M_itzQ3gijYycsG9oGVRVVSuSAZit6l6miQivb3H0WOacRz5BwHX5xoFBELd3LhglqwFM5Ti2CiM1pgzcqtj9Bni49PN8Olt5NtflrNOAXTOc_GuRPUXx5z3hi4XV1WhMuVTlNjuIwX_DaawLv34G2roRxvrl2JL3QUE0PPiQ72P-SWKCWRLneJJzh5d-VVtEdAFc9rC--h1zjsbTLl_eZxNSIwPCZxGgbrA5wcpousBbmDsMy3lGMdSnKiverwpu2xEmuQ"/>
+<div class="absolute top-3 left-3 bg-black/40 backdrop-blur-md px-2.5 py-1 rounded-lg">
+<span class="text-white text-xs font-medium">Cover Photo</span>
+</div>
+<button class="absolute top-3 right-3 bg-white/90 text-neutral-900 rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity shadow-sm">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+</div>
+<div class="flex gap-3 overflow-x-auto no-scrollbar py-1">
+<button class="flex flex-col items-center justify-center size-20 shrink-0 rounded-xl bg-primary/5 border-2 border-dashed border-primary/30 text-primary hover:bg-primary/10 hover:border-primary transition-all">
+<span class="material-symbols-outlined text-[24px]">add_photo_alternate</span>
+<span class="text-[10px] font-bold mt-1">Add</span>
+</button>
+<div class="relative size-20 shrink-0 rounded-xl overflow-hidden border border-neutral-200 dark:border-white/10 group shadow-sm">
+<img class="h-full w-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1bJa07M_itzQ3gijYycsG9oGVRVVSuSAZit6l6miQivb3H0WOacRz5BwHX5xoFBELd3LhglqwFM5Ti2CiM1pgzcqtj9Bni49PN8Olt5NtflrNOAXTOc_GuRPUXx5z3hi4XV1WhMuVTlNjuIwX_DaawLv34G2roRxvrl2JL3QUE0PPiQ72P-SWKCWRLneJJzh5d-VVtEdAFc9rC--h1zjsbTLl_eZxNSIwPCZxGgbrA5wcpousBbmDsMy3lGMdSnKiverwpu2xEmuQ"/>
+<button class="absolute top-1 right-1 bg-black/50 text-white rounded-full p-0.5 opacity-100 backdrop-blur-sm hover:bg-black/70 transition-colors">
+<span class="material-symbols-outlined text-[12px]">close</span>
+</button>
+</div>
+<div class="size-20 shrink-0 rounded-xl bg-neutral-100 dark:bg-white/5 border border-transparent"></div>
+</div>
+</section>
+<section class="flex flex-col gap-5">
+<div class="flex flex-col gap-1.5">
+<div class="flex justify-between items-center px-1">
+<label class="text-neutral-500 dark:text-neutral-400 text-xs font-medium uppercase tracking-wider">Title</label>
+<span class="flex items-center gap-1 text-[10px] text-primary bg-primary/10 px-2 py-0.5 rounded-full font-medium">
+<span class="material-symbols-outlined text-[12px]">auto_awesome</span>
+                            Auto-filled
+                        </span>
+</div>
+<input class="form-input block w-full rounded-xl border-neutral-300 dark:border-neutral-700 bg-white dark:bg-[#232524] text-neutral-900 dark:text-white h-12 px-4 text-base font-medium focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-neutral-400 shadow-sm" type="text" value="Green Velvet Armchair"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-neutral-500 dark:text-neutral-400 text-xs font-medium uppercase tracking-wider px-1">Tags</label>
+<div class="flex flex-wrap gap-2">
+<div class="flex h-8 items-center justify-center gap-x-1.5 rounded-lg bg-primary/10 border border-primary/20 pl-3 pr-2 transition-colors">
+<span class="text-primary text-sm font-medium">Velvet</span>
+<button class="text-primary/60 hover:text-primary"><span class="material-symbols-outlined text-[16px]">close</span></button>
+</div>
+<div class="flex h-8 items-center justify-center gap-x-1.5 rounded-lg bg-primary/10 border border-primary/20 pl-3 pr-2 transition-colors">
+<span class="text-primary text-sm font-medium">Green</span>
+<button class="text-primary/60 hover:text-primary"><span class="material-symbols-outlined text-[16px]">close</span></button>
+</div>
+<div class="flex h-8 items-center justify-center gap-x-1.5 rounded-lg bg-primary/10 border border-primary/20 pl-3 pr-2 transition-colors">
+<span class="text-primary text-sm font-medium">Armchair</span>
+<button class="text-primary/60 hover:text-primary"><span class="material-symbols-outlined text-[16px]">close</span></button>
+</div>
+<div class="flex h-8 items-center rounded-lg bg-white dark:bg-[#232524] border border-neutral-200 dark:border-neutral-700 px-3 shadow-sm">
+<span class="material-symbols-outlined text-neutral-400 text-[18px] mr-1">add</span>
+<input class="w-20 bg-transparent border-none p-0 text-sm focus:ring-0 placeholder:text-neutral-400 text-neutral-900 dark:text-white" placeholder="Add tag" type="text"/>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-neutral-500 dark:text-neutral-400 text-xs font-medium uppercase tracking-wider px-1">Description</label>
+<textarea class="form-textarea block w-full rounded-xl border-neutral-300 dark:border-neutral-700 bg-white dark:bg-[#232524] text-neutral-900 dark:text-white h-32 px-4 py-3 text-base focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-neutral-400 shadow-sm resize-none leading-relaxed" placeholder="Describe the condition, brand, age, and any flaws..."></textarea>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<label class="flex flex-col gap-1.5 group">
+<span class="text-neutral-500 dark:text-neutral-400 text-xs font-medium uppercase tracking-wider px-1">Price</span>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-500 font-medium">$</span>
+<input class="form-input block w-full rounded-xl border-neutral-300 dark:border-neutral-700 bg-white dark:bg-[#232524] text-neutral-900 dark:text-white h-12 pl-8 pr-4 text-base font-medium focus:border-primary focus:ring-1 focus:ring-primary transition-all shadow-sm" type="number" value="120"/>
+</div>
+</label>
+<label class="flex flex-col gap-1.5 group">
+<span class="text-neutral-500 dark:text-neutral-400 text-xs font-medium uppercase tracking-wider px-1">Category</span>
+<select class="form-select block w-full rounded-xl border-neutral-300 dark:border-neutral-700 bg-white dark:bg-[#232524] text-neutral-900 dark:text-white h-12 pl-4 pr-10 text-base font-medium focus:border-primary focus:ring-1 focus:ring-primary transition-all shadow-sm">
+<option>Living Room</option>
+<option>Bedroom</option>
+<option>Office</option>
+</select>
+</label>
+</div>
+<div class="flex gap-4">
+<label class="flex flex-col gap-1.5 flex-1 group">
+<span class="text-neutral-500 dark:text-neutral-400 text-xs font-medium uppercase tracking-wider px-1">Condition</span>
+<select class="form-select block w-full rounded-xl border-neutral-300 dark:border-neutral-700 bg-white dark:bg-[#232524] text-neutral-900 dark:text-white h-12 pl-4 pr-10 text-base font-medium focus:border-primary focus:ring-1 focus:ring-primary transition-all shadow-sm">
+<option>Like New</option>
+<option>Good</option>
+<option>Fair</option>
+<option>Used</option>
+</select>
+</label>
+<label class="flex flex-col gap-1.5 w-1/3 group">
+<span class="text-neutral-500 dark:text-neutral-400 text-xs font-medium uppercase tracking-wider px-1">Color</span>
+<div class="relative">
+<input class="form-input block w-full rounded-xl border-neutral-300 dark:border-neutral-700 bg-white dark:bg-[#232524] text-neutral-900 dark:text-white h-12 px-4 text-base font-medium focus:border-primary focus:ring-1 focus:ring-primary transition-all shadow-sm" type="text" value="Green"/>
+</div>
+</label>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-neutral-500 dark:text-neutral-400 text-xs font-medium uppercase tracking-wider px-1">Location</label>
+<div class="relative">
+<div class="absolute left-4 top-1/2 -translate-y-1/2 text-primary">
+<span class="material-symbols-outlined text-[20px]">location_on</span>
+</div>
+<input class="form-input block w-full rounded-xl border-neutral-300 dark:border-neutral-700 bg-white dark:bg-[#232524] text-neutral-900 dark:text-white h-12 pl-11 pr-4 text-base font-medium focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-neutral-400 shadow-sm" placeholder="Zip code or Neighborhood" type="text" value="Williamsburg, Brooklyn"/>
+<div class="absolute right-3 top-1/2 -translate-y-1/2 text-primary pointer-events-none">
+<span class="material-symbols-outlined text-[20px]">my_location</span>
+</div>
+</div>
+</div>
+</section>
+<div class="pt-4 pb-8">
+<button class="relative w-full overflow-hidden rounded-full bg-primary p-4 text-white shadow-xl shadow-primary/20 active:scale-[0.98] transition-all hover:bg-[#5a7569] group/button">
+<div class="relative z-10 flex items-center justify-center gap-2">
+<span class="text-lg font-bold tracking-wide">Publish Listing</span>
+<span class="material-symbols-outlined text-[24px] group-hover/button:translate-x-1 transition-transform">arrow_forward</span>
+</div>
+<div class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover/button:animate-[shimmer_1s_infinite]"></div>
+</button>
+</div>
+</main>
+<div class="fixed bottom-0 z-50 w-full bg-background-light/95 dark:bg-[#1e201f]/95 backdrop-blur-2xl border-t border-neutral-200 dark:border-white/10 pt-2 pb-6 shadow-[0_-5px_20px_rgba(0,0,0,0.05)]">
+<div class="flex items-end justify-around px-2">
+<button class="group flex flex-1 flex-col items-center justify-center gap-1 p-2 text-neutral-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[24px] group-hover:-translate-y-0.5 transition-transform">home</span>
+<span class="text-[10px] font-medium">Home</span>
+</button>
+<button class="group flex flex-1 flex-col items-center justify-center gap-1 p-2 text-neutral-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[24px] group-hover:-translate-y-0.5 transition-transform">favorite</span>
+<span class="text-[10px] font-medium">Favorite</span>
+</button>
+<div class="relative flex flex-1 flex-col items-center justify-end">
+<button class="absolute -top-10 flex size-14 items-center justify-center rounded-full bg-primary text-white shadow-xl shadow-primary/30 ring-4 ring-background-light dark:ring-[#1e201f] transition-transform active:scale-95">
+<span class="material-symbols-outlined text-[28px]">add</span>
+</button>
+<span class="mt-8 text-[10px] font-bold text-primary">Add</span>
+</div>
+<button class="group flex flex-1 flex-col items-center justify-center gap-1 p-2 text-neutral-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[24px] group-hover:-translate-y-0.5 transition-transform">inbox</span>
+<span class="text-[10px] font-medium">Inbox</span>
+</button>
+<button class="group flex flex-1 flex-col items-center justify-center gap-1 p-2 text-neutral-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[24px] group-hover:-translate-y-0.5 transition-transform">person</span>
+<span class="text-[10px] font-medium">Profile</span>
+</button>
+</div>
+<div class="flex w-full justify-center pt-2">
+<div class="h-1 w-32 rounded-full bg-neutral-300 dark:bg-neutral-700"></div>
+</div>
+</div>
+</div>
+
+</body></html>
