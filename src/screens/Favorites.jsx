@@ -1,32 +1,49 @@
 import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { supabase } from '../supabaseClient';
+import { useAuth } from '../context/AuthContext';
+import { useSettings } from '../context/SettingsContext';
 
 const Favorites = () => {
     const navigate = useNavigate();
+    const { user } = useAuth();
+    const { formatPrice, t } = useSettings();
+    const [favoriteProducts, setFavoriteProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    // Mock data for favorite products
-    const favoriteProducts = [
-        {
-            id: 1,
-            title: 'Velvet Armchair',
-            price: 120.00,
-            image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCQgCW4Muk9dbgdy6jBOSVlS0iF72meIguXixSbO_QLNpKcAB4SVg_Si4a8N71L7WXXbKLO7sSbPgfwr9ohK1HLeABfWCw52S3vlaZrQ_CSP3Yoito4qII6yQ9QxynLrNuWD03XioYkAxtkr-tTcf9jDtj9X-rKuNXxhiR0zpD6zlK57qzmtuJHh99X6o_szPSHS3CMkFQCvrwgVbFwVsn_aYN5MLcqoiSVFnTcZdFR4U7zbKEX5xK4iS0a86X3l0d741kNHjL1XC8q',
-            location: 'Portland, OR'
-        },
-        {
-            id: 4,
-            title: 'Mid-Century Lamp',
-            price: 45.00,
-            image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDAxzR6ZvIQwSF3q2rtABlVYusLMitS3FkpiPAar2f3zLVMaJfZeSozX0pgtlJtkEBZiqGmGBfT6-tEqNAzFcMo377f3RYhPWunf3CeC7-a9TMskOjNA52SfMMMv3wFcrRP2D2JLZUYVxtIMfw1Yi31byrXEXWXxIKqPJ1AbGvM7Adk89IzUjvQIhTX9OOxYATczkO_wnX_gfAXGIEOcIC1Wlg8xRXKqmeirLz97QCzu9j1cIeLzPoT6aizu93TI7mUO5yNCu7YHStm",
-            location: 'Seattle, WA'
-        },
-        {
-            id: 3,
-            title: 'Ceramic Vase',
-            price: 30.00,
-            image: "https://lh3.googleusercontent.com/aida-public/AB6AXuD9yJzK3Yd4XQ3rLgBqZp8xT6aN2cW5eH4vJ7oM1uI8kR9sP2lF0tV3yE5wA6bN7cD8fG9hI0jK1L2mO3nQ4p5qS6rT7uV8wX9yZ0aB1cD2eF3gH4iJ5kL6mN7oP8qR9sT0uV1wX2yZ3aB4cE5fG6hI7jK8lM9nO0pQ1rS2tU3vW4xY5z",
-            location: 'Eugene, OR'
-        }
-    ];
+    useEffect(() => {
+        const fetchFavorites = async () => {
+            setLoading(true);
+            if (user) {
+                const { data, error } = await supabase
+                    .from('favorites')
+                    .select('product_id, products(*)')
+                    .eq('user_id', user.id);
+
+                if (error) {
+                    console.error('Error fetching favorites:', error);
+                } else {
+                    // Map result to flatten structure: products object is in products property
+                    setFavoriteProducts(data.map(item => item.products).filter(Boolean));
+                }
+            } else {
+                // Local Storage Fallback
+                const savedIds = JSON.parse(localStorage.getItem('favorites') || '[]');
+                if (savedIds.length > 0) {
+                    const { data } = await supabase
+                        .from('products')
+                        .select('*')
+                        .in('id', savedIds);
+                    setFavoriteProducts(data || []);
+                } else {
+                    setFavoriteProducts([]);
+                }
+            }
+            setLoading(false);
+        };
+
+        fetchFavorites();
+    }, [user]);
 
     return (
         <div className="flex flex-col bg-background-light dark:bg-background-dark min-h-screen pb-24 animate-in fade-in duration-500">

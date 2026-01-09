@@ -1,13 +1,48 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { supabase } from '../supabaseClient';
 
-const Welcome = () => {
+const Auth = () => {
     const navigate = useNavigate();
     const [mode, setMode] = useState('login'); // 'login' or 'signup'
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [fullName, setFullName] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
-    const handleAuth = (e) => {
+    const handleAuth = async (e) => {
         e.preventDefault();
-        navigate('/home');
+        setLoading(true);
+        setError(null);
+
+        try {
+            if (mode === 'signup') {
+                const { error } = await supabase.auth.signUp({
+                    email,
+                    password,
+                    options: {
+                        data: {
+                            full_name: fullName,
+                        },
+                    },
+                });
+                if (error) throw error;
+                // You might want to show a message to check email for verification
+                alert('Success! Check your email to verify your account.');
+            } else {
+                const { error } = await supabase.auth.signInWithPassword({
+                    email,
+                    password,
+                });
+                if (error) throw error;
+                navigate('/home');
+            }
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -58,13 +93,27 @@ const Welcome = () => {
                             </p>
                         </div>
 
+                        {/* Error Message */}
+                        {error && (
+                            <div className="bg-red-50 dark:bg-red-900/20 text-red-500 text-sm p-3 rounded-xl">
+                                {error}
+                            </div>
+                        )}
+
                         {/* Inputs */}
                         {mode === 'signup' && (
                             <div className="group text-left">
                                 <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2 pl-1">Full Name</label>
                                 <div className="relative flex items-center w-full rounded-2xl bg-neutral-100 dark:bg-[#2c2e2d] focus-within:ring-2 focus-within:ring-primary/50 transition-all border border-transparent focus-within:bg-white dark:focus-within:bg-black focus-within:border-primary">
                                     <span className="material-symbols-outlined absolute left-4 text-neutral-400 transition-colors">person</span>
-                                    <input className="w-full h-14 pl-12 pr-4 bg-transparent border-none rounded-2xl text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:ring-0 text-base font-normal" placeholder="John Doe" type="text" />
+                                    <input
+                                        className="w-full h-14 pl-12 pr-4 bg-transparent border-none rounded-2xl text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:ring-0 text-base font-normal"
+                                        placeholder="John Doe"
+                                        type="text"
+                                        value={fullName}
+                                        onChange={(e) => setFullName(e.target.value)}
+                                        required={mode === 'signup'}
+                                    />
                                 </div>
                             </div>
                         )}
@@ -73,7 +122,14 @@ const Welcome = () => {
                             <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2 pl-1">Email Address</label>
                             <div className="relative flex items-center w-full rounded-2xl bg-neutral-100 dark:bg-[#2c2e2d] focus-within:ring-2 focus-within:ring-primary/50 transition-all border border-transparent focus-within:bg-white dark:focus-within:bg-black focus-within:border-primary">
                                 <span className="material-symbols-outlined absolute left-4 text-neutral-400 transition-colors">mail</span>
-                                <input className="w-full h-14 pl-12 pr-4 bg-transparent border-none rounded-2xl text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:ring-0 text-base font-normal" placeholder="hello@again.com" type="email" required />
+                                <input
+                                    className="w-full h-14 pl-12 pr-4 bg-transparent border-none rounded-2xl text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:ring-0 text-base font-normal"
+                                    placeholder="hello@again.com"
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    required
+                                />
                             </div>
                         </div>
 
@@ -86,7 +142,14 @@ const Welcome = () => {
                             </div>
                             <div className="relative flex items-center w-full rounded-2xl bg-neutral-100 dark:bg-[#2c2e2d] focus-within:ring-2 focus-within:ring-primary/50 transition-all border border-transparent focus-within:bg-white dark:focus-within:bg-black focus-within:border-primary">
                                 <span className="material-symbols-outlined absolute left-4 text-neutral-400 transition-colors">lock</span>
-                                <input className="w-full h-14 pl-12 pr-12 bg-transparent border-none rounded-2xl text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:ring-0 text-base font-normal" placeholder="••••••••" type="password" required />
+                                <input
+                                    className="w-full h-14 pl-12 pr-12 bg-transparent border-none rounded-2xl text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:ring-0 text-base font-normal"
+                                    placeholder="••••••••"
+                                    type="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
+                                />
                                 <button className="absolute right-4 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 flex items-center" type="button">
                                     <span className="material-symbols-outlined">visibility</span>
                                 </button>
@@ -104,9 +167,13 @@ const Welcome = () => {
                             </div>
                         )}
 
-                        <button className="w-full h-14 mt-2 bg-primary hover:bg-[#5a7368] text-white font-bold text-lg rounded-full shadow-lg shadow-primary/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2 group">
-                            <span>{mode === 'login' ? 'Log In' : 'Sign Up'}</span>
-                            <span className="material-symbols-outlined text-[20px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                        <button
+                            disabled={loading}
+                            className={`w-full h-14 mt-2 bg-primary hover:bg-[#5a7368] text-white font-bold text-lg rounded-full shadow-lg shadow-primary/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2 group ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
+                        >
+                            {loading && <span className="material-symbols-outlined animate-spin text-[20px]">progress_activity</span>}
+                            <span>{loading ? 'Processing...' : (mode === 'login' ? 'Log In' : 'Sign Up')}</span>
+                            {!loading && <span className="material-symbols-outlined text-[20px] group-hover:translate-x-1 transition-transform">arrow_forward</span>}
                         </button>
                     </form>
 
@@ -151,4 +218,4 @@ const Welcome = () => {
     );
 };
 
-export default Welcome;
+export default Auth;

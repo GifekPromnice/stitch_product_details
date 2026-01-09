@@ -1,7 +1,9 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SearchOverlay from '../components/SearchOverlay';
 import { useSettings } from '../context/SettingsContext';
+import { supabase } from '../supabaseClient';
+import { useAuth } from '../context/AuthContext';
 
 const Home = () => {
     const navigate = useNavigate();
@@ -13,28 +15,30 @@ const Home = () => {
         return saved ? JSON.parse(saved) : [];
     });
     const [showSearchOverlay, setShowSearchOverlay] = useState(false);
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         localStorage.setItem('favorites', JSON.stringify(favorites));
     }, [favorites]);
 
-    const toggleFavorite = (e, productId) => {
-        e.stopPropagation();
-        setFavorites(prev =>
-            prev.includes(productId)
-                ? prev.filter(id => id !== productId)
-                : [...prev, productId]
-        );
-    };
+    useEffect(() => {
+        const fetchProducts = async () => {
+            setLoading(true);
+            const { data, error } = await supabase
+                .from('products')
+                .select('*');
 
-    const products = [
-        { id: 1, title: '1970s Velvet Sofa', price: 450, location: 'Brooklyn, NY', category: 'sofas', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD_7CdCHlYZUxXinXnnjQHnTkP3fadL1tXiU0Oa_e5RenGOinu8N3_rGY1BqgmqANZdrxiBNIxCTDXrKt3hjjt155D1_RwGgB3HuisKKSRk1JZgOFRWBW9BBt_hE-MLSAPjSwMqmMQaxEvWsu9n8b8ZaGlRI9BzFJuk_h-W76FR9COf6Tt3Ha-_a3hfBvBxMPVgU6Nabdk55UE5pdlM0AC_uqSUgGfooV_4U0I0fP1dVX5p0mFjRIm_gstDlSUPFjy62rQB4lZHovNP', aspect: '3/4' },
-        { id: 2, title: 'Oak Coffee Table', price: 120, location: 'Austin, TX', category: 'tables', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCRk6ZkMR7el4beJA8EILmTZr97kl-B3chhZ9H6DiBfcqL8KlB9KUhURhiU9lBVwR0y93TKJfTOaMtnLWpSPajFWB0ORqHdaQldebmOsy4nCjFzpoOkdalCqvFqN90rdx6KJfDZZ20YBpN3GI7HF4YsEpFcW9_k4LL0L2FAZjk8CsjoboPMWj27VPIE-A7Hq65JIkEiiDCU2oORJhzI4I5fMYhqTYPa-WcIOvs36N1yejZkb24AO-y7oQNZ5DaV8PxpoFKwJELknBt5', aspect: '1/1' },
-        { id: 3, title: 'Industrial Lamp', price: 45, location: 'Portland, OR', category: 'lighting', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAiHEDozq89TyD9zpm9DAO9eEPUjKnTJl97HuP4jdeC2lP27Cc1sZIzzhG9d6yl5mF9NuyhXLtqm7yU97nwoSM1NG75h5S7LhaCxvGvXlnhvYkF0ujVB2Ktb4y6qWZvVVE6R0BmqmdZy3dcsS9UaRwc2bz5z74qSpxRXHDmWf5iY76KSIAllmPvF1mc8faHL31E3n_cV8eOHGu6lV6x2y9U7MZsmGEtt9s4W8G6yR8Zz2oelpHerqal_hoUyQP6o9YaHpFWcFZbSRvK', aspect: '3/5' },
-        { id: 4, title: 'Danish Armchair', price: 280, location: 'Seattle, WA', category: 'sofas', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC6S7b0zkYnUVsvWGjOMjnrrHGDKpXiDi00ALcCvzdC5Fe4ycpiOWdmRTW3VyQKX6qcVkIJ84NQOjXuhdnxe40UV6R3dMHqIK1yKe9exqJqjVDl-vf93VBcGoF9ARhh3vEq2626tU8FSFM4gHjL1tb6aJbdDyKlSecDWL8irPyEwEhD3DZfQWns47oR0KAIXJEImNP0lqOkIdGvdR-vstaMWkyMlg4c72uUEpGzDlrmIMcIWYxeW3syb-8GFtBBbYaoFC1tt2Z6HJ8k', aspect: '4/5' },
-        { id: 5, title: 'Large Monstera', price: 35, location: 'Los Angeles, CA', category: 'plants', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAjQh1gVJn_V3FJth3MUfKkh6EnWoiNcBByDF1U9FxUWXMK_IG01wwHI1FzIXiKPsqDFU2qYFcre_02CTisEU7nzVMJCSH9_twhNgk0rXLGy96or8u2il8TfKtq452mLBb5ZLIFJklHQPq0LgxrkKPKLh9Dp-SVRI8UenzpjRvMxt5ReAGP7IkmpT__r8Fr-YRlgfhvUBNzTln_km1KfYRzuUQolI7sYyl2c2H4CCSJXeNfb6Dd4i72rSreLybk3ljjHulWki8S-ygM', aspect: '1/1' },
-        { id: 6, title: 'Teak Bookshelf', price: 150, location: 'Chicago, IL', category: 'shelves', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDOCuicokfWi5DEcsTTXHxars9-hAmFIuCGAyuLi5goXG1L_SL0tMTsKTSqm2JK1w0Id4POEkgFON71Gq1NfqbD8dQh-pzJTyuw9TvRjpU71sYn1QP-mGo5EUGQqtzB9VyMRlX93Ua5NRLzK-KEzGGkUb1PTzeMjSL7wx7PCBi5rkaZvWKYQ1qU3Ose9sXDNO4K2jf2_u5dGUriA1OISMdk3dbQ_p_eZu-040A94AkYOpi718qr7OEJrLOgqUYCu4VkA-UeqOrhW8Y9', aspect: '3/4' },
-    ];
+            if (error) {
+                console.error('Error fetching products:', error);
+            } else {
+                setProducts(data || []);
+            }
+            setLoading(false);
+        };
+
+        fetchProducts();
+    }, []);
 
     const categories = ['all', 'new arrivals', 'sofas', 'lighting', 'tables', 'rugs'];
 

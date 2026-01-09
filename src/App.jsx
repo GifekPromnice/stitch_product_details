@@ -8,38 +8,46 @@ import OrderConfirmation from './screens/OrderConfirmation';
 import Profile from './screens/Profile';
 import Wallet from './screens/Wallet';
 import Features from './screens/Features';
-import Welcome from './screens/Welcome';
+import Auth from './screens/Auth';
 import Chat from './screens/Chat';
 import AddListing from './screens/AddListing';
 import Negotiate from './screens/Negotiate';
 import PersonalInformation from './screens/PersonalInformation';
 import PasswordSecurity from './screens/PasswordSecurity';
 import Layout from './components/Layout';
+import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
     return (
         <Router>
-            <div className="min-h-screen bg-background-light dark:bg-background-dark font-display">
-                <Routes>
-                    <Route path="/" element={<SplashScreen />} />
-                    <Route path="/features" element={<Features />} />
-                    <Route path="/welcome" element={<Welcome />} />
-                    <Route path="/home" element={<Layout><Home /></Layout>} />
-                    <Route path="/product/:id" element={<ProductDetails />} />
-                    <Route path="/checkout" element={<Checkout />} />
-                    <Route path="/order-confirmation" element={<OrderConfirmation />} />
-                    <Route path="/profile" element={<Layout><Profile /></Layout>} />
-                    <Route path="/favorites" element={<Layout><Favorites /></Layout>} />
-                    <Route path="/wallet" element={<Wallet />} />
-                    <Route path="/chat" element={<Chat />} />
-                    <Route path="/add-listing" element={<AddListing />} />
-                    <Route path="/negotiate/:id" element={<Negotiate />} />
-                    <Route path="/personal-information" element={<PersonalInformation />} />
-                    <Route path="/password-security" element={<PasswordSecurity />} />
-                    {/* Tu dodamy więcej ścieżek */}
-                    <Route path="*" element={<div className="p-10 text-center">Screen in development</div>} />
-                </Routes>
-            </div>
+            <AuthProvider>
+                <div className="min-h-screen bg-background-light dark:bg-background-dark font-display">
+                    <Routes>
+                        {/* Public Routes */}
+                        <Route path="/" element={<SplashScreen />} />
+                        <Route path="/features" element={<Features />} />
+                        <Route path="/auth" element={<Auth />} />
+                        <Route path="/home" element={<Layout><Home /></Layout>} />
+                        <Route path="/product/:id" element={<ProductDetails />} />
+
+                        {/* Protected Routes */}
+                        <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
+                        <Route path="/order-confirmation" element={<ProtectedRoute><OrderConfirmation /></ProtectedRoute>} />
+                        <Route path="/profile" element={<ProtectedRoute><Layout><Profile /></Layout></ProtectedRoute>} />
+                        <Route path="/favorites" element={<ProtectedRoute><Layout><Favorites /></Layout></ProtectedRoute>} />
+                        <Route path="/wallet" element={<ProtectedRoute><Wallet /></ProtectedRoute>} />
+                        <Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
+                        <Route path="/add-listing" element={<ProtectedRoute><AddListing /></ProtectedRoute>} />
+                        <Route path="/negotiate/:id" element={<ProtectedRoute><Negotiate /></ProtectedRoute>} />
+                        <Route path="/personal-information" element={<ProtectedRoute><PersonalInformation /></ProtectedRoute>} />
+                        <Route path="/password-security" element={<ProtectedRoute><PasswordSecurity /></ProtectedRoute>} />
+
+                        {/* Fallback */}
+                        <Route path="*" element={<div className="p-10 text-center">Screen in development</div>} />
+                    </Routes>
+                </div>
+            </AuthProvider>
         </Router>
     );
 }
