@@ -29,7 +29,7 @@ const Features = () => {
         if (currentSlide < slides.length - 1) {
             setCurrentSlide(currentSlide + 1);
         } else {
-            navigate('/welcome');
+            navigate('/auth');
         }
     };
 
@@ -124,7 +124,7 @@ const Features = () => {
                     </button>
                     <div className="text-center">
                         <button
-                            onClick={() => navigate('/welcome')}
+                            onClick={() => navigate('/auth')}
                             className="text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
                         >
                             Already have an account? <span className="underline decoration-primary decoration-2 underline-offset-4">Log in</span>
