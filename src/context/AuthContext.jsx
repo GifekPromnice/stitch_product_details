@@ -13,10 +13,17 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         // Check active sessions and sets the user
         const getSession = async () => {
-            const { data: { session } } = await supabase.auth.getSession();
-            setSession(session);
-            setUser(session?.user ?? null);
-            setLoading(false);
+            try {
+                const { data: { session }, error } = await supabase.auth.getSession();
+                if (error) console.warn('Error checking session:', error);
+
+                setSession(session);
+                setUser(session?.user ?? null);
+            } catch (err) {
+                console.error('Unexpected error checking session:', err);
+            } finally {
+                setLoading(false);
+            }
         };
 
         getSession();
