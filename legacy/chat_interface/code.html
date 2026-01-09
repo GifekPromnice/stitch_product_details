@@ -1,231 +1,173 @@
 <!DOCTYPE html>
-<html class="light" lang="en">
-
-<head>
-  <meta charset="utf-8" />
-  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-  <title>Chat Interface - Again</title>
-  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <script id="tailwind-config">
-    tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          colors: {
-            "primary": "#698679",
-            "background-light": "#f6f8f6",
-            "background-dark": "#132210",
-            "surface-light": "#ffffff",
-            "surface-dark": "#1c2e18",
-            "text-main": "#101b0d",
-            "text-secondary": "#599a4c",
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Messages - Again</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#698679",
+              "background-light": "#F5F5F0",
+              "surface-light": "#FFFFFF",
+              "text-main": "#2D3431",
+              "text-secondary": "#6B7280",
+            },
+            fontFamily: {
+              "display": ["Inter", "sans-serif"]
+            },
+            borderRadius: {
+              "DEFAULT": "1rem", 
+              "lg": "1.5rem", 
+              "xl": "2rem", 
+              "2xl": "2.5rem",
+              "full": "9999px"
+            },
+            boxShadow: {
+                "soft": "0 2px 12px -2px rgba(105, 134, 121, 0.08)",
+            }
           },
-          fontFamily: {
-            "display": ["Inter", "sans-serif"]
-          },
-          borderRadius: {
-            "DEFAULT": "1rem",
-            "lg": "1.5rem",
-            "xl": "2rem",
-            "2xl": "2.5rem",
-            "full": "9999px"
-          },
-          boxShadow: {
-            "soft": "0 4px 20px -2px rgba(19, 34, 16, 0.05)",
-          }
         },
-      },
-    }
-  </script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-    rel="stylesheet" />
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    ::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background-color: rgba(0, 0, 0, 0.1);
-      border-radius: 20px;
-    }
-  </style>
-  <style>
+      }
+    </script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style type="text/tailwindcss">
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .ios-safe-bottom {
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+    </style>
+<style>
     body {
       min-height: max(884px, 100dvh);
     }
   </style>
-  <style>
-    body {
-      min-height: max(884px, 100dvh);
-    }
-  </style>
-</head>
+  </head>
+<body class="bg-background-light text-text-main flex flex-col h-screen overflow-hidden antialiased">
+<header class="shrink-0 z-20 bg-background-light/80 backdrop-blur-md sticky top-0 border-b border-gray-200/50">
+<div class="flex items-center justify-between px-6 py-4">
+<h1 class="text-2xl font-bold tracking-tight text-text-main">Messages</h1>
+<button class="p-2 rounded-full hover:bg-black/5 transition-colors">
+<span class="material-symbols-outlined text-[24px]">search</span>
+</button>
+</div>
+</header>
+<main class="flex-1 overflow-y-auto">
+<div class="flex flex-col">
+<button class="flex items-center gap-4 px-6 py-4 hover:bg-black/5 transition-colors text-left relative">
+<div class="relative shrink-0">
+<div class="w-14 h-14 rounded-full bg-center bg-cover border border-gray-100" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC-TmO3Oa6AaeIXD4ERjEpCgz2gPjRhql5RpFp2UnYaq3GtXh4xccDTbQCofRmwEpgs841qcIIkpy1j5REKD5eZVkLSpECEZxrodPEZoKCF2szfbVhMtxOCMDOqUtxL91xR1E-ERfEdWiuohRbpn7BkaA65AXsDZNuWadFWfL1E0r_lSeQFaWWb2Qi5HlnXytXkYx7hNQFftuu23-hR6JRotSHP-B6fij5tCZlL50ZfHOZ8DaOTooryI6p7_o5kKztXPYrFjW4O0yHg");'></div>
+<div class="absolute -top-0.5 -right-0.5 w-4 h-4 bg-primary border-4 border-background-light rounded-full"></div>
+</div>
+<div class="flex-1 min-w-0 flex flex-col gap-0.5">
+<div class="flex justify-between items-center">
+<span class="font-bold text-base truncate">Jane Doe</span>
+<span class="text-[12px] font-semibold text-primary">10:26 AM</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="text-sm font-semibold text-text-main truncate flex-1">Is the chair still available for pickup?</span>
+</div>
+<div class="flex items-center gap-2 mt-1">
+<div class="w-5 h-5 rounded-md bg-center bg-cover shrink-0" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDqzInuR7CPsG-Xr0rPXYJip7razEesgzVnFexwUXeVmozFcXz2LcP0O4V9d5p182KB4r-aeSQBr7uCe8n9xJ4IORrfOIFVfYGki8hSIk--KN3OtgxJb0TlTJXgcVS2TuK7yhPYbK1xe7guExEaMuDBvXO-p83R3hPzoF0fjmu-TXOghLHTbumtuPTLO0xZkw5AYm8Nhgrt1nZnn6aNazdfjwiseRDQkJxhXP26CkVzFTKzeR4hvtYdNAmi4dXLPESC6jvObidB9xIp");'></div>
+<span class="text-[12px] text-text-secondary truncate">Mid-Century Modern Chair</span>
+</div>
+</div>
+</button>
+<div class="mx-6 border-b border-gray-200/60"></div>
+<button class="flex items-center gap-4 px-6 py-4 hover:bg-black/5 transition-colors text-left">
+<div class="relative shrink-0">
+<div class="w-14 h-14 rounded-full bg-center bg-cover border border-gray-100" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDZbXq64_VW7zGVU-xz3SA9o3qvgLLVmi2r5NuAwcboKq9eWQKwNNUuSwcsE-J3OzTB55H2lyw590CbdRJ80r4Zhrzen4Fwm4Ffg1vKqbsFVq8knHk93eJSc0bZbYXlltZyx4XlNb90lEumMxqqzdVYl6MgisxuJb7NWt4tvXBdIqXiXS2x3PPb75HHllyyRQPiTxwGK8BQxFikGZH59RNUof_R8v269R1hkAweXvMY3F9oF52hisMcZxEDiYDJkw73NXwFS-ARZtI3");'></div>
+</div>
+<div class="flex-1 min-w-0 flex flex-col gap-0.5">
+<div class="flex justify-between items-center">
+<span class="font-semibold text-base truncate">Marcus Chen</span>
+<span class="text-[12px] text-text-secondary">Yesterday</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="text-sm text-text-secondary truncate flex-1">Thanks! I'll be there around 5 PM tomorrow.</span>
+</div>
+<div class="flex items-center gap-2 mt-1">
+<div class="w-5 h-5 rounded-md bg-center bg-cover shrink-0" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDkRHE7vfUdGfArQs46ySK8ewsJLrqFAv9tvqPR2zaYKHmLbkVAl94-XZm5jAPNwyv-oAAxXoO4VxO9aZZuApKNINPqmfjB4-7_JTqh2IuPO8sPbZE1gmLCoSnqqEmCLF4mQNosKZ1S55DPPGlMfORAq4x43z8r83ZUbvffz16GnUs45vxxfpriBsfBFpHgPchueF18caAvwMBnezp8D_9uWXoCKJBLRh0jy28UxUImPDEJPIEDwgzYfa1dkv4lr2Aa8FaeRlh2a195");'></div>
+<span class="text-[12px] text-text-secondary truncate">Solid Oak Dining Table</span>
+</div>
+</div>
+</button>
+<div class="mx-6 border-b border-gray-200/60"></div>
+<button class="flex items-center gap-4 px-6 py-4 hover:bg-black/5 transition-colors text-left">
+<div class="relative shrink-0">
+<div class="w-14 h-14 rounded-full bg-center bg-cover border border-gray-100" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDkRHE7vfUdGfArQs46ySK8ewsJLrqFAv9tvqPR2zaYKHmLbkVAl94-XZm5jAPNwyv-oAAxXoO4VxO9aZZuApKNINPqmfjB4-7_JTqh2IuPO8sPbZE1gmLCoSnqqEmCLF4mQNosKZ1S55DPPGlMfORAq4x43z8r83ZUbvffz16GnUs45vxxfpriBsfBFpHgPchueF18caAvwMBnezp8D_9uWXoCKJBLRh0jy28UxUImPDEJPIEDwgzYfa1dkv4lr2Aa8FaeRlh2a195");'></div>
+</div>
+<div class="flex-1 min-w-0 flex flex-col gap-0.5">
+<div class="flex justify-between items-center">
+<span class="font-semibold text-base truncate">Sarah Williams</span>
+<span class="text-[12px] text-text-secondary">Monday</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="text-sm text-text-secondary truncate flex-1">Would you consider $120 for the lamp?</span>
+</div>
+<div class="flex items-center gap-2 mt-1">
+<div class="w-5 h-5 rounded-md bg-center bg-cover shrink-0" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDwYf6yB_wyudkpXEZRWXNnaSoVP4uxNqeT8EfGnkeue3IFnkqFbn9jrRZoah0J76Y0vX-C96bN8EmcEsNEY2-ZrxJHVcg__JG7SD17jvlg7cZuzjSEHggJ9HWJIJfZCnykXUkFWlomWHZVIxEFgFS25MT_mGG-tL0bfVa48Ob4ctgWXbH7XTph5dLskKFdqJZ_TBG2ZtVmSJ8wMFU4VfsC4s-yaqmids6FQ05tb7fFMVbnj-4bPfKb3R6Gr5TZ2HEqR2NYJx9zI08e");'></div>
+<span class="text-[12px] text-text-secondary truncate">Vintage Brass Table Lamp</span>
+</div>
+</div>
+</button>
+<div class="mx-6 border-b border-gray-200/60"></div>
+<button class="flex items-center gap-4 px-6 py-4 hover:bg-black/5 transition-colors text-left">
+<div class="relative shrink-0">
+<div class="w-14 h-14 rounded-full bg-center bg-cover border border-gray-100" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDwYf6yB_wyudkpXEZRWXNnaSoVP4uxNqeT8EfGnkeue3IFnkqFbn9jrRZoah0J76Y0vX-C96bN8EmcEsNEY2-ZrxJHVcg__JG7SD17jvlg7cZuzjSEHggJ9HWJIJfZCnykXUkFWlomWHZVIxEFgFS25MT_mGG-tL0bfVa48Ob4ctgWXbH7XTph5dLskKFdqJZ_TBG2ZtVmSJ8wMFU4VfsC4s-yaqmids6FQ05tb7fFMVbnj-4bPfKb3R6Gr5TZ2HEqR2NYJx9zI08e");'></div>
+</div>
+<div class="flex-1 min-w-0 flex flex-col gap-0.5">
+<div class="flex justify-between items-center">
+<span class="font-semibold text-base truncate">Liam Foster</span>
+<span class="text-[12px] text-text-secondary">Aug 12</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="text-sm text-text-secondary truncate flex-1">The dimensions are perfect, thank you!</span>
+</div>
+<div class="flex items-center gap-2 mt-1">
+<div class="w-5 h-5 rounded-md bg-center bg-cover shrink-0" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDZbXq64_VW7zGVU-xz3SA9o3qvgLLVmi2r5NuAwcboKq9eWQKwNNUuSwcsE-J3OzTB55H2lyw590CbdRJ80r4Zhrzen4Fwm4Ffg1vKqbsFVq8knHk93eJSc0bZbYXlltZyx4XlNb90lEumMxqqzdVYl6MgisxuJb7NWt4tvXBdIqXiXS2x3PPb75HHllyyRQPiTxwGK8BQxFikGZH59RNUof_R8v269R1hkAweXvMY3F9oF52hisMcZxEDiYDJkw73NXwFS-ARZtI3");'></div>
+<span class="text-[12px] text-text-secondary truncate">Teak Bookshelf</span>
+</div>
+</div>
+</button>
+</div>
+</main>
+<footer class="shrink-0 z-30 bg-white border-t border-gray-100 ios-safe-bottom">
+<div class="flex items-center justify-around h-16 max-w-lg mx-auto">
+<button class="flex flex-col items-center justify-center w-full gap-1 text-gray-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[24px]">home</span>
+<span class="text-[10px] font-medium">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center w-full gap-1 text-gray-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[24px]">favorite</span>
+<span class="text-[10px] font-medium">Favorite</span>
+</button>
+<button class="flex flex-col items-center justify-center w-full">
+<div class="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center text-white shadow-lg shadow-primary/30">
+<span class="material-symbols-outlined text-[28px]">add</span>
+</div>
+</button>
+<button class="flex flex-col items-center justify-center w-full gap-1 text-primary">
+<span class="material-symbols-outlined text-[24px] font-fill">chat_bubble</span>
+<span class="text-[10px] font-bold">Inbox</span>
+</button>
+<button class="flex flex-col items-center justify-center w-full gap-1 text-gray-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[24px]">person</span>
+<span class="text-[10px] font-medium">Profile</span>
+</button>
+</div>
+</footer>
+<style>
+        .font-fill {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
 
-<body
-  class="bg-background-light dark:bg-background-dark text-text-main dark:text-gray-100 flex flex-col h-screen overflow-hidden antialiased selection:bg-primary selection:text-white">
-  <header
-    class="shrink-0 z-20 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-md sticky top-0 border-b border-gray-100 dark:border-gray-800 transition-colors">
-    <div class="flex items-center justify-between px-4 py-3">
-      <div class="flex items-center gap-3">
-        <button onclick="window.location.href='../home_discovery_feed/code.html'"
-          class="p-2 -ml-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/10 transition-colors text-text-main dark:text-white">
-          <span class="material-symbols-outlined text-[24px]">arrow_back_ios_new</span>
-        </button>
-        <div class="relative">
-          <div
-            class="bg-center bg-no-repeat bg-cover rounded-full w-10 h-10 border-2 border-white dark:border-background-dark shadow-sm"
-            data-alt="Portrait of a smiling woman with glasses"
-            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC-TmO3Oa6AaeIXD4ERjEpCgz2gPjRhql5RpFp2UnYaq3GtXh4xccDTbQCofRmwEpgs841qcIIkpy1j5REKD5eZVkLSpECEZxrodPEZoKCF2szfbVhMtxOCMDOqUtxL91xR1E-ERfEdWiuohRbpn7BkaA65AXsDZNuWadFWfL1E0r_lSeQFaWWb2Qi5HlnXytXkYx7hNQFftuu23-hR6JRotSHP-B6fij5tCZlL50ZfHOZ8DaOTooryI6p7_o5kKztXPYrFjW4O0yHg");'>
-          </div>
-          <div
-            class="absolute bottom-0 right-0 w-3 h-3 bg-primary rounded-full border-2 border-background-light dark:border-background-dark">
-          </div>
-        </div>
-        <div class="flex flex-col">
-          <h1 class="text-base font-bold leading-tight text-text-main dark:text-white">Jane Doe</h1>
-          <span class="text-xs font-medium text-text-secondary dark:text-primary/80">Active now</span>
-        </div>
-      </div>
-      <button
-        class="p-2 -mr-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/10 transition-colors text-text-main dark:text-white">
-        <span class="material-symbols-outlined">more_vert</span>
-      </button>
-    </div>
-  </header>
-  <main class="flex-1 overflow-y-auto overflow-x-hidden flex flex-col relative w-full pb-4">
-    <div class="sticky top-2 z-10 px-4 mb-4">
-      <div
-        class="bg-surface-light dark:bg-surface-dark p-3 rounded-2xl shadow-soft flex items-center justify-between gap-3 border border-gray-100 dark:border-gray-800 backdrop-blur-sm bg-opacity-95 dark:bg-opacity-95">
-        <div class="flex items-center gap-3 overflow-hidden">
-          <div class="bg-center bg-no-repeat bg-cover rounded-xl w-14 h-14 shrink-0 bg-gray-200"
-            data-alt="Mid-century modern wooden chair with green upholstery"
-            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDqzInuR7CPsG-Xr0rPXYJip7razEesgzVnFexwUXeVmozFcXz2LcP0O4V9d5p182KB4r-aeSQBr7uCe8n9xJ4IORrfOIFVfYGki8hSIk--KN3OtgxJb0TlTJXgcVS2TuK7yhPYbK1xe7guExEaMuDBvXO-p83R3hPzoF0fjmu-TXOghLHTbumtuPTLO0xZkw5AYm8Nhgrt1nZnn6aNazdfjwiseRDQkJxhXP26CkVzFTKzeR4hvtYdNAmi4dXLPESC6jvObidB9xIp");'>
-          </div>
-          <div class="flex flex-col min-w-0">
-            <p class="text-sm font-semibold text-text-main dark:text-white truncate">Mid-Century Modern Chair</p>
-            <p class="text-sm font-bold text-primary">$150.00</p>
-          </div>
-        </div>
-        <button
-          class="shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 text-gray-400 dark:text-gray-500 transition-colors">
-          <span class="material-symbols-outlined text-[18px]">close</span>
-        </button>
-      </div>
-    </div>
-    <div class="flex justify-center my-4">
-      <span
-        class="text-[11px] font-medium text-gray-400 uppercase tracking-wider bg-gray-100 dark:bg-surface-dark px-3 py-1 rounded-full">Today</span>
-    </div>
-    <div class="flex flex-col gap-6 px-4 pb-4">
-      <div class="flex items-end gap-3 max-w-[85%] self-start group">
-        <div
-          class="bg-center bg-no-repeat bg-cover rounded-full w-8 h-8 shrink-0 mb-1 shadow-sm border border-gray-100 dark:border-transparent"
-          data-alt="Portrait of a smiling woman with glasses"
-          style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDZbXq64_VW7zGVU-xz3SA9o3qvgLLVmi2r5NuAwcboKq9eWQKwNNUuSwcsE-J3OzTB55H2lyw590CbdRJ80r4Zhrzen4Fwm4Ffg1vKqbsFVq8knHk93eJSc0bZbYXlltZyx4XlNb90lEumMxqqzdVYl6MgisxuJb7NWt4tvXBdIqXiXS2x3PPb75HHllyyRQPiTxwGK8BQxFikGZH59RNUof_R8v269R1hkAweXvMY3F9oF52hisMcZxEDiYDJkw73NXwFS-ARZtI3");'>
-        </div>
-        <div class="flex flex-col gap-1">
-          <div
-            class="bg-surface-light dark:bg-surface-dark p-4 rounded-2xl rounded-bl-sm shadow-sm border border-gray-100 dark:border-gray-800">
-            <p class="text-[15px] leading-relaxed text-text-main dark:text-gray-100">
-              Hi! Yes, the chair is still available. Are you interested in picking it up this week?
-            </p>
-          </div>
-          <span class="text-[11px] text-gray-400 ml-2">10:23 AM</span>
-        </div>
-      </div>
-      <div class="flex items-end gap-3 max-w-[85%] self-end flex-row-reverse group">
-        <div class="flex flex-col gap-1 items-end">
-          <div class="bg-primary p-4 rounded-2xl rounded-br-sm shadow-md shadow-primary/20">
-            <p class="text-[15px] leading-relaxed text-white font-medium">
-              Great! Is there any damage to the upholstery?
-            </p>
-          </div>
-          <span class="text-[11px] text-gray-400 mr-2 flex items-center gap-1">
-            10:25 AM
-            <span class="material-symbols-outlined text-[14px] text-primary">done_all</span>
-          </span>
-        </div>
-      </div>
-      <div class="flex items-end gap-3 max-w-[85%] self-start group">
-        <div
-          class="bg-center bg-no-repeat bg-cover rounded-full w-8 h-8 shrink-0 mb-1 shadow-sm border border-gray-100 dark:border-transparent"
-          data-alt="Portrait of a smiling woman with glasses"
-          style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDkRHE7vfUdGfArQs46ySK8ewsJLrqFAv9tvqPR2zaYKHmLbkVAl94-XZm5jAPNwyv-oAAxXoO4VxO9aZZuApKNINPqmfjB4-7_JTqh2IuPO8sPbZE1gmLCoSnqqEmCLF4mQNosKZ1S55DPPGlMfORAq4x43z8r83ZUbvffz16GnUs45vxxfpriBsfBFpHgPchueF18caAvwMBnezp8D_9uWXoCKJBLRh0jy28UxUImPDEJPIEDwgzYfa1dkv4lr2Aa8FaeRlh2a195");'>
-        </div>
-        <div class="flex flex-col gap-1">
-          <div
-            class="bg-surface-light dark:bg-surface-dark p-4 rounded-2xl rounded-bl-sm shadow-sm border border-gray-100 dark:border-gray-800">
-            <p class="text-[15px] leading-relaxed text-text-main dark:text-gray-100">
-              No tears, just minor wear on the legs. It's barely noticeable. I can send a close-up photo if you'd like?
-            </p>
-          </div>
-          <span class="text-[11px] text-gray-400 ml-2">10:26 AM</span>
-        </div>
-      </div>
-      <div class="flex items-end gap-3 max-w-[85%] self-end flex-row-reverse group">
-        <div class="flex flex-col gap-1 items-end">
-          <div class="bg-primary p-4 rounded-2xl rounded-br-sm shadow-md shadow-primary/20">
-            <p class="text-[15px] leading-relaxed text-white font-medium">
-              That would be helpful, thanks!
-            </p>
-          </div>
-          <span class="text-[11px] text-gray-400 mr-2 flex items-center gap-1">
-            10:28 AM
-            <span class="material-symbols-outlined text-[14px] text-gray-300">check</span>
-          </span>
-        </div>
-      </div>
-      <div class="flex items-end gap-3 max-w-[85%] self-start group animate-pulse">
-        <div
-          class="bg-center bg-no-repeat bg-cover rounded-full w-8 h-8 shrink-0 mb-1 shadow-sm border border-gray-100 dark:border-transparent"
-          data-alt="Portrait of a smiling woman with glasses"
-          style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDwYf6yB_wyudkpXEZRWXNnaSoVP4uxNqeT8EfGnkeue3IFnkqFbn9jrRZoah0J76Y0vX-C96bN8EmcEsNEY2-ZrxJHVcg__JG7SD17jvlg7cZuzjSEHggJ9HWJIJfZCnykXUkFWlomWHZVIxEFgFS25MT_mGG-tL0bfVa48Ob4ctgWXbH7XTph5dLskKFdqJZ_TBG2ZtVmSJ8wMFU4VfsC4s-yaqmids6FQ05tb7fFMVbnj-4bPfKb3R6Gr5TZ2HEqR2NYJx9zI08e");'>
-        </div>
-        <div class="flex flex-col gap-1">
-          <div
-            class="bg-surface-light dark:bg-surface-dark px-4 py-3 rounded-2xl rounded-bl-sm shadow-sm border border-gray-100 dark:border-gray-800 flex items-center gap-1">
-            <div class="w-1.5 h-1.5 rounded-full bg-gray-400"></div>
-            <div class="w-1.5 h-1.5 rounded-full bg-gray-400"></div>
-            <div class="w-1.5 h-1.5 rounded-full bg-gray-400"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </main>
-  <footer
-    class="shrink-0 z-20 bg-background-light dark:bg-background-dark px-4 py-3 pb-6 sm:pb-4 transition-all duration-300">
-    <div class="flex items-end gap-2 max-w-3xl mx-auto">
-      <button
-        class="shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-gray-200 dark:bg-surface-dark text-text-main dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50">
-        <span class="material-symbols-outlined text-[24px]">add</span>
-      </button>
-      <div
-        class="flex-1 bg-surface-light dark:bg-surface-dark border border-gray-200 dark:border-gray-700 rounded-[2rem] flex items-center px-4 py-1.5 focus-within:ring-2 focus-within:ring-primary/50 focus-within:border-primary transition-all shadow-sm">
-        <input
-          class="w-full bg-transparent border-none focus:ring-0 p-2 text-[15px] placeholder:text-gray-400 text-text-main dark:text-white leading-normal h-[36px]"
-          placeholder="Type a message..." type="text" />
-        <button class="shrink-0 p-1.5 text-gray-400 hover:text-primary transition-colors">
-          <span class="material-symbols-outlined text-[22px]">sentiment_satisfied</span>
-        </button>
-      </div>
-      <button
-        class="shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-primary text-white shadow-md shadow-primary/20 hover:bg-primary/90 hover:scale-105 active:scale-95 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary dark:focus:ring-offset-background-dark">
-        <span class="material-symbols-outlined text-[22px] ml-0.5">send</span>
-      </button>
-    </div>
-  </footer>
-
-</body>
-
-</html>
+</body></html>

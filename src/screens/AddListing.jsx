@@ -9,6 +9,7 @@ const AddListing = () => {
     const { user } = useAuth();
     const { t } = useSettings();
     const fileInputRef = useRef(null);
+    const tagInputRef = useRef(null);
 
     const [title, setTitle] = useState('');
     const [price, setPrice] = useState('');
@@ -32,6 +33,10 @@ const AddListing = () => {
             e.preventDefault();
             setTags([...tags, newTag.trim()]);
             setNewTag('');
+            // Ensure input stays focused for rapid entry
+            setTimeout(() => {
+                if (tagInputRef.current) tagInputRef.current.focus();
+            }, 0);
         }
     };
 
@@ -182,32 +187,6 @@ const AddListing = () => {
                             hidden
                         />
                     </div>
-
-                    <div className="flex gap-3 overflow-x-auto no-scrollbar py-1">
-                        <button
-                            onClick={triggerFileInput}
-                            className="flex flex-col items-center justify-center size-20 shrink-0 rounded-xl bg-primary/5 border-2 border-dashed border-primary/30 text-primary hover:bg-primary/10 hover:border-primary transition-all"
-                        >
-                            <span className="material-symbols-outlined text-[24px]">add_photo_alternate</span>
-                            <span className="text-[10px] font-bold mt-1">{t('addListing.addPhoto')}</span>
-                        </button>
-
-                        {image && (
-                            <div className="relative size-20 shrink-0 rounded-xl overflow-hidden border border-neutral-200 dark:border-white/10 group shadow-sm">
-                                <img
-                                    className="h-full w-full object-cover"
-                                    src={image}
-                                    alt="Thumbnail"
-                                />
-                                <button
-                                    onClick={() => setImage(null)}
-                                    className="absolute top-1 right-1 bg-black/50 text-white rounded-full p-0.5 opacity-100 backdrop-blur-sm hover:bg-black/70 transition-colors"
-                                >
-                                    <span className="material-symbols-outlined text-[12px]">close</span>
-                                </button>
-                            </div>
-                        )}
-                    </div>
                 </section>
 
                 {/* Form Section */}
@@ -235,10 +214,11 @@ const AddListing = () => {
                                     </button>
                                 </div>
                             ))}
-                            <div className="flex h-8 items-center rounded-lg bg-white dark:bg-[#232524] border border-neutral-200 dark:border-neutral-700 px-3 shadow-sm">
-                                <span className="material-symbols-outlined text-neutral-400 text-[18px] mr-1">add</span>
+                            <div className="flex h-12 items-center rounded-xl bg-white dark:bg-[#232524] border border-neutral-200 dark:border-neutral-700 px-3 shadow-sm focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all">
+                                <span className="material-symbols-outlined text-neutral-400 text-[20px] mr-2">add</span>
                                 <input
-                                    className="w-20 bg-transparent border-none p-0 text-sm focus:ring-0 placeholder:text-neutral-400 text-neutral-900 dark:text-white"
+                                    ref={tagInputRef}
+                                    className="flex-1 bg-transparent border-none p-0 text-base focus:ring-0 placeholder:text-neutral-400 text-neutral-900 dark:text-white font-medium"
                                     placeholder={t('addListing.addTagPlaceholder')}
                                     type="text"
                                     value={newTag}
@@ -263,9 +243,9 @@ const AddListing = () => {
                         <label className="flex flex-col gap-1.5 group">
                             <span className="text-neutral-500 dark:text-neutral-400 text-xs font-medium uppercase tracking-wider px-1">{t('addListing.field.price')}</span>
                             <div className="relative">
-                                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-500 font-medium">{t('currency')}</span>
+                                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral-500 font-medium">{t('currency')}</span>
                                 <input
-                                    className="block w-full rounded-xl border-neutral-300 dark:border-neutral-700 bg-white dark:bg-[#232524] text-neutral-900 dark:text-white h-12 pl-10 pr-4 text-base font-medium focus:border-primary focus:ring-1 focus:ring-primary transition-all shadow-sm"
+                                    className="block w-full rounded-xl border-neutral-300 dark:border-neutral-700 bg-white dark:bg-[#232524] text-neutral-900 dark:text-white h-12 pl-4 pr-12 text-base font-medium focus:border-primary focus:ring-1 focus:ring-primary transition-all shadow-sm"
                                     type="number"
                                     value={price}
                                     onChange={(e) => setPrice(e.target.value)}
@@ -284,10 +264,8 @@ const AddListing = () => {
                                 ))}
                             </select>
                         </label>
-                    </div>
 
-                    <div className="flex gap-4">
-                        <label className="flex flex-col gap-1.5 flex-1 group">
+                        <label className="flex flex-col gap-1.5 group">
                             <span className="text-neutral-500 dark:text-neutral-400 text-xs font-medium uppercase tracking-wider px-1">{t('addListing.field.condition')}</span>
                             <select
                                 value={condition}
@@ -299,7 +277,7 @@ const AddListing = () => {
                                 ))}
                             </select>
                         </label>
-                        <label className="flex flex-col gap-1.5 w-1/3 group">
+                        <label className="flex flex-col gap-1.5 group">
                             <span className="text-neutral-500 dark:text-neutral-400 text-xs font-medium uppercase tracking-wider px-1">{t('addListing.field.color')}</span>
                             <select
                                 value={color}
