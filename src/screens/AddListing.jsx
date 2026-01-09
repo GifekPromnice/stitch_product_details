@@ -20,14 +20,6 @@ const AddListing = () => {
         }
     };
 
-    const navItems = [
-        { name: 'Home', icon: 'home', path: '/home' },
-        { name: 'Favorite', icon: 'favorite', path: '/home' },
-        { name: 'Add', icon: 'add', path: '/add-listing', isAction: true },
-        { name: 'Inbox', icon: 'inbox', path: '/chat' },
-        { name: 'Profile', icon: 'person', path: '/profile' }
-    ];
-
     return (
         <div className="relative flex min-h-screen w-full flex-col bg-background-light dark:bg-background-dark text-neutral-900 dark:text-gray-100 antialiased selection:bg-primary/30 pb-24 mx-auto max-w-md shadow-2xl overflow-hidden">
             {/* Header */}
@@ -205,37 +197,6 @@ const AddListing = () => {
                     </button>
                 </div>
             </main>
-
-            {/* Bottom Navigation */}
-            <div className="fixed bottom-0 z-50 w-full max-w-md bg-background-light/95 dark:bg-[#1e201f]/95 backdrop-blur-2xl border-t border-neutral-200 dark:border-white/10 pt-2 pb-6 shadow-[0_-5px_20px_rgba(0,0,0,0.05)]">
-                <div className="flex items-end justify-around px-2">
-                    {navItems.map((item) => (
-                        <button
-                            key={item.name}
-                            onClick={() => navigate(item.path)}
-                            className={`group flex flex-1 flex-col items-center justify-center gap-1 p-2 transition-colors ${item.isAction ? 'relative' : 'text-neutral-400 hover:text-primary'
-                                }`}
-                        >
-                            {item.isAction ? (
-                                <>
-                                    <div className="absolute -top-10 flex size-14 items-center justify-center rounded-full bg-primary text-white shadow-xl shadow-primary/30 ring-4 ring-background-light dark:ring-[#1e201f] transition-transform active:scale-95">
-                                        <span className="material-symbols-outlined text-[28px]">{item.icon}</span>
-                                    </div>
-                                    <span className="mt-8 text-[10px] font-bold text-primary">{item.name}</span>
-                                </>
-                            ) : (
-                                <>
-                                    <span className="material-symbols-outlined text-[24px] group-hover:-translate-y-0.5 transition-transform">{item.icon}</span>
-                                    <span className="text-[10px] font-medium">{item.name}</span>
-                                </>
-                            )}
-                        </button>
-                    ))}
-                </div>
-                <div className="flex w-full justify-center pt-2">
-                    <div className="h-1 w-32 rounded-full bg-neutral-300 dark:bg-neutral-700"></div>
-                </div>
-            </div>
 
             <style dangerouslySetInnerHTML={{
                 __html: `

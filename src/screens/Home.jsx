@@ -42,7 +42,7 @@ const Home = () => {
     );
 
     return (
-        <div className="animate-in fade-in duration-500 bg-background-light dark:bg-background-dark min-h-screen">
+        <div className="animate-in fade-in duration-500 bg-background-light dark:bg-background-dark">
             <header className="fixed top-0 left-0 right-0 z-50 px-4 pt-12 pb-4 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md">
                 <div className="flex gap-3 items-center w-full max-w-md mx-auto">
                     <div
@@ -72,7 +72,7 @@ const Home = () => {
                 products={products}
             />
 
-            <main className="w-full max-w-md mx-auto pt-32 pb-24 px-4 text-text-main dark:text-gray-100">
+            <main className="w-full max-w-md mx-auto pt-32 px-4 text-text-main dark:text-gray-100">
                 <div className="flex gap-2 overflow-x-auto no-scrollbar pb-6 -mx-4 px-4">
                     {categories.map(cat => (
                         <button

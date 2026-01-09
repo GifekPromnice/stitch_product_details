@@ -30,7 +30,7 @@ const Profile = () => {
     ];
 
     return (
-        <div className="flex flex-col min-h-screen bg-background-light dark:bg-background-dark animate-in fade-in duration-500">
+        <div className="flex flex-col bg-background-light dark:bg-background-dark animate-in fade-in duration-500">
             <header className="sticky top-0 z-10 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm pt-12 pb-3 px-4 flex items-center justify-between">
                 <button onClick={() => navigate(-1)}
                     className="flex size-10 items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
@@ -39,7 +39,7 @@ const Profile = () => {
                 <h2 className="text-lg font-bold leading-tight tracking-tight flex-1 text-center pr-10">Settings</h2>
             </header>
 
-            <main className="flex flex-col gap-6 pb-24 px-4 overflow-y-auto">
+            <main className="flex flex-col gap-6 px-4 overflow-y-auto">
                 {/* Profile Header */}
                 <div className="flex flex-col items-center gap-4 pt-2">
                     <div className="relative group cursor-pointer">

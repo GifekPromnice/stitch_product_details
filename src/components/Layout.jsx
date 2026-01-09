@@ -18,34 +18,34 @@ const Layout = ({ children }) => {
                 {children}
             </main>
 
-            <nav className="fixed bottom-0 w-full z-50 bg-white dark:bg-[#2C2E2D] border-t border-gray-100 dark:border-gray-800 pb-safe pt-2">
-                <div className="flex justify-between items-center px-6 pb-4 h-16 max-w-md mx-auto relative">
+            <nav className="fixed bottom-0 w-full z-50 bg-white/95 dark:bg-[#1E201F]/95 backdrop-blur-2xl border-t border-gray-100 dark:border-white/10 pt-2 pb-6 shadow-[0_-5px_20px_rgba(0,0,0,0.05)]">
+                <div className="flex items-end justify-around px-2 max-w-md mx-auto">
                     {navItems.map((item) => (
                         <Link
                             key={item.name}
                             to={item.path}
-                            className={`flex flex-col items-center justify-center gap-1 group transition-all ${item.isAction ? '-mt-4' : 'w-12'
+                            className={`group flex flex-1 flex-col items-center justify-center gap-1 p-2 transition-colors ${item.isAction ? 'relative' : 'text-neutral-400 hover:text-primary'
                                 }`}
                         >
                             {item.isAction ? (
                                 <>
-                                    <div className="h-14 w-14 rounded-full bg-primary shadow-float hover:bg-primary-dark flex items-center justify-center transition-all hover:scale-105 active:scale-95">
-                                        <span className="material-symbols-outlined text-white text-[32px]">{item.icon}</span>
+                                    <div className="absolute -top-10 flex size-14 items-center justify-center rounded-full bg-primary text-white shadow-xl shadow-primary/30 ring-4 ring-white dark:ring-[#1E201F] transition-transform active:scale-95 group-hover:scale-105">
+                                        <span className="material-symbols-outlined text-[28px]">{item.icon}</span>
                                     </div>
-                                    <span className="text-[11px] font-semibold text-primary">
+                                    <span className="mt-8 text-[10px] font-bold text-primary">
                                         {item.name}
                                     </span>
                                 </>
                             ) : (
                                 <>
-                                    <div className={`h-7 w-12 rounded-full flex items-center justify-center transition-colors ${currentPath === item.path ? 'bg-primary/20' : 'hover:bg-gray-100 dark:hover:bg-gray-700'
-                                        }`}>
-                                        <span className={`material-symbols-outlined text-[24px] ${currentPath === item.path ? 'text-primary' : 'text-text-sub dark:text-gray-400'
-                                            }`} style={{ fontVariationSettings: currentPath === item.path ? "'FILL' 1" : "'FILL' 0" }}>
-                                            {item.icon}
-                                        </span>
-                                    </div>
-                                    <span className={`text-[11px] transition-colors ${currentPath === item.path ? 'text-primary font-semibold' : 'text-text-sub dark:text-gray-400 font-medium'
+                                    <span
+                                        className={`material-symbols-outlined text-[24px] transition-transform group-hover:-translate-y-0.5 ${currentPath === item.path ? 'text-primary' : ''
+                                            }`}
+                                        style={{ fontVariationSettings: currentPath === item.path ? "'FILL' 1" : "'FILL' 0" }}
+                                    >
+                                        {item.icon}
+                                    </span>
+                                    <span className={`text-[10px] font-medium ${currentPath === item.path ? 'text-primary font-bold' : ''
                                         }`}>
                                         {item.name}
                                     </span>

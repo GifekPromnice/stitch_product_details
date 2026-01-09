@@ -27,7 +27,7 @@ function App() {
                     <Route path="/order-confirmation" element={<OrderConfirmation />} />
                     <Route path="/profile" element={<Layout><Profile /></Layout>} />
                     <Route path="/wallet" element={<Wallet />} />
-                    <Route path="/chat" element={<Layout><Chat /></Layout>} />
+                    <Route path="/chat" element={<Chat />} />
                     <Route path="/add-listing" element={<AddListing />} />
                     <Route path="/negotiate/:id" element={<Negotiate />} />
                     {/* Tu dodamy więcej ścieżek */}
