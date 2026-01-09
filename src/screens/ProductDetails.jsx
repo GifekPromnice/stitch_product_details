@@ -1,9 +1,11 @@
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useState, useMemo } from 'react';
+import { useSettings } from '../context/SettingsContext';
 
 const ProductDetails = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const { t, formatPrice } = useSettings();
     const { id } = useParams();
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -106,8 +108,8 @@ const ProductDetails = () => {
                     </div>
                     <div className="flex items-center justify-between mt-2">
                         <div className="flex items-baseline gap-3">
-                            <span className="text-3xl font-bold text-primary">${product.price.toFixed(2)}</span>
-                            <span className="text-sm text-gray-500 dark:text-gray-400 font-medium line-through">${product.originalPrice.toFixed(2)}</span>
+                            <span className="text-3xl font-bold text-primary">{formatPrice(product.price)}</span>
+                            <span className="text-sm text-gray-500 dark:text-gray-400 font-medium line-through">{formatPrice(product.originalPrice)}</span>
                         </div>
                     </div>
                     <div className="flex items-center gap-2 mt-4">
@@ -127,7 +129,7 @@ const ProductDetails = () => {
                         <div className="flex items-center gap-3 flex-1 justify-start">
                             <span className="material-symbols-outlined text-primary text-[20px]">height</span>
                             <div className="flex flex-col">
-                                <span className="text-[10px] text-gray-400 uppercase tracking-wider font-bold">Height</span>
+                                <span className="text-[10px] text-gray-400 uppercase tracking-wider font-bold">{t('product.height')}</span>
                                 <span className="text-sm font-bold text-gray-900 dark:text-white">{product.dimensions.height}</span>
                             </div>
                         </div>
@@ -135,7 +137,7 @@ const ProductDetails = () => {
                         <div className="flex items-center gap-3 flex-1 justify-center">
                             <span className="material-symbols-outlined text-primary text-[20px]">straighten</span>
                             <div className="flex flex-col">
-                                <span className="text-[10px] text-gray-400 uppercase tracking-wider font-bold">Width</span>
+                                <span className="text-[10px] text-gray-400 uppercase tracking-wider font-bold">{t('product.width')}</span>
                                 <span className="text-sm font-bold text-gray-900 dark:text-white">{product.dimensions.width}</span>
                             </div>
                         </div>
@@ -143,7 +145,7 @@ const ProductDetails = () => {
                         <div className="flex items-center gap-3 flex-1 justify-end">
                             <span className="material-symbols-outlined text-primary text-[20px]">deployed_code</span>
                             <div className="flex flex-col">
-                                <span className="text-[10px] text-gray-400 uppercase tracking-wider font-bold">Depth</span>
+                                <span className="text-[10px] text-gray-400 uppercase tracking-wider font-bold">{t('product.depth')}</span>
                                 <span className="text-sm font-bold text-gray-900 dark:text-white">{product.dimensions.depth}</span>
                             </div>
                         </div>
@@ -152,7 +154,7 @@ const ProductDetails = () => {
 
                 {/* Description */}
                 <div className="px-6 mb-6">
-                    <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-2">Description</h3>
+                    <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-2">{t('product.description')}</h3>
                     <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
                         {product.description}
                     </p>
@@ -172,7 +174,7 @@ const ProductDetails = () => {
                 {/* Pickup Location */}
                 <div className="mb-8">
                     <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-3 px-6">
-                        Pickup Location <span className="text-gray-500 dark:text-gray-400 font-normal ml-1">{product.location}</span>
+                        {t('product.pickupLocation')} <span className="text-gray-500 dark:text-gray-400 font-normal ml-1">{product.location}</span>
                     </h3>
                     <div className="w-full h-48 overflow-hidden relative">
                         <img
@@ -189,7 +191,7 @@ const ProductDetails = () => {
                     <div className="px-6 flex justify-center">
                         <button className="mt-4 px-6 py-2 border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 text-[11px] uppercase tracking-wider font-bold rounded-full flex items-center gap-2 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                             <span className="material-symbols-outlined text-[14px]">local_shipping</span>
-                            Estimate Transport
+                            {t('product.estimateTransport')}
                         </button>
                     </div>
                 </div>
@@ -206,7 +208,7 @@ const ProductDetails = () => {
                                 <div className="absolute -bottom-1 -right-1 bg-green-500 w-3 h-3 rounded-full border-2 border-white dark:border-background-dark"></div>
                             </div>
                             <div>
-                                <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Sold by {product.seller.name}</h3>
+                                <h3 className="text-sm font-semibold text-gray-900 dark:text-white">{t('product.soldBy')} {product.seller.name}</h3>
                                 <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
                                     <span className="material-symbols-outlined text-[14px] text-yellow-500" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
                                     <span>{product.seller.rating}</span>
@@ -241,7 +243,7 @@ const ProductDetails = () => {
                     className="flex-1 h-12 bg-primary text-white font-bold rounded-2xl flex items-center justify-center gap-2 shadow-lg shadow-primary/30 active:scale-[0.98] transition-all"
                 >
                     <span className="material-symbols-outlined text-[20px]">shopping_cart</span>
-                    Buy Now
+                    {t('product.buyNow')}
                 </button>
             </div>
         </div>

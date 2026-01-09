@@ -42,6 +42,12 @@ const Home = () => {
 
     const categories = ['all', 'new arrivals', 'sofas', 'lighting', 'tables', 'rugs'];
 
+    const getCategoryLabel = (cat) => {
+        if (cat === 'all') return t('cat.all');
+        if (cat === 'new arrivals') return t('cat.newArrivals');
+        return t(`cat.${cat}`);
+    };
+
     const filteredProducts = products.filter(p =>
         (activeCategory === 'all' || p.category === activeCategory || activeCategory === 'new arrivals') &&
         p.title.toLowerCase().includes(searchQuery.toLowerCase())
@@ -89,7 +95,7 @@ const Home = () => {
                                 : 'bg-secondary dark:bg-[#2C2E2D] text-primary dark:text-primary-dark border border-transparent hover:bg-primary/10 dark:hover:bg-primary/20'
                                 }`}
                         >
-                            <span className={`text-sm ${activeCategory === cat ? 'font-semibold' : 'font-medium'}`}>{cat}</span>
+                            <span className={`text-sm ${activeCategory === cat ? 'font-semibold' : 'font-medium'}`}>{getCategoryLabel(cat)}</span>
                         </button>
                     ))}
                 </div>

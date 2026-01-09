@@ -119,6 +119,8 @@ export const SettingsProvider = ({ children }) => {
             'addListing.publishing': 'Publishing...',
 
             // Categories
+            'cat.all': 'All',
+            'cat.newArrivals': 'New Arrivals',
             'cat.sofas': 'Sofas',
             'cat.tables': 'Tables',
             'cat.lighting': 'Lighting',
@@ -144,6 +146,16 @@ export const SettingsProvider = ({ children }) => {
             'col.green': 'Green',
             'col.yellow': 'Yellow',
             'col.other': 'Other',
+
+            // Product Details
+            'product.height': 'Height',
+            'product.width': 'Width',
+            'product.depth': 'Depth',
+            'product.description': 'Description',
+            'product.pickupLocation': 'Pickup Location',
+            'product.estimateTransport': 'Estimate Transport',
+            'product.soldBy': 'Sold by',
+            'product.buyNow': 'Buy Now',
         },
         pl: {
             // Navigation
@@ -220,6 +232,8 @@ export const SettingsProvider = ({ children }) => {
             'addListing.publishing': 'Publikowanie...',
 
             // Categories
+            'cat.all': 'Wszystkie',
+            'cat.newArrivals': 'Nowości',
             'cat.sofas': 'Sofy',
             'cat.tables': 'Stoły',
             'cat.lighting': 'Oświetlenie',
@@ -245,6 +259,16 @@ export const SettingsProvider = ({ children }) => {
             'col.green': 'Zielony',
             'col.yellow': 'Żółty',
             'col.other': 'Inny',
+
+            // Product Details
+            'product.height': 'Wysokość',
+            'product.width': 'Szerokość',
+            'product.depth': 'Głębokość',
+            'product.description': 'Opis',
+            'product.pickupLocation': 'Miejsce Odbioru',
+            'product.estimateTransport': 'Oszacuj Transport',
+            'product.soldBy': 'Sprzedawane przez',
+            'product.buyNow': 'Kup Teraz',
         }
     };
 
@@ -254,14 +278,16 @@ export const SettingsProvider = ({ children }) => {
 
     // Helper for currency formatting
     const formatPrice = (price) => {
+        const numericPrice = parseFloat(price);
+        if (isNaN(numericPrice)) return price;
+
         if (language === 'pl') {
-            // Assuming 1 USD = 4 PLN for roughly logic, or just display raw
-            // Ideally we'd convert, but for now let's just swap symbol/format
-            // Simple mockup conversion
-            const val = price * 4;
+            // Simple conversion rate for demo: 1 USD = 4 PLN
+            // You might want to remove this if prices are stored in mixed currencies
+            const val = numericPrice * 4;
             return `${val.toFixed(2)} zł`;
         }
-        return `$${price.toFixed(2)}`;
+        return `$${numericPrice.toFixed(2)}`;
     };
 
     return (
