@@ -16,11 +16,12 @@ import PersonalInformation from './screens/PersonalInformation';
 import PasswordSecurity from './screens/PasswordSecurity';
 import Layout from './components/Layout';
 import { AuthProvider } from './context/AuthContext';
-import ProtectedRoute from './components/ProtectedRoute';
+import ScrollToTop from './components/ScrollToTop';
 
 function App() {
     return (
         <Router>
+            <ScrollToTop />
             <AuthProvider>
                 <div className="min-h-screen bg-background-light dark:bg-background-dark font-display">
                     <Routes>

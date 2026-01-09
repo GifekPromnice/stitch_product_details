@@ -84,6 +84,17 @@ const AddListing = () => {
             console.error('Error adding product:', error);
             alert('Failed to publish listing: ' + error.message);
         } else {
+            // Reset form
+            setTitle('');
+            setPrice('');
+            setDescription('');
+            setTags([]);
+            setCategory('sofas');
+            setCondition('good');
+            setColor('black');
+            setLocation('');
+            setImage(null);
+
             navigate('/home');
         }
     };
