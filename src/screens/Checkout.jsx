@@ -1,11 +1,14 @@
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 const Checkout = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
     const passedProduct = location.state?.product;
+
+    const [deliveryMethod, setDeliveryMethod] = useState('courier');
+    const [paymentMethod, setPaymentMethod] = useState('credit_card');
 
     // Use passed data or fallback to mock
     const product = useMemo(() => {
@@ -18,7 +21,10 @@ const Checkout = () => {
 
     const fees = useMemo(() => {
         const subtotal = product.price;
-        const delivery = 50.00;
+        let delivery = 0;
+        if (deliveryMethod === 'courier') delivery = 50.00;
+        else if (deliveryMethod === 'furgonetka') delivery = 45.00;
+
         const service = subtotal * 0.03; // 3% service fee
         return {
             subtotal,
@@ -26,10 +32,10 @@ const Checkout = () => {
             service,
             total: subtotal + delivery + service
         };
-    }, [product]);
+    }, [product, deliveryMethod]);
 
     return (
-        <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden bg-background-light dark:bg-background-dark animate-in fade-in duration-500">
+        <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden bg-background-light dark:bg-background-dark animate-in fade-in duration-500 pb-32">
             <header className="sticky top-0 z-10 flex items-center justify-between bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm px-4 py-3 pb-safe pt-12">
                 <button onClick={() => navigate(-1)}
                     className="flex size-10 items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
@@ -41,7 +47,7 @@ const Checkout = () => {
                 </div>
             </header>
 
-            <main className="flex flex-col gap-6 px-4 pt-2 pb-32">
+            <main className="flex flex-col gap-6 px-4 pt-2">
                 {/* Order Summary */}
                 <section aria-label="Order Summary">
                     <div className="flex items-center gap-4 bg-white dark:bg-[#2C2E2D] p-4 rounded-2xl shadow-sm border border-stone-100 dark:border-stone-800">
@@ -81,6 +87,14 @@ const Checkout = () => {
                                 </div>
                             </div>
                         </div>
+                        <div className="mt-4 w-full h-24 rounded-lg bg-stone-200 dark:bg-stone-700 overflow-hidden relative">
+                            <img alt="Map showing location" className="w-full h-full object-cover opacity-80 dark:opacity-60" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_28XfGmWGkWnlX_EA97ElMMr9O-htxy7wAunyxuJIUW4QYFmqZ9jt-buRdtdemDVfhjZEBitm55ajAFUNu1Hm589EMoAu7-G8Nvn6OInCG6ZRwIS3tOvqpfL3uWCawfEZwOSAcOSbPwixLTy4C18jWBCJN1XzZbsLTNHuqCUIQE-fZn80bhSFExVlDxK5SyJpxbVYUVkGIo89fVQfDUS9dD44ZnCaD-WWaJr4xiEYd7AKgs6PFLMDlhrYu1NYn2JMKOiBKsajttqB" />
+                            <div className="absolute inset-0 bg-primary/5 flex items-center justify-center">
+                                <div className="bg-white dark:bg-stone-800 p-1 rounded-full shadow-lg">
+                                    <span className="material-symbols-outlined text-primary text-sm block">location_on</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </section>
 
@@ -90,36 +104,119 @@ const Checkout = () => {
                         <h3 className="text-lg font-bold">Delivery Method</h3>
                     </div>
                     <div className="flex flex-col gap-3">
-                        <label className="relative flex items-center gap-4 bg-white dark:bg-[#2C2E2D] p-4 rounded-2xl shadow-sm border-2 border-primary cursor-pointer transition-all">
-                            <input checked readOnly className="peer sr-only" name="delivery_method" type="radio" />
-                            <div className="flex items-center justify-center rounded-full bg-primary/10 text-primary shrink-0 size-12">
-                                <span className="material-symbols-outlined">local_shipping</span>
-                            </div>
-                            <div className="flex flex-col flex-1">
-                                <p className="text-base font-semibold">Professional Delivery</p>
-                                <p className="text-gray-500 dark:text-gray-400 text-sm">Arrives by Fri, Oct 24</p>
-                            </div>
-                            <div className="text-right">
-                                <p className="font-bold text-primary">$50.00</p>
-                            </div>
-                            <div className="absolute right-4 top-4 text-primary opacity-100">
-                                <span className="material-symbols-outlined fill-[1]" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+                        <label className="relative block cursor-pointer group" onClick={() => setDeliveryMethod('furgonetka')}>
+                            <input className="peer sr-only" name="delivery_method" type="radio" checked={deliveryMethod === 'furgonetka'} readOnly />
+                            <div className="flex items-center gap-4 bg-white dark:bg-[#2C2E2D] p-4 rounded-2xl border border-stone-200 dark:border-stone-800 transition-all peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:shadow-sm">
+                                <div className="flex items-center justify-center rounded-full bg-stone-100 dark:bg-stone-700 text-stone-500 shrink-0 size-12 peer-checked:text-primary peer-checked:bg-primary/20 transition-colors group-hover:bg-primary/10 group-hover:text-primary/70">
+                                    <span className="material-symbols-outlined">local_shipping</span>
+                                </div>
+                                <div className="flex flex-col flex-1">
+                                    <p className="text-base font-semibold">Furgonetka.pl</p>
+                                    <p className="text-gray-500 dark:text-gray-400 text-sm">Estimate price</p>
+                                </div>
+                                <div className="text-right">
+                                    <p className="font-bold text-gray-500 dark:text-gray-400 text-sm">~ $45.00</p>
+                                </div>
+                                <div className="absolute right-4 top-4 text-primary opacity-0 peer-checked:opacity-100 transition-opacity">
+                                    <span className="material-symbols-outlined fill-current text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+                                </div>
                             </div>
                         </label>
 
-                        <label className="relative flex items-center gap-4 bg-white dark:bg-[#2C2E2D] p-4 rounded-2xl shadow-sm border border-stone-200 dark:border-stone-800 cursor-pointer transition-all hover:border-primary/50">
-                            <input className="peer sr-only" name="delivery_method" type="radio" />
-                            <div className="flex items-center justify-center rounded-full bg-stone-100 dark:bg-stone-700 text-stone-500 shrink-0 size-12">
-                                <span className="material-symbols-outlined">storefront</span>
-                            </div>
-                            <div className="flex flex-col flex-1">
-                                <p className="text-base font-semibold">Self Pickup</p>
-                                <p className="text-gray-500 dark:text-gray-400 text-sm">15 miles away</p>
-                            </div>
-                            <div className="text-right">
-                                <p className="font-bold text-green-600 dark:text-green-400">Free</p>
+                        <label className="relative block cursor-pointer group" onClick={() => setDeliveryMethod('courier')}>
+                            <input className="peer sr-only" name="delivery_method" type="radio" checked={deliveryMethod === 'courier'} readOnly />
+                            <div className="flex items-center gap-4 bg-white dark:bg-[#2C2E2D] p-4 rounded-2xl border border-stone-200 dark:border-stone-800 transition-all peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:shadow-sm">
+                                <div className="flex items-center justify-center rounded-full bg-stone-100 dark:bg-stone-700 text-stone-500 shrink-0 size-12 peer-checked:text-primary peer-checked:bg-primary/20 transition-colors group-hover:bg-primary/10 group-hover:text-primary/70">
+                                    <span className="material-symbols-outlined">directions_car</span>
+                                </div>
+                                <div className="flex flex-col flex-1">
+                                    <p className="text-base font-semibold">Courier</p>
+                                    <p className="text-gray-500 dark:text-gray-400 text-sm">Arrives by Oct 24</p>
+                                </div>
+                                <div className="text-right">
+                                    <p className="font-bold text-primary">$50.00</p>
+                                </div>
+                                <div className="absolute right-4 top-4 text-primary opacity-0 peer-checked:opacity-100 transition-opacity">
+                                    <span className="material-symbols-outlined fill-current text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+                                </div>
                             </div>
                         </label>
+
+                        <label className="relative block cursor-pointer group" onClick={() => setDeliveryMethod('pickup')}>
+                            <input className="peer sr-only" name="delivery_method" type="radio" checked={deliveryMethod === 'pickup'} readOnly />
+                            <div className="flex items-center gap-4 bg-white dark:bg-[#2C2E2D] p-4 rounded-2xl border border-stone-200 dark:border-stone-800 transition-all peer-checked:border-primary peer-checked:bg-primary/5 peer-checked:shadow-sm">
+                                <div className="flex items-center justify-center rounded-full bg-stone-100 dark:bg-stone-700 text-stone-500 shrink-0 size-12 peer-checked:text-primary peer-checked:bg-primary/20 transition-colors group-hover:bg-primary/10 group-hover:text-primary/70">
+                                    <span className="material-symbols-outlined">storefront</span>
+                                </div>
+                                <div className="flex flex-col flex-1">
+                                    <p className="text-base font-semibold">Self Pickup</p>
+                                    <p className="text-gray-500 dark:text-gray-400 text-sm">15 miles away</p>
+                                </div>
+                                <div className="text-right">
+                                    <p className="font-bold text-green-600 dark:text-green-400">Free</p>
+                                </div>
+                                <div className="absolute right-4 top-4 text-primary opacity-0 peer-checked:opacity-100 transition-opacity">
+                                    <span className="material-symbols-outlined fill-current text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                </section>
+
+                {/* Payment Method */}
+                <section aria-label="Payment Method">
+                    <div className="flex items-center justify-between mb-3 px-1">
+                        <h3 className="text-lg font-bold">Payment Method</h3>
+                    </div>
+                    <div className="bg-white dark:bg-[#2C2E2D] p-2 rounded-2xl border border-stone-200 dark:border-stone-800">
+                        <div className="flex flex-col">
+                            <label className="relative flex items-center gap-3 p-3 rounded-xl cursor-pointer hover:bg-stone-50 dark:hover:bg-white/5 transition-colors" onClick={() => setPaymentMethod('credit_card')}>
+                                <input className="peer sr-only" name="payment_method" type="radio" checked={paymentMethod === 'credit_card'} readOnly />
+                                <div className="flex items-center justify-center rounded-full bg-stone-100 dark:bg-stone-700 text-stone-500 shrink-0 size-10 peer-checked:bg-primary peer-checked:text-white transition-colors">
+                                    <span className="material-symbols-outlined text-[20px]">credit_card</span>
+                                </div>
+                                <span className="font-medium flex-1 text-base">Credit Card</span>
+                                <div className="size-5 rounded-full border-2 border-stone-300 dark:border-stone-600 flex items-center justify-center peer-checked:border-primary peer-checked:bg-primary">
+                                    <span className="material-symbols-outlined text-white text-[14px] opacity-0 peer-checked:opacity-100">check</span>
+                                </div>
+                            </label>
+                            <div className="h-px bg-stone-100 dark:bg-stone-800 mx-3"></div>
+
+                            <label className="relative flex items-center gap-3 p-3 rounded-xl cursor-pointer hover:bg-stone-50 dark:hover:bg-white/5 transition-colors" onClick={() => setPaymentMethod('payu')}>
+                                <input className="peer sr-only" name="payment_method" type="radio" checked={paymentMethod === 'payu'} readOnly />
+                                <div className="flex items-center justify-center rounded-full bg-stone-100 dark:bg-stone-700 text-stone-500 shrink-0 size-10 peer-checked:bg-primary peer-checked:text-white transition-colors">
+                                    <span className="material-symbols-outlined text-[20px]">payments</span>
+                                </div>
+                                <span className="font-medium flex-1 text-base">PayU</span>
+                                <div className="size-5 rounded-full border-2 border-stone-300 dark:border-stone-600 flex items-center justify-center peer-checked:border-primary peer-checked:bg-primary">
+                                    <span className="material-symbols-outlined text-white text-[14px] opacity-0 peer-checked:opacity-100">check</span>
+                                </div>
+                            </label>
+                            <div className="h-px bg-stone-100 dark:bg-stone-800 mx-3"></div>
+
+                            <label className="relative flex items-center gap-3 p-3 rounded-xl cursor-pointer hover:bg-stone-50 dark:hover:bg-white/5 transition-colors" onClick={() => setPaymentMethod('transfer')}>
+                                <input className="peer sr-only" name="payment_method" type="radio" checked={paymentMethod === 'transfer'} readOnly />
+                                <div className="flex items-center justify-center rounded-full bg-stone-100 dark:bg-stone-700 text-stone-500 shrink-0 size-10 peer-checked:bg-primary peer-checked:text-white transition-colors">
+                                    <span className="material-symbols-outlined text-[20px]">account_balance</span>
+                                </div>
+                                <span className="font-medium flex-1 text-base">Classic Transfer</span>
+                                <div className="size-5 rounded-full border-2 border-stone-300 dark:border-stone-600 flex items-center justify-center peer-checked:border-primary peer-checked:bg-primary">
+                                    <span className="material-symbols-outlined text-white text-[14px] opacity-0 peer-checked:opacity-100">check</span>
+                                </div>
+                            </label>
+                            <div className="h-px bg-stone-100 dark:bg-stone-800 mx-3"></div>
+
+                            <label className="relative flex items-center gap-3 p-3 rounded-xl cursor-pointer hover:bg-stone-50 dark:hover:bg-white/5 transition-colors" onClick={() => setPaymentMethod('cod')}>
+                                <input className="peer sr-only" name="payment_method" type="radio" checked={paymentMethod === 'cod'} readOnly />
+                                <div className="flex items-center justify-center rounded-full bg-stone-100 dark:bg-stone-700 text-stone-500 shrink-0 size-10 peer-checked:bg-primary peer-checked:text-white transition-colors">
+                                    <span className="material-symbols-outlined text-[20px]">attach_money</span>
+                                </div>
+                                <span className="font-medium flex-1 text-base">Cash on Delivery</span>
+                                <div className="size-5 rounded-full border-2 border-stone-300 dark:border-stone-600 flex items-center justify-center peer-checked:border-primary peer-checked:bg-primary">
+                                    <span className="material-symbols-outlined text-white text-[14px] opacity-0 peer-checked:opacity-100">check</span>
+                                </div>
+                            </label>
+                        </div>
                     </div>
                 </section>
 
@@ -167,5 +264,6 @@ const Checkout = () => {
         </div>
     );
 };
+
 
 export default Checkout;

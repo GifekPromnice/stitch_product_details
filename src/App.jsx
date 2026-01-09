@@ -11,6 +11,8 @@ import Welcome from './screens/Welcome';
 import Chat from './screens/Chat';
 import AddListing from './screens/AddListing';
 import Negotiate from './screens/Negotiate';
+import PersonalInformation from './screens/PersonalInformation';
+import PasswordSecurity from './screens/PasswordSecurity';
 import Layout from './components/Layout';
 
 function App() {
@@ -30,6 +32,8 @@ function App() {
                     <Route path="/chat" element={<Chat />} />
                     <Route path="/add-listing" element={<AddListing />} />
                     <Route path="/negotiate/:id" element={<Negotiate />} />
+                    <Route path="/personal-information" element={<PersonalInformation />} />
+                    <Route path="/password-security" element={<PasswordSecurity />} />
                     {/* Tu dodamy więcej ścieżek */}
                     <Route path="*" element={<div className="p-10 text-center">Screen in development</div>} />
                 </Routes>

@@ -7,8 +7,8 @@ const Profile = () => {
         {
             category: 'Account',
             items: [
-                { name: 'Personal Information', icon: 'person' },
-                { name: 'Password & Security', icon: 'lock' },
+                { name: 'Personal Information', icon: 'person', onClick: () => navigate('/personal-information') },
+                { name: 'Password & Security', icon: 'lock', onClick: () => navigate('/password-security') },
                 { name: 'Payment Methods', icon: 'credit_card', onClick: () => navigate('/wallet') },
             ]
         },
