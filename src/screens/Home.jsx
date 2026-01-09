@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import SearchOverlay from '../components/SearchOverlay';
 
 const Home = () => {
     const navigate = useNavigate();
@@ -9,6 +10,7 @@ const Home = () => {
         const saved = localStorage.getItem('favorites');
         return saved ? JSON.parse(saved) : [];
     });
+    const [showSearchOverlay, setShowSearchOverlay] = useState(false);
 
     useEffect(() => {
         localStorage.setItem('favorites', JSON.stringify(favorites));
@@ -43,14 +45,17 @@ const Home = () => {
         <div className="animate-in fade-in duration-500 bg-background-light dark:bg-background-dark min-h-screen">
             <header className="fixed top-0 left-0 right-0 z-50 px-4 pt-12 pb-4 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md">
                 <div className="flex gap-3 items-center w-full max-w-md mx-auto">
-                    <div className="flex-1 h-12 bg-white dark:bg-[#2C2E2D] shadow-soft rounded-full flex items-center px-4 transition-shadow hover:shadow-float group">
+                    <div
+                        className="flex-1 h-12 bg-white dark:bg-[#2C2E2D] shadow-soft rounded-full flex items-center px-4 transition-shadow hover:shadow-float group cursor-pointer"
+                        onClick={() => setShowSearchOverlay(true)}
+                    >
                         <span className="material-symbols-outlined text-text-sub dark:text-gray-400 mr-3">search</span>
                         <input
-                            className="flex-1 bg-transparent border-none p-0 text-text-main dark:text-white placeholder:text-text-sub focus:ring-0 text-base font-medium leading-normal"
+                            className="flex-1 bg-transparent border-none p-0 text-text-main dark:text-white placeholder:text-text-sub focus:ring-0 text-base font-medium leading-normal cursor-pointer"
                             placeholder="Search vintage chairs..."
                             type="text"
                             value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
+                            readOnly
                         />
                     </div>
                     <button className="shrink-0 h-12 w-12 rounded-full overflow-hidden shadow-soft border-2 border-white dark:border-[#2C2E2D]">
@@ -58,6 +63,13 @@ const Home = () => {
                     </button>
                 </div>
             </header>
+
+            <SearchOverlay
+                isOpen={showSearchOverlay}
+                onClose={() => setShowSearchOverlay(false)}
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+            />
 
             <main className="w-full max-w-md mx-auto pt-32 pb-24 px-4 text-text-main dark:text-gray-100">
                 <div className="flex gap-2 overflow-x-auto no-scrollbar pb-6 -mx-4 px-4">
