@@ -18,7 +18,7 @@ const Layout = ({ children }) => {
                 {children}
             </main>
 
-            <nav className="fixed bottom-0 w-full z-50 bg-white/95 dark:bg-[#1E201F]/95 backdrop-blur-2xl border-t border-gray-100 dark:border-white/10 pt-2 pb-6 shadow-[0_-5px_20px_rgba(0,0,0,0.05)]">
+            <nav className="fixed bottom-0 w-full z-50 bg-white/95 dark:bg-[#1E201F]/95 backdrop-blur-2xl border-t border-gray-100 dark:border-white/10 pt-2 pb-2 shadow-[0_-5px_20px_rgba(0,0,0,0.05)]">
                 <div className="flex items-end justify-around px-2 max-w-md mx-auto">
                     {navItems.map((item) => (
                         <Link
@@ -29,10 +29,10 @@ const Layout = ({ children }) => {
                         >
                             {item.isAction ? (
                                 <>
-                                    <div className="absolute -top-10 flex size-14 items-center justify-center rounded-full bg-primary text-white shadow-xl shadow-primary/30 ring-4 ring-white dark:ring-[#1E201F] transition-transform active:scale-95 group-hover:scale-105">
-                                        <span className="material-symbols-outlined text-[28px]">{item.icon}</span>
+                                    <div className="absolute -top-7 flex size-12 items-center justify-center rounded-full bg-primary text-white shadow-xl shadow-primary/30 ring-4 ring-white dark:ring-[#1E201F] transition-transform active:scale-95 group-hover:scale-105">
+                                        <span className="material-symbols-outlined text-[24px]">{item.icon}</span>
                                     </div>
-                                    <span className="mt-8 text-[10px] font-bold text-primary">
+                                    <span className="mt-6 text-[10px] font-bold text-primary">
                                         {item.name}
                                     </span>
                                 </>

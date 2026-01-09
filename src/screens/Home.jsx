@@ -43,7 +43,7 @@ const Home = () => {
 
     return (
         <div className="animate-in fade-in duration-500 bg-background-light dark:bg-background-dark">
-            <header className="fixed top-0 left-0 right-0 z-50 px-4 pt-12 pb-4 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md">
+            <header className="fixed top-0 left-0 right-0 z-50 px-4 pt-6 pb-2 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md">
                 <div className="flex gap-3 items-center w-full max-w-md mx-auto">
                     <div
                         className="flex-1 h-12 bg-white dark:bg-[#2C2E2D] shadow-soft rounded-full flex items-center px-4 transition-shadow hover:shadow-float group cursor-pointer"
@@ -72,8 +72,8 @@ const Home = () => {
                 products={products}
             />
 
-            <main className="w-full max-w-md mx-auto pt-32 px-4 text-text-main dark:text-gray-100">
-                <div className="flex gap-2 overflow-x-auto no-scrollbar pb-6 -mx-4 px-4">
+            <main className="w-full max-w-md mx-auto pt-24 px-3 text-text-main dark:text-gray-100">
+                <div className="flex gap-2 overflow-x-auto no-scrollbar pb-4 -mx-3 px-3">
                     {categories.map(cat => (
                         <button
                             key={cat}
@@ -91,8 +91,8 @@ const Home = () => {
                 <div className="masonry-grid w-full">
                     {filteredProducts.map(product => (
                         <div key={product.id} className="masonry-item relative group" onClick={() => navigate(`/product/${product.id}`)}>
-                            <div className="bg-white dark:bg-[#2C2E2D] rounded-xl p-3 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer">
-                                <div className="relative w-full overflow-hidden rounded-lg mb-3">
+                            <div className="bg-white dark:bg-[#2C2E2D] rounded-xl p-2.5 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer">
+                                <div className="relative w-full overflow-hidden rounded-lg mb-2">
                                     <div className="w-full h-auto bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
                                         style={{ backgroundImage: `url("${product.image}")`, aspectRatio: product.aspect }}>
                                     </div>
@@ -103,10 +103,10 @@ const Home = () => {
                                         <span className={`material-symbols-outlined text-primary text-[20px] transition-all ${favorites.includes(product.id) ? 'font-variation-settings-fill' : 'opacity-70 hover:opacity-100'}`}>favorite</span>
                                     </button>
                                 </div>
-                                <div className="flex flex-col gap-1 px-1">
-                                    <h3 className="text-primary dark:text-primary text-lg font-bold tracking-tight">${product.price}</h3>
-                                    <p className="text-text-main dark:text-gray-100 text-sm font-semibold leading-tight line-clamp-2">{product.title}</p>
-                                    <p className="text-text-sub dark:text-gray-400 text-xs font-normal mt-1">{product.location}</p>
+                                <div className="flex flex-col gap-0.5 px-1">
+                                    <h3 className="text-primary dark:text-primary text-base font-bold tracking-tight">${product.price}</h3>
+                                    <p className="text-text-main dark:text-gray-100 text-[13px] font-semibold leading-tight line-clamp-2">{product.title}</p>
+                                    <p className="text-text-sub dark:text-gray-400 text-[11px] font-normal mt-0.5">{product.location}</p>
                                 </div>
                             </div>
                         </div>
