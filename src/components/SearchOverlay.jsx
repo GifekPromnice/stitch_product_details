@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const SearchOverlay = ({ isOpen, onClose, searchQuery, setSearchQuery }) => {
+const SearchOverlay = ({ isOpen, onClose, searchQuery, setSearchQuery, products = [] }) => {
     if (!isOpen) return null;
 
     const categories = [
@@ -18,8 +18,17 @@ const SearchOverlay = ({ isOpen, onClose, searchQuery, setSearchQuery }) => {
         'Green lamp'
     ];
 
+    const suggestions = products.filter(p =>
+        p.title.toLowerCase().includes(searchQuery.toLowerCase())
+    ).slice(0, 5); // Show top 5 suggestions
+
+    const handleSuggestionClick = (title) => {
+        setSearchQuery(title);
+        onClose();
+    };
+
     return (
-        <div className="fixed inset-0 z-[60] bg-background-light dark:bg-background-dark animate-in slide-in-from-bottom duration-300">
+        <div className="fixed inset-0 z-[60] bg-background-light dark:bg-background-dark animate-in slide-in-from-bottom duration-300 flex flex-col">
             <div className="h-12 w-full bg-background-light dark:bg-background-dark shrink-0"></div>
 
             {/* Header / Search Bar */}
@@ -38,7 +47,7 @@ const SearchOverlay = ({ isOpen, onClose, searchQuery, setSearchQuery }) => {
                         </div>
                         <input
                             autoFocus
-                            className="block w-full h-full pl-12 pr-10 rounded-full bg-secondary dark:bg-white/10 border-2 border-primary/50 focus:border-primary text-on-surface-light dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-0 transition-colors text-base"
+                            className="block w-full h-full pl-12 pr-10 rounded-full bg-secondary dark:bg-white/10 border-2 border-primary/50 focus:border-primary text-on-surface-light dark:text-white placeholder:text-text-sub dark:placeholder-gray-400 focus:ring-0 transition-colors text-base"
                             placeholder="Search furniture..."
                             type="text"
                             value={searchQuery}
@@ -71,9 +80,7 @@ const SearchOverlay = ({ isOpen, onClose, searchQuery, setSearchQuery }) => {
                             {categories.map((cat) => (
                                 <button
                                     key={cat.name}
-                                    onClick={(e) => {
-                                        setSearchQuery(cat.name);
-                                    }}
+                                    onClick={() => handleSuggestionClick(cat.name)}
                                     className="group relative flex flex-col items-center justify-center gap-4 p-6 aspect-[4/3] rounded-2xl bg-white dark:bg-white/5 border border-transparent hover:border-primary/30 shadow-card hover:shadow-soft transition-all active:scale-[0.98]"
                                 >
                                     <div className="w-16 h-16 rounded-full bg-surface-variant dark:bg-primary/20 flex items-center justify-center group-hover:bg-primary/10 transition-colors">
@@ -93,7 +100,7 @@ const SearchOverlay = ({ isOpen, onClose, searchQuery, setSearchQuery }) => {
                                 {recentSearches.map((term) => (
                                     <button
                                         key={term}
-                                        onClick={() => setSearchQuery(term)}
+                                        onClick={() => handleSuggestionClick(term)}
                                         className="px-4 py-2 rounded-full bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 text-sm text-gray-700 dark:text-gray-200 hover:border-primary hover:text-primary dark:hover:border-primary dark:hover:text-primary transition-colors"
                                     >
                                         {term}
@@ -104,13 +111,35 @@ const SearchOverlay = ({ isOpen, onClose, searchQuery, setSearchQuery }) => {
                     </>
                 ) : (
                     <div className="animate-in fade-in duration-300">
-                        {/* Search results would go here or handled by Home.jsx after overlay is partially transparent or closed */}
-                        <p className="text-gray-500 text-center py-10">Press Enter to search for "{searchQuery}"</p>
+                        <div className="flex items-center justify-between mb-4">
+                            <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Suggestions</h3>
+                        </div>
+                        <div className="space-y-1">
+                            {suggestions.length > 0 ? (
+                                suggestions.map((product) => (
+                                    <button
+                                        key={product.id}
+                                        onClick={() => handleSuggestionClick(product.title)}
+                                        className="w-full flex items-center gap-4 p-3 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-left group"
+                                    >
+                                        <div className="h-12 w-12 rounded-lg bg-cover bg-center shrink-0 shadow-sm" style={{ backgroundImage: `url(${product.image})` }}></div>
+                                        <div className="flex-1 overflow-hidden">
+                                            <p className="font-medium text-on-surface-light dark:text-white truncate group-hover:text-primary transition-colors">{product.title}</p>
+                                            <p className="text-xs text-text-sub dark:text-gray-400">${product.price} • {product.location}</p>
+                                        </div>
+                                        <span className="material-symbols-outlined text-gray-300 group-hover:text-primary transition-colors">north_west</span>
+                                    </button>
+                                ))
+                            ) : (
+                                <p className="text-gray-500 py-4 text-center">No products found for "{searchQuery}"</p>
+                            )}
+                        </div>
+
                         <button
                             onClick={onClose}
-                            className="w-full h-12 rounded-full bg-primary text-white font-semibold"
+                            className="mt-6 w-full h-12 rounded-full bg-primary text-white font-semibold shadow-soft hover:bg-primary-dark transition-all active:scale-95"
                         >
-                            View Results
+                            View all results
                         </button>
                     </div>
                 )}

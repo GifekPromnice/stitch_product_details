@@ -69,6 +69,7 @@ const Home = () => {
                 onClose={() => setShowSearchOverlay(false)}
                 searchQuery={searchQuery}
                 setSearchQuery={setSearchQuery}
+                products={products}
             />
 
             <main className="w-full max-w-md mx-auto pt-32 pb-24 px-4 text-text-main dark:text-gray-100">
