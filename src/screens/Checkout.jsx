@@ -42,9 +42,6 @@ const Checkout = () => {
                     <span className="material-symbols-outlined text-2xl">arrow_back</span>
                 </button>
                 <h1 className="text-lg font-bold leading-tight tracking-tight flex-1 text-center">Checkout</h1>
-                <div className="flex size-10 items-center justify-center">
-                    <span className="text-xs font-semibold text-primary bg-primary/10 px-2 py-1 rounded-full whitespace-nowrap">Step 2/3</span>
-                </div>
             </header>
 
             <main className="flex flex-col gap-6 px-4 pt-2">

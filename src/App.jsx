@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import SplashScreen from './screens/SplashScreen';
 import Home from './screens/Home';
 import ProductDetails from './screens/ProductDetails';
+import Favorites from './screens/Favorites';
 import Checkout from './screens/Checkout';
 import OrderConfirmation from './screens/OrderConfirmation';
 import Profile from './screens/Profile';
@@ -28,6 +29,7 @@ function App() {
                     <Route path="/checkout" element={<Checkout />} />
                     <Route path="/order-confirmation" element={<OrderConfirmation />} />
                     <Route path="/profile" element={<Layout><Profile /></Layout>} />
+                    <Route path="/favorites" element={<Layout><Favorites /></Layout>} />
                     <Route path="/wallet" element={<Wallet />} />
                     <Route path="/chat" element={<Chat />} />
                     <Route path="/add-listing" element={<AddListing />} />
