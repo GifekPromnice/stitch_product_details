@@ -1,85 +1,122 @@
 // src/utils/aiService.js
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 
-// Initialize Gemini API
-// IMPORTANT: User needs to provide VITE_GEMINI_API_KEY in .env
-const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY || "YOUR_API_KEY_HERE");
+// Initialize the Google Gen AI client with the API key from environment variables
+const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+
+// Base client for the SDK
+const genAI = new GoogleGenAI({
+    apiKey: apiKey,
+});
 
 /**
- * Converts a File object to a GoogleGenerativeAI.Part object (Base64).
+ * Converts a browser File object to a Base64 string for the Gemini API.
  */
 async function fileToGenerativePart(file) {
-    const base64EncodedDataPromise = new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result.split(',')[1]);
+        reader.onloadend = () => {
+            const base64Data = reader.result.split(",")[1];
+            resolve({
+                inlineData: {
+                    data: base64Data,
+                    mimeType: file.type,
+                },
+            });
+        };
+        reader.onerror = reject;
         reader.readAsDataURL(file);
     });
-    return {
-        inlineData: {
-            data: await base64EncodedDataPromise,
-            mimeType: file.type,
-        },
-    };
 }
 
 /**
- * Sends an image to Gemini Pro Vision for analysis.
+ * Analyzes an image using Gemini 2.0 Flash and returns structured product data.
+ * This is a clean re-implementation using the latest SDK and model.
  */
 export const analyzeImageWithAI = async (imageFile) => {
-    try {
-        if (!import.meta.env.VITE_GEMINI_API_KEY) {
-            console.warn("Missing VITE_GEMINI_API_KEY. Falling back to mock data for demo.");
-            // Fallback Mock if no key provided
-            await new Promise(r => setTimeout(r, 1000));
-            return {
-                title: "Demo Item (No API Key)",
-                price: 99,
-                category: "decor",
-                condition: "good",
-                color: "other",
-                tags: ["demo", "no-key", "setup-required"],
-                description: "This is a demo result because VITE_GEMINI_API_KEY is missing in your .env file."
-            };
-        }
+    // 1. Basic validation
+    if (!apiKey || apiKey === "YOUR_API_KEY_HERE" || apiKey.trim() === "") {
+        console.warn("AI DEBUG: Missing VITE_GEMINI_API_KEY. Falling back to mock data.");
+        await new Promise(r => setTimeout(r, 1500)); // Simulate delay
+        return {
+            title: "Stylowy Mebel (Podgląd)",
+            price: 250,
+            category: "decor",
+            condition: "good",
+            color: "beige",
+            tags: ["retro", "drewno", "odnowiony"],
+            description: "To jest przykładowy opis. Skonfiguruj klucz Gemini w .env, aby uzyskać prawdziwą analizę."
+        };
+    }
 
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    try {
+        console.log("%c AI DEBUG: Starting analysis with Gemini 2.5 Flash... ", "background: #222; color: #bada55");
 
         const imagePart = await fileToGenerativePart(imageFile);
 
         const prompt = `
-        You are an expert furniture appraiser and copywriter. Analyze this image of a furniture item.
-        Return ONLY a raw JSON object (no markdown formatting, no backticks) with the following fields:
-        - title: A short, catchy, descriptive title (e.g., "Vintage Oak Coffee Table").
-        - category: One of EXACTLY these values: 'sofas', 'tables', 'lighting', 'chairs', 'shelves', 'rugs', 'kitchens', 'wardrobes', 'lamps', 'drawers', 'decor'. If unsure, use 'decor'.
-        - condition: One of: 'new', 'good', 'fair', 'used'. Estimate based on visual wear.
-        - color: One of: 'black', 'white', 'gray', 'beige', 'brown', 'red', 'blue', 'green', 'yellow', 'other'.
-        - price: An estimated value number (integer) in USD/PLN (just the number).
-        - tags: An array of 5-7 relevant keywords (strings) for searching (e.g., ["vintage", "wooden", "mid-century"]).
-        - description: A professional, appealing description (2-3 sentences) selling the item.
-        
-        Example JSON format:
-        {
-          "title": "Modern Grey Sofa",
-          "category": "sofas",
-          "condition": "good",
-          "color": "gray",
-          "price": 450,
-          "tags": ["modern", "comfortable", "living room"],
-          "description": "A beautiful modern sofa."
-        }
+            Analyze this furniture image and provide details for a listing.
+            Return ONLY a raw JSON object (no markdown, no backticks) in Polish.
+            
+            JSON structure:
+            {
+              "title": "Short catchy Polish title",
+              "category": "One of: sofas, tables, lighting, chairs, shelves, rugs, kitchens, wardrobes, lamps, drawers, decor",
+              "condition": "One of: new, good, fair, used",
+              "color": "One of: black, white, gray, beige, brown, red, blue, green, yellow, other",
+              "price": Number (estimated price in PLN),
+              "tags": ["tag1", "tag2", "tag3", "tag4", "tag5"],
+              "description": "2 sentence Polish description"
+            }
         `;
 
-        const result = await model.generateContent([prompt, imagePart]);
-        const response = await result.response;
-        const text = response.text();
+        // 2. Call the Gemini 2.5 Flash model
+        const result = await genAI.models.generateContent({
+            model: "gemini-2.5-flash",
+            contents: [
+                {
+                    role: "user",
+                    parts: [
+                        { text: prompt },
+                        imagePart
+                    ]
+                }
+            ],
+            config: {
+                responseMimeType: "application/json"
+            }
+        });
 
-        // Clean up markdown code blocks if Gemini adds them
-        const cleanedText = text.replace(/```json/g, '').replace(/```/g, '').trim();
+        // 3. Extract and parse response
+        let responseText = "";
+        try {
+            // result.text is a function in the recent @google/genai SDK
+            responseText = typeof result.text === 'function' ? result.text() : result.text;
+        } catch (e) {
+            console.warn("AI DEBUG: result.text() failed, trying alternative paths...");
+            responseText = result.candidates?.[0]?.content?.parts?.[0]?.text || "";
+        }
 
-        return JSON.parse(cleanedText);
+        console.log("AI DEBUG: Raw Response:", responseText);
+
+        const parsedData = JSON.parse(responseText);
+        console.log("AI DEBUG: Parsed Data:", parsedData);
+
+        return parsedData;
 
     } catch (error) {
-        console.error("Gemini Analysis Error:", error);
-        throw error;
+        console.error("AI DEBUG: Analysis Critical Error:", error);
+
+        // Handle specific 404/not available errors by falling back to 1.5-flash
+        if (error.message?.includes("404") || error.message?.includes("not found")) {
+            console.warn("AI DEBUG: Gemini 2.0 not found, trying fallback to 1.5-flash...");
+            const fallbackResult = await genAI.models.generateContent({
+                model: "gemini-1.5-flash",
+                contents: [{ role: "user", parts: [{ text: "Analyze as furniture JSON: " + imageFile.name }, await fileToGenerativePart(imageFile)] }]
+            });
+            return JSON.parse(fallbackResult.text());
+        }
+
+        throw new Error("AI Analysis failed: " + (error.message || "Unknown error"));
     }
 };

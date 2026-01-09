@@ -56,20 +56,23 @@ const AddListing = () => {
 
                 // Auto-fill logic
                 if (aiData) {
-                    setTitle(aiData.title || title);
-                    setPrice(aiData.price || price);
-                    setCategory(aiData.category || category);
-                    setCondition(aiData.condition || condition);
-                    setColor(aiData.color || color);
-                    setDescription(aiData.description || description);
+                    console.log("AI UI DEBUG: Otrzymano dane do autouzupełniania:", aiData);
+                    if (aiData.title) setTitle(String(aiData.title));
+                    if (aiData.price) setPrice(String(aiData.price));
+                    if (aiData.category) setCategory(String(aiData.category).toLowerCase());
+                    if (aiData.condition) setCondition(String(aiData.condition).toLowerCase());
+                    if (aiData.color) setColor(String(aiData.color).toLowerCase());
+                    if (aiData.description) setDescription(String(aiData.description));
 
-                    // Merge tags intelligently
-                    const newTags = aiData.tags || [];
-                    const uniqueTags = [...new Set([...tags, ...newTags])];
-                    setTags(uniqueTags);
+                    // Merge tags 
+                    if (Array.isArray(aiData.tags)) {
+                        const uniqueTags = [...new Set([...tags, ...aiData.tags])];
+                        setTags(uniqueTags);
+                    }
                 }
             } catch (err) {
-                console.error("AI Analysis failed", err);
+                console.error("AI Analysis UI Error:", err);
+                alert("Błąd AI: " + (err.message || "Nie udało się przeanalizować zdjęcia."));
             } finally {
                 setIsAnalyzing(false);
             }
@@ -293,7 +296,7 @@ const AddListing = () => {
                                 onChange={(e) => setCategory(e.target.value)}
                                 className="form-select block w-full rounded-xl border-neutral-300 dark:border-neutral-700 bg-white dark:bg-[#232524] text-neutral-900 dark:text-white h-12 pl-4 pr-10 text-base font-medium focus:border-primary focus:ring-1 focus:ring-primary transition-all shadow-sm"
                             >
-                                {['sofas', 'tables', 'lighting', 'chairs', 'shelves', 'rugs', 'decor'].map(cat => (
+                                {['sofas', 'tables', 'lighting', 'chairs', 'shelves', 'rugs', 'kitchens', 'wardrobes', 'lamps', 'drawers', 'decor'].map(cat => (
                                     <option key={cat} value={cat}>{t(`cat.${cat}`)}</option>
                                 ))}
                             </select>
