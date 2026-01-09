@@ -20,6 +20,7 @@ const AddListing = () => {
     const [color, setColor] = useState('black');
     const [location, setLocation] = useState('');
     const [image, setImage] = useState(null); // Default empty
+    const [imageFile, setImageFile] = useState(null);
     const [isPublishing, setIsPublishing] = useState(false);
 
     const removeTag = (tagToRemove) => {
@@ -37,6 +38,7 @@ const AddListing = () => {
     const handleImageUpload = (e) => {
         const file = e.target.files[0];
         if (file) {
+            setImageFile(file);
             const objectUrl = URL.createObjectURL(file);
             setImage(objectUrl);
         }
@@ -59,6 +61,31 @@ const AddListing = () => {
         }
 
         setIsPublishing(true);
+        let imageUrl = image;
+
+        // Upload image if selected
+        if (imageFile) {
+            const fileExt = imageFile.name.split('.').pop();
+            const fileName = `${Math.random().toString(36).substring(2, 15)}_${Date.now()}.${fileExt}`;
+            const filePath = `${fileName}`;
+
+            const { error: uploadError } = await supabase.storage
+                .from('product-images')
+                .upload(filePath, imageFile);
+
+            if (uploadError) {
+                console.error('Error uploading image:', uploadError);
+                alert('Failed to upload image: ' + uploadError.message);
+                setIsPublishing(false);
+                return;
+            }
+
+            const { data: { publicUrl } } = supabase.storage
+                .from('product-images')
+                .getPublicUrl(filePath);
+
+            imageUrl = publicUrl;
+        }
 
         const { data, error } = await supabase
             .from('products')
@@ -68,7 +95,7 @@ const AddListing = () => {
                     price: parseFloat(price),
                     description,
                     category,
-                    image, // In a real app, upload file to storage and use that URL
+                    image: imageUrl, // Use the uploaded URL
                     location,
                     aspect: '4/3',
                     is_new: condition === 'new',
@@ -94,6 +121,7 @@ const AddListing = () => {
             setColor('black');
             setLocation('');
             setImage(null);
+            setImageFile(null);
 
             navigate('/home');
         }

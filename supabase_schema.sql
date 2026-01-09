@@ -60,6 +60,28 @@ INSERT INTO products (title, price, category, image, location, aspect, rating, r
 ('Large Monstera', 35.00, 'plants', 'https://lh3.googleusercontent.com/aida-public/AB6AXuAjQh1gVJn_V3FJth3MUfKkh6EnWoiNcBByDF1U9FxUWXMK_IG01wwHI1FzIXiKPsqDFU2qYFcre_02CTisEU7nzVMJCSH9_twhNgk0rXLGy96or8u2il8TfKtq452mLBb5ZLIFJklHQPq0LgxrkKPKLh9Dp-SVRI8UenzpjRvMxt5ReAGP7IkmpT__r8Fr-YRlgfhvUBNzTln_km1KfYRzuUQolI7sYyl2c2H4CCSJXeNfb6Dd4i72rSreLybk3ljjHulWki8S-ygM', 'Los Angeles, CA', '1/1', 4.8, 42, false),
 ('Teak Bookshelf', 150.00, 'shelves', 'https://lh3.googleusercontent.com/aida-public/AB6AXuDOCuicokfWi5DEcsTTXHxars9-hAmFIuCGAyuLi5goXG1L_SL0tMTsKTSqm2JK1w0Id4POEkgFON71Gq1NfqbD8dQh-pzJTyuw9TvRjpU71sYn1QP-mGo5EUGQqtzB9VyMRlX93Ua5NRLzK-KEzGGkUb1PTzeMjSL7wx7PCBi5rkaZvWKYQ1qU3Ose9sXDNO4K2jf2_u5dGUriA1OISMdk3dbQ_p_eZu-040A94AkYOpi718qr7OEJrLOgqUYCu4VkA-UeqOrhW8Y9', 'Chicago, IL', '3/4', 4.6, 75, false);
 
+-- Storage Setup for Product Images
+-- 1. Create Bucket
+insert into storage.buckets (id, name, public) 
+values ('product-images', 'product-images', true)
+on conflict (id) do nothing;
+
+-- 2. Storage Policies (Adjust as needed for strictness)
+-- Allow Public Read
+create policy "Public Access" 
+on storage.objects for select 
+using ( bucket_id = 'product-images' );
+
+-- Allow Authenticated Upload
+create policy "Authenticated Upload" 
+on storage.objects for insert 
+with check ( bucket_id = 'product-images' AND auth.role() = 'authenticated' );
+
+-- Allow Owner Delete (Optional, simplified)
+create policy "Owner Delete" 
+on storage.objects for delete 
+using ( bucket_id = 'product-images' AND auth.uid() = owner );
+
 -- Migrations for existing tables (in case table already exists without these)
 ALTER TABLE products ADD COLUMN IF NOT EXISTS user_id UUID REFERENCES auth.users(id);
 
