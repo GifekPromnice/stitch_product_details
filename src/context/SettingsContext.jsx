@@ -97,6 +97,26 @@ export const SettingsProvider = ({ children }) => {
 
             // Generic
             'currency': '$',
+
+            // Add Listing
+            'addListing.title': 'New Listing',
+            'addListing.saveDraft': 'Save Draft',
+            'addListing.coverPhoto': 'Cover Photo',
+            'addListing.addPhoto': 'Add',
+            'addListing.field.title': 'Title',
+            'addListing.field.autoFilled': 'Auto-filled',
+            'addListing.field.tags': 'Tags',
+            'addListing.addTagPlaceholder': 'Add tag',
+            'addListing.field.description': 'Description',
+            'addListing.descriptionPlaceholder': 'Describe the condition, brand, age, and any flaws...',
+            'addListing.field.price': 'Price',
+            'addListing.field.category': 'Category',
+            'addListing.field.condition': 'Condition',
+            'addListing.field.color': 'Color',
+            'addListing.field.location': 'Location',
+            'addListing.locationPlaceholder': 'Zip code or Neighborhood',
+            'addListing.publish': 'Publish Listing',
+            'addListing.publishing': 'Publishing...',
         },
         pl: {
             // Navigation
@@ -151,6 +171,26 @@ export const SettingsProvider = ({ children }) => {
 
             // Generic
             'currency': 'zł',
+
+            // Add Listing
+            'addListing.title': 'Nowe Ogłoszenie',
+            'addListing.saveDraft': 'Zapisz Szkic',
+            'addListing.coverPhoto': 'Zdjęcie Główne',
+            'addListing.addPhoto': 'Dodaj',
+            'addListing.field.title': 'Tytuł',
+            'addListing.field.autoFilled': 'Wypełniono aut.',
+            'addListing.field.tags': 'Tagi',
+            'addListing.addTagPlaceholder': 'Dodaj tag',
+            'addListing.field.description': 'Opis',
+            'addListing.descriptionPlaceholder': 'Opisz stan, markę, wiek i ewentualne wady...',
+            'addListing.field.price': 'Cena',
+            'addListing.field.category': 'Kategoria',
+            'addListing.field.condition': 'Stan',
+            'addListing.field.color': 'Kolor',
+            'addListing.field.location': 'Lokalizacja',
+            'addListing.locationPlaceholder': 'Kod pocztowy lub dzielnica',
+            'addListing.publish': 'Opublikuj',
+            'addListing.publishing': 'Publikowanie...',
         }
     };
 

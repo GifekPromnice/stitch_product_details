@@ -59,3 +59,25 @@ INSERT INTO products (title, price, category, image, location, aspect, rating, r
 ('Danish Armchair', 280.00, 'sofas', 'https://lh3.googleusercontent.com/aida-public/AB6AXuC6S7b0zkYnUVsvWGjOMjnrrHGDKpXiDi00ALcCvzdC5Fe4ycpiOWdmRTW3VyQKX6qcVkIJ84NQOjXuhdnxe40UV6R3dMHqIK1yKe9exqJqjVDl-vf93VBcGoF9ARhh3vEq2626tU8FSFM4gHjL1tb6aJbdDyKlSecDWL8irPyEwEhD3DZfQWns47oR0KAIXJEImNP0lqOkIdGvdR-vstaMWkyMlg4c72uUEpGzDlrmIMcIWYxeW3syb-8GFtBBbYaoFC1tt2Z6HJ8k', 'Seattle, WA', '4/5', 4.9, 56, true),
 ('Large Monstera', 35.00, 'plants', 'https://lh3.googleusercontent.com/aida-public/AB6AXuAjQh1gVJn_V3FJth3MUfKkh6EnWoiNcBByDF1U9FxUWXMK_IG01wwHI1FzIXiKPsqDFU2qYFcre_02CTisEU7nzVMJCSH9_twhNgk0rXLGy96or8u2il8TfKtq452mLBb5ZLIFJklHQPq0LgxrkKPKLh9Dp-SVRI8UenzpjRvMxt5ReAGP7IkmpT__r8Fr-YRlgfhvUBNzTln_km1KfYRzuUQolI7sYyl2c2H4CCSJXeNfb6Dd4i72rSreLybk3ljjHulWki8S-ygM', 'Los Angeles, CA', '1/1', 4.8, 42, false),
 ('Teak Bookshelf', 150.00, 'shelves', 'https://lh3.googleusercontent.com/aida-public/AB6AXuDOCuicokfWi5DEcsTTXHxars9-hAmFIuCGAyuLi5goXG1L_SL0tMTsKTSqm2JK1w0Id4POEkgFON71Gq1NfqbD8dQh-pzJTyuw9TvRjpU71sYn1QP-mGo5EUGQqtzB9VyMRlX93Ua5NRLzK-KEzGGkUb1PTzeMjSL7wx7PCBi5rkaZvWKYQ1qU3Ose9sXDNO4K2jf2_u5dGUriA1OISMdk3dbQ_p_eZu-040A94AkYOpi718qr7OEJrLOgqUYCu4VkA-UeqOrhW8Y9', 'Chicago, IL', '3/4', 4.6, 75, false);
+
+-- Migrations for existing tables (in case table already exists without these)
+ALTER TABLE products ADD COLUMN IF NOT EXISTS user_id UUID REFERENCES auth.users(id);
+
+-- Policies for Products
+-- Ensure RLS is enabled
+ALTER TABLE products ENABLE ROW LEVEL SECURITY;
+
+-- Drop existing generic select policy to be safe/clean re-run (optional, or rely on distinct names)
+DROP POLICY IF EXISTS "Public products are viewable by everyone." ON products;
+CREATE POLICY "Public products are viewable by everyone." ON products FOR SELECT USING (true);
+
+-- Allow authenticated users to insert products linked to their ID
+DROP POLICY IF EXISTS "Users can create products." ON products;
+CREATE POLICY "Users can create products." ON products FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+-- Allow users to update/delete their own products
+DROP POLICY IF EXISTS "Users can update own products." ON products;
+CREATE POLICY "Users can update own products." ON products FOR UPDATE USING (auth.uid() = user_id);
+
+DROP POLICY IF EXISTS "Users can delete own products." ON products;
+CREATE POLICY "Users can delete own products." ON products FOR DELETE USING (auth.uid() = user_id);

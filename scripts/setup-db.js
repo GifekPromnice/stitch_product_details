@@ -40,6 +40,7 @@ async function setupDatabase() {
         console.log('✅ Schema applied successfully!');
     } catch (err) {
         console.error('❌ Error applying schema:', err);
+        process.exit(1);
     } finally {
         await client.end();
     }
