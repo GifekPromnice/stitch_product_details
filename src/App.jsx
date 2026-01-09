@@ -16,6 +16,7 @@ import PersonalInformation from './screens/PersonalInformation';
 import PasswordSecurity from './screens/PasswordSecurity';
 import Layout from './components/Layout';
 import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
 import ScrollToTop from './components/ScrollToTop';
 
 function App() {
