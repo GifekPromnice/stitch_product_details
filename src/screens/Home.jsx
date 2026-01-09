@@ -90,7 +90,7 @@ const Home = () => {
 
                 <div className="masonry-grid w-full">
                     {filteredProducts.map(product => (
-                        <div key={product.id} className="masonry-item relative group" onClick={() => navigate(`/product/${product.id}`)}>
+                        <div key={product.id} className="masonry-item relative group" onClick={() => navigate(`/product/${product.id}`, { state: { product } })}>
                             <div className="bg-white dark:bg-[#2C2E2D] rounded-xl p-2.5 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer">
                                 <div className="relative w-full overflow-hidden rounded-lg mb-2">
                                     <div className="w-full h-auto bg-cover bg-center transition-transform duration-500 group-hover:scale-105"

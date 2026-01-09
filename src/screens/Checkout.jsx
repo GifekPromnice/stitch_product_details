@@ -1,21 +1,32 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useMemo } from 'react';
 
 const Checkout = () => {
     const navigate = useNavigate();
+    const location = useLocation();
 
-    // Mock data based on legacy
-    const product = {
-        title: 'Mid-Century Modern Sofa',
-        price: 450.00,
-        image: "https://lh3.googleusercontent.com/aida-public/AB6AXuBkE3rA2NIQskELOYMgSnSUxwAR9E9oG5x0CGhleUTVUuFxDwy3Z9vP8lyxnNEQy2jXldAodnybheumIhj4ZbG3W5Qpy7oEicrvFVRsPCkAKpoNbO2CqVFzhtRxD5yz8_19pT5H1Ds_1Sc6X9vt43wHMCWN-7nLHkxKflQkTagb4gV17wGu5aAFluGVQ3HFJnkqtBUcMnuO8KEtdKciYNtceDc1OceSWTZssPucfT2FsudbLXjKevK49PIozGIk6fqll4GXyy2QEeqB"
-    };
+    const passedProduct = location.state?.product;
 
-    const fees = {
-        subtotal: 450.00,
-        delivery: 50.00,
-        service: 15.00,
-        total: 515.00
-    };
+    // Use passed data or fallback to mock
+    const product = useMemo(() => {
+        return {
+            title: passedProduct?.title || 'Mid-Century Modern Sofa',
+            price: passedProduct?.price || 450.00,
+            image: passedProduct?.image || "https://lh3.googleusercontent.com/aida-public/AB6AXuBkE3rA2NIQskELOYMgSnSUxwAR9E9oG5x0CGhleUTVUuFxDwy3Z9vP8lyxnNEQy2jXldAodnybheumIhj4ZbG3W5Qpy7oEicrvFVRsPCkAKpoNbO2CqVFzhtRxD5yz8_19pT5H1Ds_1Sc6X9vt43wHMCWN-7nLHkxKflQkTagb4gV17wGu5aAFluGVQ3HFJnkqtBUcMnuO8KEtdKciYNtceDc1OceSWTZssPucfT2FsudbLXjKevK49PIozGIk6fqll4GXyy2QEeqB"
+        };
+    }, [passedProduct]);
+
+    const fees = useMemo(() => {
+        const subtotal = product.price;
+        const delivery = 50.00;
+        const service = subtotal * 0.03; // 3% service fee
+        return {
+            subtotal,
+            delivery,
+            service,
+            total: subtotal + delivery + service
+        };
+    }, [product]);
 
     return (
         <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden bg-background-light dark:bg-background-dark animate-in fade-in duration-500">

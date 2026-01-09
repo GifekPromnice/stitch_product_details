@@ -1,34 +1,40 @@
-import { useNavigate, useParams } from 'react-router-dom';
-import { useState } from 'react';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import { useState, useMemo } from 'react';
 
 const ProductDetails = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const { id } = useParams();
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-    // Mock data based on the new design
-    const product = {
-        title: 'Vintage Velvet Armchair',
-        price: 120.00,
-        originalPrice: 180.00,
-        location: 'Brooklyn, NY',
-        condition: 'Good Condition',
-        timeListed: 'Listed 2h ago',
-        seller: {
-            name: 'Sarah J.',
-            rating: 4.8,
-            image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDRjBy5olySuBu-5aexKNm5gVzcaLVENlzMbx-eDhuhKvO1XxKLTh_gP-anraJdzXADlPSisSJdJm6FBU5zvj2inKqVkQCRQsbCkJQYUp-ohxlu73dGky0GaBcgG6bwvsAw_BERre9BPYg2kq2wzxJcoAVqlYRxoIkfQSNo4MMhuX66q4W5D19pjp2e_EkaeocBeACUM2IzuO1M2P9l7tExubYFO1fEfNqK95q6x4ys42VAsQTNID9FBxr9-UgOHRAMDWxmCIVnKzZs"
-        },
-        images: [
-            "https://lh3.googleusercontent.com/aida-public/AB6AXuBnL8q_KkKo5Zi5VoxcxzycrSt4lkiv-ZEldyK0qLnqvnNJgAI18mVpuV3YiZep8yuZGbu71VY0fxvyija031i5kiQQUAJ36Uqkkxi1Q4VJhF6CLlm6G6_b7ADtf0oOml8Yb0iyskMbt3RPrNTLpLJ-51U0Gcavj-w77FFZBUvzTXpydTS8yxf5GXJAUS-kS8_-Btq5JDrezeQf3K9Kh5VnHF3h6C8kNxIcL7ZoEM679z3Du-QZ3Bn_zKqNDWXEnfyr8nURQjHyKOo_",
-            "https://lh3.googleusercontent.com/aida-public/AB6AXuBnL8q_KkKo5Zi5VoxcxzycrSt4lkiv-ZEldyK0qLnqvnNJgAI18mVpuV3YiZep8yuZGbu71VY0fxvyija031i5kiQQUAJ36Uqkkxi1Q4VJhF6CLlm6G6_b7ADtf0oOml8Yb0iyskMbt3RPrNTLpLJ-51U0Gcavj-w77FFZBUvzTXpydTS8yxf5GXJAUS-kS8_-Btq5JDrezeQf3K9Kh5VnHF3h6C8kNxIcL7ZoEM679z3Du-QZ3Bn_zKqNDWXEnfyr8nURQjHyKOo_",
-            "https://lh3.googleusercontent.com/aida-public/AB6AXuBnL8q_KkKo5Zi5VoxcxzycrSt4lkiv-ZEldyK0qLnqvnNJgAI18mVpuV3YiZep8yuZGbu71VY0fxvyija031i5kiQQUAJ36Uqkkxi1Q4VJhF6CLlm6G6_b7ADtf0oOml8Yb0iyskMbt3RPrNTLpLJ-51U0Gcavj-w77FFZBUvzTXpydTS8yxf5GXJAUS-kS8_-Btq5JDrezeQf3K9Kh5VnHF3h6C8kNxIcL7ZoEM679z3Du-QZ3Bn_zKqNDWXEnfyr8nURQjHyKOo_"
-        ],
-        dimensions: { height: '32"', width: '28"', depth: '30"' },
-        tags: ['Velvet', 'Armchair', 'Green', 'Vintage', 'Comfortable'],
-        description: 'Beautiful mid-century modern style velvet armchair in a rich emerald green. Perfect accent piece for a living room or reading nook. The fabric is soft and luxurious. This vintage find maintains its structural integrity while showing minor signs of its unique history.',
-        mapImage: "https://lh3.googleusercontent.com/aida-public/AB6AXuAv416prnqJ93spioHVTa2lPQ4Y4I9NxkbED4cysFMsqRvAgm1aKCTjGWjub7grvVkyhcGsis7Gn_c0psDoV9M1EfEHdqybSjbMMxalTY6ckvZzAXDxDKpy7OuEL0R6vT-Jld6q9WFtaA2ZEhPqO7aJsTzJMi47Sv_iuyop0eWo3IeToaGqdYatdZznm-sNp2_kZAfkVvfhPzbPpw6BGSK8wpLc9IaMOuvxVo0o7BzFs83BoA541SswaC5laH-YfHUFTCSGOVm56rJE"
-    };
+    const passedProduct = location.state?.product;
+
+    // Mock data supplemented by passed data
+    const product = useMemo(() => {
+        const baseProduct = {
+            title: passedProduct?.title || 'Vintage Velvet Armchair',
+            price: passedProduct?.price || 120.00,
+            originalPrice: (passedProduct?.price ? passedProduct.price * 1.5 : 180.00),
+            location: passedProduct?.location || 'Brooklyn, NY',
+            condition: 'Good Condition',
+            timeListed: 'Listed 2h ago',
+            seller: {
+                name: 'Sarah J.',
+                rating: 4.8,
+                image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDRjBy5olySuBu-5aexKNm5gVzcaLVENlzMbx-eDhuhKvO1XxKLTh_gP-anraJdzXADlPSisSJdJm6FBU5zvj2inKqVkQCRQsbCkJQYUp-ohxlu73dGky0GaBcgG6bwvsAw_BERre9BPYg2kq2wzxJcoAVqlYRxoIkfQSNo4MMhuX66q4W5D19pjp2e_EkaeocBeACUM2IzuO1M2P9l7tExubYFO1fEfNqK95q6x4ys42VAsQTNID9FBxr9-UgOHRAMDWxmCIVnKzZs"
+            },
+            images: [
+                passedProduct?.image || "https://lh3.googleusercontent.com/aida-public/AB6AXuBnL8q_KkKo5Zi5VoxcxzycrSt4lkiv-ZEldyK0qLnqvnNJgAI18mVpuV3YiZep8yuZGbu71VY0fxvyija031i5kiQQUAJ36Uqkkxi1Q4VJhF6CLlm6G6_b7ADtf0oOml8Yb0iyskMbt3RPrNTLpLJ-51U0Gcavj-w77FFZBUvzTXpydTS8yxf5GXJAUS-kS8_-Btq5JDrezeQf3K9Kh5VnHF3h6C8kNxIcL7ZoEM679z3Du-QZ3Bn_zKqNDWXEnfyr8nURQjHyKOo_",
+                "https://lh3.googleusercontent.com/aida-public/AB6AXuBnL8q_KkKo5Zi5VoxcxzycrSt4lkiv-ZEldyK0qLnqvnNJgAI18mVpuV3YiZep8yuZGbu71VY0fxvyija031i5kiQQUAJ36Uqkkxi1Q4VJhF6CLlm6G6_b7ADtf0oOml8Yb0iyskMbt3RPrNTLpLJ-51U0Gcavj-w77FFZBUvzTXpydTS8yxf5GXJAUS-kS8_-Btq5JDrezeQf3K9Kh5VnHF3h6C8kNxIcL7ZoEM679z3Du-QZ3Bn_zKqNDWXEnfyr8nURQjHyKOo_",
+                "https://lh3.googleusercontent.com/aida-public/AB6AXuBnL8q_KkKo5Zi5VoxcxzycrSt4lkiv-ZEldyK0qLnqvnNJgAI18mVpuV3YiZep8yuZGbu71VY0fxvyija031i5kiQQUAJ36Uqkkxi1Q4VJhF6CLlm6G6_b7ADtf0oOml8Yb0iyskMbt3RPrNTLpLJ-51U0Gcavj-w77FFZBUvzTXpydTS8yxf5GXJAUS-kS8_-Btq5JDrezeQf3K9Kh5VnHF3h6C8kNxIcL7ZoEM679z3Du-QZ3Bn_zKqNDWXEnfyr8nURQjHyKOo_"
+            ],
+            dimensions: { height: '32"', width: '28"', depth: '30"' },
+            tags: ['Velvet', 'Armchair', 'Green', 'Vintage', 'Comfortable'],
+            description: passedProduct?.title ? `Excellent quality ${passedProduct.title}. A beautiful piece for any home.` : 'Beautiful mid-century modern style velvet armchair in a rich emerald green. Perfect accent piece for a living room or reading nook.',
+            mapImage: "https://lh3.googleusercontent.com/aida-public/AB6AXuAv416prnqJ93spioHVTa2lPQ4Y4I9NxkbED4cysFMsqRvAgm1aKCTjGWjub7grvVkyhcGsis7Gn_c0psDoV9M1EfEHdqybSjbMMxalTY6ckvZzAXDxDKpy7OuEL0R6vT-Jld6q9WFtaA2ZEhPqO7aJsTzJMi47Sv_iuyop0eWo3IeToaGqdYatdZznm-sNp2_kZAfkVvfhPzbPpw6BGSK8wpLc9IaMOuvxVo0o7BzFs83BoA541SswaC5laH-YfHUFTCSGOVm56rJE"
+        };
+        return baseProduct;
+    }, [passedProduct]);
 
     const handleScroll = (e) => {
         const width = e.target.offsetWidth;
@@ -229,7 +235,7 @@ const ProductDetails = () => {
                     <span className="material-symbols-outlined">gavel</span>
                 </button>
                 <button
-                    onClick={() => navigate('/checkout')}
+                    onClick={() => navigate('/checkout', { state: { product } })}
                     className="flex-1 h-12 bg-primary text-white font-bold rounded-2xl flex items-center justify-center gap-2 shadow-lg shadow-primary/30 active:scale-[0.98] transition-all"
                 >
                     <span className="material-symbols-outlined text-[20px]">shopping_cart</span>
