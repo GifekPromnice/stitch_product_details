@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>My Wallet - Lofted</title>
+    <!-- Material Symbols -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Theme Configuration -->
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#698679", // Leading color requested
+                        "primary-dark": "#44554e", // Darker earthy tone for contrast/text
+                        "background-light": "#F9FAF9", // Warm light gray
+                        "background-dark": "#181a19",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#2C2E2D",
+                        "on-surface-light": "#141515",
+                        "on-surface-dark": "#E0E2E1",
+                        "positive": "#4A6E58",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "Noto Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "2xl": "2rem",
+                        "full": "9999px"
+                    },
+                    boxShadow: {
+                        "soft": "0 2px 8px rgba(0,0,0,0.05)",
+                        "elevation-1": "0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)",
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            /* IE and Edge */
+            scrollbar-width: none;
+            /* Firefox */
+        }
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-on-surface-light dark:text-on-surface-dark transition-colors duration-200">
+    <!-- Main Container -->
+    <div
+        class="relative flex h-full min-h-screen w-full flex-col overflow-x-hidden max-w-md mx-auto shadow-2xl bg-background-light dark:bg-background-dark">
+        <!-- Top App Bar -->
+        <header
+            class="sticky top-0 z-10 flex items-center justify-between px-4 py-2 pt-12 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-md">
+            <button onclick="window.location.href='../profile_settings/code.html'"
+                class="flex size-10 items-center justify-center rounded-full hover:bg-primary/10 transition-colors text-primary-dark dark:text-white">
+                <span class="material-symbols-outlined text-[24px]">arrow_back</span>
+            </button>
+            <h1 class="text-lg font-bold text-primary-dark dark:text-white">My Wallet</h1>
+            <button
+                class="flex size-10 items-center justify-center rounded-full hover:bg-primary/10 transition-colors text-primary-dark dark:text-white">
+                <span class="material-symbols-outlined text-[24px]">settings</span>
+            </button>
+        </header>
+        <!-- Main Content Area -->
+        <main class="flex-1 flex flex-col pb-24">
+            <!-- Balance Card Section -->
+            <section class="px-4 py-4">
+                <div class="relative w-full rounded-[2rem] overflow-hidden shadow-soft group">
+                    <!-- Background with Gradient and Image Overlay -->
+                    <div class="absolute inset-0 bg-[#698679]"></div>
+                    <div class="absolute inset-0 bg-cover bg-center opacity-20 mix-blend-overlay"
+                        data-alt="Abstract organic green leaf texture pattern"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDRb-IBa_g8lPpgu9bqdKnrDiYXjUdLxLGdWz0hhfCONUIAjskjl15oFqAMC0V2wTxAz6VtPk-IRjUzWC0VW5wzBceLbUszPrl3-a_2mRoz8nNxCUCnTlMMU4Yzw0kVowy-GIJCvKXPbpsMGXXT_gCAmu2o5ATGH3LGMSYStdnNzm18yT0uox5x42ZEVU7QodJ3FJ2m5LB7rSP0_ja60Gz0gfqOhtoF8iE3CiyCGoEq98_8r66yAu94BkexSgwaP5aHDVB313YM-AFG");'>
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-br from-white/10 to-black/20"></div>
+                    <div
+                        class="relative p-6 flex flex-col items-center justify-center text-center h-[200px] text-white">
+                        <span class="text-sm font-medium opacity-90 mb-1 tracking-wide">Total Balance</span>
+                        <h2 class="text-4xl font-bold tracking-tight mb-2">$1,240.50</h2>
+                        <div class="flex items-center gap-1 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">
+                            <span class="material-symbols-outlined text-[16px]">check_circle</span>
+                            <span class="text-xs font-medium">Available to withdraw</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Withdraw Button (Primary Action) -->
+                <div class="mt-4 flex justify-center">
+                    <button
+                        class="w-full bg-primary-dark text-white font-semibold h-12 rounded-full shadow-md flex items-center justify-center gap-2 active:scale-95 transition-transform">
+                        <span class="material-symbols-outlined">payments</span>
+                        Withdraw Funds
+                    </button>
+                </div>
+            </section>
+            <!-- Payment Methods Section -->
+            <section class="mt-2">
+                <div class="flex items-center justify-between px-4 pb-2">
+                    <h3 class="text-primary-dark dark:text-white text-lg font-bold">Payment Methods</h3>
+                    <button class="text-primary text-sm font-semibold hover:opacity-80">Edit</button>
+                </div>
+                <!-- Carousel -->
+                <div class="flex overflow-x-auto no-scrollbar gap-4 px-4 pb-4 snap-x snap-mandatory">
+                    <!-- Card 1: Visa -->
+                    <div
+                        class="snap-center shrink-0 w-[280px] h-[160px] rounded-[1.5rem] bg-gradient-to-br from-[#1e293b] to-[#0f172a] text-white p-5 flex flex-col justify-between shadow-soft relative overflow-hidden">
+                        <div class="absolute right-0 top-0 w-32 h-32 bg-white/5 rounded-full -mr-10 -mt-10 blur-xl">
+                        </div>
+                        <div class="flex justify-between items-start z-10">
+                            <img alt="Visa Logo" class="h-5 brightness-200 grayscale contrast-200"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAxzR6ZvIQwSF3q2rtABlVYusLMitS3FkpiPAar2f3zLVMaJfZeSozX0pgtlJtkEBZiqGmGBfT6-tEqNAzFcMo377f3RYhPWunf3CeC7-a9TMskOjNA52SfMMMv3wFcrRP2D2JLZUYVxtIMfw1Yi31byrXEXWXxIKqPJ1AbGvM7Adk89IzUjvQIhTX9OOxYATczkO_wnX_gfAXGIEOcIC1Wlg8xRXKqmeirLz97QCzu9j1cIeLzPoT6aizu93TI7mUO5yNCu7YHStm" />
+                            <span class="material-symbols-outlined text-white/50">contactless</span>
+                        </div>
+                        <div class="z-10">
+                            <p class="text-lg tracking-widest font-mono">•••• 4242</p>
+                        </div>
+                        <div class="flex justify-between items-end z-10">
+                            <div>
+                                <p class="text-[10px] text-white/60 uppercase tracking-wider">Card Holder</p>
+                                <p class="text-sm font-medium">Alex Morgan</p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] text-white/60 uppercase tracking-wider">Expires</p>
+                                <p class="text-sm font-medium">12/25</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Card 2: Apple Pay -->
+                    <div
+                        class="snap-center shrink-0 w-[280px] h-[160px] rounded-[1.5rem] bg-surface-light dark:bg-surface-dark border border-neutral-200 dark:border-neutral-700 p-5 flex flex-col justify-between shadow-sm relative group">
+                        <div class="flex justify-between items-start">
+                            <div
+                                class="bg-black text-white px-2 py-1 rounded text-xs font-bold flex items-center gap-1">
+                                <span class="material-symbols-outlined text-[14px]">ios</span> Pay
+                            </div>
+                            <div
+                                class="bg-primary/10 text-primary px-2 py-0.5 rounded-full text-[10px] font-bold uppercase">
+                                Default</div>
+                        </div>
+                        <div>
+                            <p class="text-sm text-neutral-500 dark:text-neutral-400">Linked to iCloud</p>
+                            <p class="text-base font-semibold text-primary-dark dark:text-white">alex.morgan@icloud.com
+                            </p>
+                        </div>
+                        <div class="flex justify-end">
+                            <span
+                                class="material-symbols-outlined text-neutral-300 dark:text-neutral-600">check_circle</span>
+                        </div>
+                    </div>
+                    <!-- Add New Card Button -->
+                    <button
+                        class="snap-center shrink-0 w-[80px] h-[160px] rounded-[1.5rem] bg-neutral-100 dark:bg-white/5 border-2 border-dashed border-neutral-300 dark:border-neutral-600 flex flex-col items-center justify-center gap-2 hover:bg-neutral-200 dark:hover:bg-white/10 transition-colors">
+                        <div
+                            class="w-10 h-10 rounded-full bg-white dark:bg-white/10 flex items-center justify-center shadow-sm">
+                            <span class="material-symbols-outlined text-primary text-[24px]">add</span>
+                        </div>
+                        <span
+                            class="text-xs font-bold text-primary-dark dark:text-white text-center">Add<br />New</span>
+                    </button>
+                </div>
+            </section>
+            <!-- Recent Activity Section -->
+            <section class="mt-4 px-4">
+                <h3 class="text-primary-dark dark:text-white text-lg font-bold mb-4">Recent Activity</h3>
+                <div class="flex flex-col gap-3">
+                    <!-- Transaction Item 1 (Sale) -->
+                    <div
+                        class="flex items-center justify-between p-3 rounded-2xl bg-surface-light dark:bg-surface-dark shadow-[0_1px_2px_rgba(0,0,0,0.05)] border border-neutral-100 dark:border-neutral-800">
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="size-12 rounded-full bg-[#E8F3EB] dark:bg-[#2C3A33] flex items-center justify-center text-[#4A6E58] dark:text-[#A5C9B3]">
+                                <span class="material-symbols-outlined">chair</span>
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="font-bold text-sm text-primary-dark dark:text-white">Sold: Mid-Century
+                                    Lamp</span>
+                                <span class="text-xs text-neutral-500 dark:text-neutral-400">Today, 2:30 PM</span>
+                            </div>
+                        </div>
+                        <span class="font-bold text-[#4A6E58] dark:text-[#88B89C] text-base">+$150.00</span>
+                    </div>
+                    <!-- Transaction Item 2 (Purchase) -->
+                    <div
+                        class="flex items-center justify-between p-3 rounded-2xl bg-surface-light dark:bg-surface-dark shadow-[0_1px_2px_rgba(0,0,0,0.05)] border border-neutral-100 dark:border-neutral-800">
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="size-12 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center text-primary-dark dark:text-white">
+                                <span class="material-symbols-outlined">shopping_bag</span>
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="font-bold text-sm text-primary-dark dark:text-white">Bought: Jute
+                                    Rug</span>
+                                <span class="text-xs text-neutral-500 dark:text-neutral-400">Yesterday</span>
+                            </div>
+                        </div>
+                        <span class="font-bold text-primary-dark dark:text-white text-base">-$45.00</span>
+                    </div>
+                    <!-- Transaction Item 3 (Withdrawal) -->
+                    <div
+                        class="flex items-center justify-between p-3 rounded-2xl bg-surface-light dark:bg-surface-dark shadow-[0_1px_2px_rgba(0,0,0,0.05)] border border-neutral-100 dark:border-neutral-800">
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="size-12 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center text-primary-dark dark:text-white">
+                                <span class="material-symbols-outlined">account_balance</span>
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="font-bold text-sm text-primary-dark dark:text-white">Withdrawal to
+                                    Bank</span>
+                                <span class="text-xs text-neutral-500 dark:text-neutral-400">Oct 24</span>
+                            </div>
+                        </div>
+                        <span class="font-bold text-primary-dark dark:text-white text-base">-$500.00</span>
+                    </div>
+                    <!-- Transaction Item 4 (Top Up) -->
+                    <div
+                        class="flex items-center justify-between p-3 rounded-2xl bg-surface-light dark:bg-surface-dark shadow-[0_1px_2px_rgba(0,0,0,0.05)] border border-neutral-100 dark:border-neutral-800">
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="size-12 rounded-full bg-[#E8F3EB] dark:bg-[#2C3A33] flex items-center justify-center text-[#4A6E58] dark:text-[#A5C9B3]">
+                                <span class="material-symbols-outlined">add_card</span>
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="font-bold text-sm text-primary-dark dark:text-white">Wallet Top Up</span>
+                                <span class="text-xs text-neutral-500 dark:text-neutral-400">Oct 20</span>
+                            </div>
+                        </div>
+                        <span class="font-bold text-[#4A6E58] dark:text-[#88B89C] text-base">+$200.00</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+
+</html>

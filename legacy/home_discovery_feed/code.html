@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Again - Home Discovery Feed</title>
+    <meta content="#698679" name="theme-color" />
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#698679", // Sage Green updated as requested
+                        "primary-dark": "#4a6358",
+                        "secondary": "#f0f2f1",
+                        "background-light": "#FAFAF9", // Warm off-white
+                        "background-dark": "#181a19",
+                        "surface-light": "#FFFFFF",
+                        "surface-dark": "#2C2E2D",
+                        "text-main": "#131515",
+                        "text-sub": "#6d7873",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "1.5rem",
+                        "xl": "2rem",
+                        "2xl": "2.5rem",
+                        "full": "9999px"
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+                        'float': '0 8px 30px -4px rgba(0, 0, 0, 0.1)',
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .masonry-grid {
+            column-count: 2;
+            column-gap: 1rem;
+        }
+
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 1rem;
+        }
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark font-display text-text-main dark:text-gray-100 antialiased min-h-screen flex flex-col">
+    <header
+        class="fixed top-0 left-0 right-0 z-50 px-4 pt-12 pb-4 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md transition-all duration-300">
+        <div class="flex gap-3 items-center w-full max-w-md mx-auto">
+            <div
+                class="flex-1 h-12 bg-white dark:bg-surface-dark shadow-soft rounded-full flex items-center px-4 transition-shadow hover:shadow-float group cursor-text">
+                <span class="material-symbols-outlined text-text-sub dark:text-gray-400 mr-3">search</span>
+                <input
+                    class="flex-1 bg-transparent border-none p-0 text-text-main dark:text-white placeholder:text-text-sub focus:ring-0 text-base font-medium leading-normal"
+                    placeholder="Search vintage chairs..." type="text" />
+            </div>
+            <button
+                class="shrink-0 h-12 w-12 rounded-full overflow-hidden shadow-soft border-2 border-white dark:border-surface-dark focus:outline-none focus:ring-2 focus:ring-primary">
+                <div class="w-full h-full bg-cover bg-center" data-alt="User profile portrait smiling"
+                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD3SyI4DXsM3hsK0ptMgWfsE5n70w88P2IqBSJATriL4gATFuAvat6RQtFttDKgjDzvPQ4N8Z8yJ9-80jBVvj_DqlXvLD_495eGOT7MUOw-ODx5-tfn6z_zJUydvb6doWwEwZArdWikx6zo5IGZOjd-Q8d2l5H1k4ByPMn0MjAunIh1cMRtRubFAzlOxrBbn4kf7zN4g_eU4aw1mE_cALO6UJ97LbWidfHUENIyYySdEDf8OFUu-gX3lI1XwQvTj3WZV7ZT8IR2Si64");'>
+                </div>
+            </button>
+        </div>
+    </header>
+    <main class="flex-1 w-full max-w-md mx-auto pt-32 pb-24 px-4 overflow-x-hidden">
+        <div id="categoryChips" class="flex gap-2 overflow-x-auto no-scrollbar pb-6 -mx-4 px-4 scroll-smooth">
+            <button onclick="filterFeed('all', '')"
+                class="category-chip shrink-0 h-10 px-5 flex items-center justify-center rounded-full bg-primary text-white shadow-md transition-transform active:scale-95 active-chip">
+                <span class="text-sm font-semibold">All</span>
+            </button>
+            <button onclick="filterFeed('category', 'new arrivals')"
+                class="category-chip shrink-0 h-10 px-5 flex items-center justify-center rounded-full bg-secondary dark:bg-surface-dark text-primary dark:text-primary-dark border border-transparent hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors">
+                <span class="text-sm font-medium">New Arrivals</span>
+            </button>
+            <button onclick="filterFeed('category', 'sofas')"
+                class="category-chip shrink-0 h-10 px-5 flex items-center justify-center rounded-full bg-secondary dark:bg-surface-dark text-primary dark:text-primary-dark border border-transparent hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors">
+                <span class="text-sm font-medium">Sofas</span>
+            </button>
+            <button onclick="filterFeed('category', 'lighting')"
+                class="category-chip shrink-0 h-10 px-5 flex items-center justify-center rounded-full bg-secondary dark:bg-surface-dark text-primary dark:text-primary-dark border border-transparent hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors">
+                <span class="text-sm font-medium">Lighting</span>
+            </button>
+            <button onclick="filterFeed('category', 'tables')"
+                class="category-chip shrink-0 h-10 px-5 flex items-center justify-center rounded-full bg-secondary dark:bg-surface-dark text-primary dark:text-primary-dark border border-transparent hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors">
+                <span class="text-sm font-medium">Tables</span>
+            </button>
+            <button onclick="filterFeed('category', 'rugs')"
+                class="category-chip shrink-0 h-10 px-5 flex items-center justify-center rounded-full bg-secondary dark:bg-surface-dark text-primary dark:text-primary-dark border border-transparent hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors">
+                <span class="text-sm font-medium">Rugs</span>
+            </button>
+        </div>
+        <div class="masonry-grid w-full">
+            <div class="masonry-item relative group" data-category="sofas"
+                data-keywords="sofa velvet green 1970s vintage">
+                <div class="bg-white dark:bg-surface-dark rounded-xl p-3 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer"
+                    onclick="window.location.href='../product_details/code.html'">
+                    <div class="relative w-full overflow-hidden rounded-lg mb-3">
+                        <div class="w-full h-auto aspect-[3/4] bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+                            data-alt="Green velvet vintage sofa in a living room"
+                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD_7CdCHlYZUxXinXnnjQHnTkP3fadL1tXiU0Oa_e5RenGOinu8N3_rGY1BqgmqANZdrxiBNIxCTDXrKt3hjjt155D1_RwGgB3HuisKKSRk1JZgOFRWBW9BBt_hE-MLSAPjSwMqmMQaxEvWsu9n8b8ZaGlRI9BzFJuk_h-W76FR9COf6Tt3Ha-_a3hfBvBxMPVgU6Nabdk55UE5pdlM0AC_uqSUgGfooV_4U0I0fP1dVX5p0mFjRIm_gstDlSUPFjy62rQB4lZHovNP");'>
+                        </div>
+                        <button
+                            class="absolute top-2 right-2 h-8 w-8 bg-white/90 dark:bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm hover:bg-white transition-colors">
+                            <span
+                                class="material-symbols-outlined text-primary/70 text-[20px] hover:text-primary transition-colors">favorite</span>
+                        </button>
+                    </div>
+                    <div class="flex flex-col gap-1 px-1">
+                        <div class="flex justify-between items-start">
+                            <h3 class="text-primary dark:text-primary text-lg font-bold tracking-tight">$450</h3>
+                        </div>
+                        <p class="text-text-main dark:text-gray-100 text-sm font-semibold leading-tight line-clamp-2">
+                            1970s Velvet Sofa</p>
+                        <p class="text-text-sub dark:text-gray-400 text-xs font-normal mt-1">Brooklyn, NY</p>
+                    </div>
+                </div>
+            </div>
+            <div class="masonry-item relative group" data-category="tables"
+                data-keywords="table coffee oak modern minimalist">
+                <div
+                    class="bg-white dark:bg-surface-dark rounded-xl p-3 shadow-sm hover:shadow-md transition-all duration-300">
+                    <div class="relative w-full overflow-hidden rounded-lg mb-3">
+                        <div class="w-full h-auto aspect-[1/1] bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+                            data-alt="Modern minimalist oak coffee table"
+                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCRk6ZkMR7el4beJA8EILmTZr97kl-B3chhZ9H6DiBfcqL8KlB9KUhURhiU9lBVwR0y93TKJfTOaMtnLWpSPajFWB0ORqHdaQldebmOsy4nCjFzpoOkdalCqvFqN90rdx6KJfDZZ20YBpN3GI7HF4YsEpFcW9_k4LL0L2FAZjk8CsjoboPMWj27VPIE-A7Hq65JIkEiiDCU2oORJhzI4I5fMYhqTYPa-WcIOvs36N1yejZkb24AO-y7oQNZ5DaV8PxpoFKwJELknBt5");'>
+                        </div>
+                        <button
+                            class="absolute top-2 right-2 h-8 w-8 bg-white/90 dark:bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm hover:bg-white transition-colors">
+                            <span
+                                class="material-symbols-outlined text-primary/70 text-[20px] hover:text-primary transition-colors">favorite</span>
+                        </button>
+                    </div>
+                    <div class="flex flex-col gap-1 px-1">
+                        <div class="flex justify-between items-start">
+                            <h3 class="text-primary dark:text-primary text-lg font-bold tracking-tight">$120</h3>
+                        </div>
+                        <p class="text-text-main dark:text-gray-100 text-sm font-semibold leading-tight line-clamp-2">
+                            Oak Coffee Table</p>
+                        <p class="text-text-sub dark:text-gray-400 text-xs font-normal mt-1">Austin, TX</p>
+                    </div>
+                </div>
+            </div>
+            <div class="masonry-item relative group" data-category="lighting"
+                data-keywords="lamp industrial floor black metal">
+                <div
+                    class="bg-white dark:bg-surface-dark rounded-xl p-3 shadow-sm hover:shadow-md transition-all duration-300">
+                    <div class="relative w-full overflow-hidden rounded-lg mb-3">
+                        <div class="w-full h-auto aspect-[3/5] bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+                            data-alt="Tall industrial floor lamp black metal"
+                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAiHEDozq89TyD9zpm9DAO9eEPUjKnTJl97HuP4jdeC2lP27Cc1sZIzzhG9d6yl5mF9NuyhXLtqm7yU97nwoSM1NG75h5S7LhaCxvGvXlnhvYkF0ujVB2Ktb4y6qWZvVVE6R0BmqmdZy3dcsS9UaRwc2bz5z74qSpxRXHDmWf5iY76KSIAllmPvF1mc8faHL31E3n_cV8eOHGu6lV6x2y9U7MZsmGEtt9s4W8G6yR8Zz2oelpHerqal_hoUyQP6o9YaHpFWcFZbSRvK");'>
+                        </div>
+                        <button
+                            class="absolute top-2 right-2 h-8 w-8 bg-white/90 dark:bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm hover:bg-white transition-colors">
+                            <span
+                                class="material-symbols-outlined text-primary text-[20px] font-variation-settings-fill">favorite</span>
+                        </button>
+                    </div>
+                    <div class="flex flex-col gap-1 px-1">
+                        <div class="flex justify-between items-start">
+                            <h3 class="text-primary dark:text-primary text-lg font-bold tracking-tight">$45</h3>
+                        </div>
+                        <p class="text-text-main dark:text-gray-100 text-sm font-semibold leading-tight line-clamp-2">
+                            Industrial Lamp</p>
+                        <p class="text-text-sub dark:text-gray-400 text-xs font-normal mt-1">Portland, OR</p>
+                    </div>
+                </div>
+            </div>
+            <div class="masonry-item relative group" data-category="sofas"
+                data-keywords="armchair chair orange mid-century danish">
+                <div
+                    class="bg-white dark:bg-surface-dark rounded-xl p-3 shadow-sm hover:shadow-md transition-all duration-300">
+                    <div class="relative w-full overflow-hidden rounded-lg mb-3">
+                        <div class="w-full h-auto aspect-[4/5] bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+                            data-alt="Mid-century modern armchair orange fabric"
+                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC6S7b0zkYnUVsvWGjOMjnrrHGDKpXiDi00ALcCvzdC5Fe4ycpiOWdmRTW3VyQKX6qcVkIJ84NQOjXuhdnxe40UV6R3dMHqIK1yKe9exqJqjVDl-vf93VBcGoF9ARhh3vEq2626tU8FSFM4gHjL1tb6aJbdDyKlSecDWL8irPyEwEhD3DZfQWns47oR0KAIXJEImNP0lqOkIdGvdR-vstaMWkyMlg4c72uUEpGzDlrmIMcIWYxeW3syb-8GFtBBbYaoFC1tt2Z6HJ8k");'>
+                        </div>
+                        <button
+                            class="absolute top-2 right-2 h-8 w-8 bg-white/90 dark:bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm hover:bg-white transition-colors">
+                            <span
+                                class="material-symbols-outlined text-primary/70 text-[20px] hover:text-primary transition-colors">favorite</span>
+                        </button>
+                    </div>
+                    <div class="flex flex-col gap-1 px-1">
+                        <div class="flex justify-between items-start">
+                            <h3 class="text-primary dark:text-primary text-lg font-bold tracking-tight">$280</h3>
+                        </div>
+                        <p class="text-text-main dark:text-gray-100 text-sm font-semibold leading-tight line-clamp-2">
+                            Danish Armchair</p>
+                        <p class="text-text-sub dark:text-gray-400 text-xs font-normal mt-1">Seattle, WA</p>
+                    </div>
+                </div>
+            </div>
+            <div class="masonry-item relative group" data-category="plants"
+                data-keywords="plant monstera pot green large">
+                <div
+                    class="bg-white dark:bg-surface-dark rounded-xl p-3 shadow-sm hover:shadow-md transition-all duration-300">
+                    <div class="relative w-full overflow-hidden rounded-lg mb-3">
+                        <div class="w-full h-auto aspect-[1/1] bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+                            data-alt="Potted monstera plant in ceramic pot"
+                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAjQh1gVJn_V3FJth3MUfKkh6EnWoiNcBByDF1U9FxUWXMK_IG01wwHI1FzIXiKPsqDFU2qYFcre_02CTisEU7nzVMJCSH9_twhNgk0rXLGy96or8u2il8TfKtq452mLBb5ZLIFJklHQPq0LgxrkKPKLh9Dp-SVRI8UenzpjRvMxt5ReAGP7IkmpT__r8Fr-YRlgfhvUBNzTln_km1KfYRzuUQolI7sYyl2c2H4CCSJXeNfb6Dd4i72rSreLybk3ljjHulWki8S-ygM");'>
+                        </div>
+                        <button
+                            class="absolute top-2 right-2 h-8 w-8 bg-white/90 dark:bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm hover:bg-white transition-colors">
+                            <span
+                                class="material-symbols-outlined text-primary/70 text-[20px] hover:text-primary transition-colors">favorite</span>
+                        </button>
+                    </div>
+                    <div class="flex flex-col gap-1 px-1">
+                        <div class="flex justify-between items-start">
+                            <h3 class="text-primary dark:text-primary text-lg font-bold tracking-tight">$35</h3>
+                        </div>
+                        <p class="text-text-main dark:text-gray-100 text-sm font-semibold leading-tight line-clamp-2">
+                            Large Monstera</p>
+                        <p class="text-text-sub dark:text-gray-400 text-xs font-normal mt-1">Los Angeles, CA</p>
+                    </div>
+                </div>
+            </div>
+            <div class="masonry-item relative group" data-category="shelves"
+                data-keywords="bookshelf book shelf wood teak vintage">
+                <div
+                    class="bg-white dark:bg-surface-dark rounded-xl p-3 shadow-sm hover:shadow-md transition-all duration-300">
+                    <div class="relative w-full overflow-hidden rounded-lg mb-3">
+                        <div class="w-full h-auto aspect-[3/4] bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+                            data-alt="Wooden vintage bookshelf with books"
+                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDOCuicokfWi5DEcsTTXHxars9-hAmFIuCGAyuLi5goXG1L_SL0tMTsKTSqm2JK1w0Id4POEkgFON71Gq1NfqbD8dQh-pzJTyuw9TvRjpU71sYn1QP-mGo5EUGQqtzB9VyMRlX93Ua5NRLzK-KEzGGkUb1PTzeMjSL7wx7PCBi5rkaZvWKYQ1qU3Ose9sXDNO4K2jf2_u5dGUriA1OISMdk3dbQ_p_eZu-040A94AkYOpi718qr7OEJrLOgqUYCu4VkA-UeqOrhW8Y9");'>
+                        </div>
+                        <button
+                            class="absolute top-2 right-2 h-8 w-8 bg-white/90 dark:bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm hover:bg-white transition-colors">
+                            <span
+                                class="material-symbols-outlined text-primary/70 text-[20px] hover:text-primary transition-colors">favorite</span>
+                        </button>
+                    </div>
+                    <div class="flex flex-col gap-1 px-1">
+                        <div class="flex justify-between items-start">
+                            <h3 class="text-primary dark:text-primary text-lg font-bold tracking-tight">$150</h3>
+                        </div>
+                        <p class="text-text-main dark:text-gray-100 text-sm font-semibold leading-tight line-clamp-2">
+                            Teak Bookshelf</p>
+                        <p class="text-text-sub dark:text-gray-400 text-xs font-normal mt-1">Chicago, IL</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <nav
+        class="fixed bottom-0 w-full z-50 bg-surface-light dark:bg-surface-dark border-t border-gray-100 dark:border-gray-800 pb-safe pt-2">
+        <div class="flex justify-between items-center px-6 pb-4 h-16 max-w-md mx-auto relative">
+            <a class="flex flex-col items-center justify-center w-12 gap-1 group" href="#"
+                onclick="filterFeed('all', ''); return false;">
+                <div class="h-7 w-12 rounded-full bg-primary/20 flex items-center justify-center transition-colors">
+                    <span
+                        class="material-symbols-outlined text-primary text-[24px] font-variation-settings-fill">home</span>
+                </div>
+                <span class="text-[11px] font-semibold text-primary">Home</span>
+            </a>
+            <a class="flex flex-col items-center justify-center w-12 gap-1 group" href="#">
+                <div
+                    class="h-7 w-12 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-center transition-colors">
+                    <span class="material-symbols-outlined text-text-sub dark:text-gray-400 text-[24px]">favorite</span>
+                </div>
+                <span
+                    class="text-[11px] font-medium text-text-sub dark:text-gray-400 group-hover:text-primary transition-colors">Favorite</span>
+            </a>
+            <a class="flex flex-col items-center justify-center gap-1 group -mt-4"
+                href="../add_listing_(ai_wizard)/code.html">
+                <div
+                    class="h-14 w-14 rounded-2xl bg-primary shadow-float hover:bg-primary-dark flex items-center justify-center transition-all hover:scale-105 active:scale-95">
+                    <span class="material-symbols-outlined text-white text-[32px]">add</span>
+                </div>
+                <span class="text-[11px] font-semibold text-primary">Add</span>
+            </a>
+            <a class="flex flex-col items-center justify-center w-12 gap-1 group" href="../chat_interface/code.html">
+                <div
+                    class="h-7 w-12 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-center transition-colors">
+                    <span
+                        class="material-symbols-outlined text-text-sub dark:text-gray-400 text-[24px]">chat_bubble</span>
+                </div>
+                <span
+                    class="text-[11px] font-medium text-text-sub dark:text-gray-400 group-hover:text-primary transition-colors">Inbox</span>
+            </a>
+            <a class="flex flex-col items-center justify-center w-12 gap-1 group" href="../profile_settings/code.html">
+                <div
+                    class="h-7 w-12 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-center transition-colors">
+                    <span class="material-symbols-outlined text-text-sub dark:text-gray-400 text-[24px]">person</span>
+                </div>
+                <span
+                    class="text-[11px] font-medium text-text-sub dark:text-gray-400 group-hover:text-primary transition-colors">Profile</span>
+            </a>
+        </div>
+    </nav>
+    <style>
+        .font-variation-settings-fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .pb-safe {
+            padding-bottom: env(safe-area-inset-bottom, 1rem);
+        }
+    </style>
+    <!-- Search Overlay -->
+    <div id="searchOverlay"
+        class="fixed inset-0 z-[60] bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-xl hidden flex-col transition-opacity duration-300 opacity-0">
+        <!-- Status Bar Spacer (Simulated) -->
+        <div class="h-12 w-full shrink-0"></div>
+        <!-- Header: Search Bar -->
+        <div class="px-4 pb-2 shrink-0">
+            <div class="flex items-center gap-3">
+                <!-- Search Input Container -->
+                <div
+                    class="flex flex-1 items-center h-12 bg-surface-light dark:bg-surface-dark rounded-full px-4 gap-2 transition-all shadow-sm ring-1 ring-transparent focus-within:ring-primary group/search">
+                    <span class="material-symbols-outlined text-primary" style="font-size: 24px;">search</span>
+                    <input id="searchInput"
+                        class="flex-1 bg-transparent border-none p-0 text-base text-text-main dark:text-gray-100 placeholder:text-text-sub dark:placeholder:text-gray-400 focus:ring-0 font-medium caret-primary"
+                        placeholder="Search furniture, lamps, chairs..." type="text">
+                    <button id="clearSearch"
+                        class="flex items-center justify-center text-text-sub dark:text-gray-400 hover:text-text-main dark:hover:text-gray-200 transition-colors p-1 rounded-full hover:bg-black/5 dark:hover:bg-white/10 hidden">
+                        <span class="material-symbols-outlined" style="font-size: 20px;">cancel</span>
+                    </button>
+                </div>
+                <!-- Cancel Action -->
+                <button id="cancelSearch" class="text-primary font-medium text-base shrink-0 active:opacity-70">
+                    Cancel
+                </button>
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="flex-1 overflow-y-auto no-scrollbar pt-2 px-4 pb-24 relative">
+
+            <!-- Default State: Categories -->
+            <div id="searchCategories" class="animate-[fadeIn_0.3s_ease-out]">
+                <div class="mb-6 mt-4">
+                    <h2 class="text-2xl font-bold tracking-tight text-text-main dark:text-white">What are you looking
+                        for?</h2>
+                    <p class="text-text-sub dark:text-gray-400 text-sm mt-1">Browse by category</p>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <button
+                        class="group relative flex flex-col items-center justify-center gap-4 p-6 aspect-[4/3] rounded-2xl bg-white dark:bg-surface-dark border border-transparent hover:border-primary/30 shadow-sm hover:shadow-soft transition-all active:scale-[0.98]">
+                        <div
+                            class="w-16 h-16 rounded-full bg-secondary dark:bg-white/5 flex items-center justify-center group-hover:bg-primary/10 transition-colors">
+                            <span class="material-symbols-outlined text-[32px] text-primary">chair</span>
+                        </div>
+                        <span
+                            class="font-semibold text-lg text-text-main dark:text-gray-100 group-hover:text-primary transition-colors">Sofas</span>
+                    </button>
+                    <button
+                        class="group relative flex flex-col items-center justify-center gap-4 p-6 aspect-[4/3] rounded-2xl bg-white dark:bg-surface-dark border border-transparent hover:border-primary/30 shadow-sm hover:shadow-soft transition-all active:scale-[0.98]">
+                        <div
+                            class="w-16 h-16 rounded-full bg-secondary dark:bg-white/5 flex items-center justify-center group-hover:bg-primary/10 transition-colors">
+                            <span class="material-symbols-outlined text-[32px] text-primary">table_lamp</span>
+                        </div>
+                        <span
+                            class="font-semibold text-lg text-text-main dark:text-gray-100 group-hover:text-primary transition-colors">Lamps</span>
+                    </button>
+                    <button
+                        class="group relative flex flex-col items-center justify-center gap-4 p-6 aspect-[4/3] rounded-2xl bg-white dark:bg-surface-dark border border-transparent hover:border-primary/30 shadow-sm hover:shadow-soft transition-all active:scale-[0.98]">
+                        <div
+                            class="w-16 h-16 rounded-full bg-secondary dark:bg-white/5 flex items-center justify-center group-hover:bg-primary/10 transition-colors">
+                            <span class="material-symbols-outlined text-[32px] text-primary">countertops</span>
+                        </div>
+                        <span
+                            class="font-semibold text-lg text-text-main dark:text-gray-100 group-hover:text-primary transition-colors">Kitchens</span>
+                    </button>
+                    <button
+                        class="group relative flex flex-col items-center justify-center gap-4 p-6 aspect-[4/3] rounded-2xl bg-white dark:bg-surface-dark border border-transparent hover:border-primary/30 shadow-sm hover:shadow-soft transition-all active:scale-[0.98]">
+                        <div
+                            class="w-16 h-16 rounded-full bg-secondary dark:bg-white/5 flex items-center justify-center group-hover:bg-primary/10 transition-colors">
+                            <span class="material-symbols-outlined text-[32px] text-primary">shelves</span>
+                        </div>
+                        <span
+                            class="font-semibold text-lg text-text-main dark:text-gray-100 group-hover:text-primary transition-colors">Drawers</span>
+                    </button>
+                </div>
+
+                <div class="mt-8 pt-6 border-t border-gray-100 dark:border-white/10">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-sm font-semibold text-text-sub dark:text-gray-400 uppercase tracking-wider">
+                            Recent Searches</h3>
+                        <button class="text-sm text-primary font-medium hover:text-primary-dark">Clear all</button>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <button
+                            class="px-4 py-2 rounded-full bg-white dark:bg-surface-dark border border-gray-200 dark:border-white/10 text-sm text-text-main dark:text-gray-200 hover:border-primary hover:text-primary transition-colors">
+                            Mid-century modern chair
+                        </button>
+                        <button
+                            class="px-4 py-2 rounded-full bg-white dark:bg-surface-dark border border-gray-200 dark:border-white/10 text-sm text-text-main dark:text-gray-200 hover:border-primary hover:text-primary transition-colors">
+                            Oak desk
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Typing State: Autocomplete -->
+            <div id="searchResults" class="hidden">
+                <!-- Results will be injected here via JS -->
+            </div>
+
+            <!-- No Results Empty State -->
+            <div id="noResults"
+                class="hidden flex flex-col items-center justify-center py-12 text-center animate-[fadeIn_0.3s_ease-out]">
+                <div
+                    class="w-16 h-16 rounded-full bg-secondary dark:bg-surface-dark flex items-center justify-center mb-4">
+                    <span class="material-symbols-outlined text-3xl text-text-sub">search_off</span>
+                </div>
+                <h3 class="text-lg font-bold text-text-main dark:text-white">No results found</h3>
+                <p class="text-text-sub dark:text-gray-400 text-sm mt-1 max-w-[200px]">We couldn't find any items
+                    matching your search.</p>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Mock Data for Autocomplete
+        const furnitureItems = [
+            "Mid-century modern sofa",
+            "Mid-century desk",
+            "Mid-century chair",
+            "Mid-century dresser",
+            "Teak coffee table",
+            "Oak dining table",
+            "Leather armchair",
+            "Vintage lamp",
+            "Industrial shelf",
+            "Velvet ottoman",
+            "Rattan garden chair"
+        ];
+
+        // DOM Elements
+        const searchTriggerInput = document.querySelector('header input');
+        const searchTriggerContainer = document.querySelector('header .shadow-soft');
+        const searchOverlay = document.getElementById('searchOverlay');
+        const searchInput = document.getElementById('searchInput');
+        const cancelSearchBtn = document.getElementById('cancelSearch');
+        const clearSearchBtn = document.getElementById('clearSearch');
+        const searchCategories = document.getElementById('searchCategories');
+        const searchResults = document.getElementById('searchResults');
+        const noResults = document.getElementById('noResults');
+        const masonryItems = document.querySelectorAll('.masonry-item');
+        const headerTitle = document.querySelector('header input'); // Reusing input as title holder for context
+
+        // Functions
+        function openSearch() {
+            searchOverlay.classList.remove('hidden');
+            searchOverlay.style.display = 'flex'; // Ensure flex layout
+            requestAnimationFrame(() => {
+                searchOverlay.classList.remove('opacity-0');
+                searchInput.focus();
+            });
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+
+        function closeSearch() {
+            searchOverlay.classList.add('opacity-0');
+            setTimeout(() => {
+                searchOverlay.classList.add('hidden');
+                searchOverlay.style.display = '';
+                searchInput.value = '';
+                updateSearchState('');
+            }, 300);
+            document.body.style.overflow = '';
+        }
+
+        function filterFeed(filterType, filterValue) {
+            const normalizedFilter = filterValue.toLowerCase();
+            let hasResults = false;
+
+            masonryItems.forEach(item => {
+                const category = item.dataset.category || '';
+                const keywords = item.dataset.keywords || '';
+
+                let match = false;
+                if (filterType === 'all') {
+                    match = true;
+                } else if (filterType === 'category') {
+                    match = category === normalizedFilter;
+                } else if (filterType === 'keyword') {
+                    match = keywords.includes(normalizedFilter) || normalizedFilter.includes(keywords);
+                }
+
+                if (match) {
+                    item.style.display = '';
+                    item.classList.remove('hidden');
+                    hasResults = true;
+                } else {
+                    item.style.display = 'none';
+                    item.classList.add('hidden');
+                }
+            });
+
+            // Update Category Chips UI
+            document.querySelectorAll('.category-chip').forEach(chip => {
+                const chipText = chip.innerText.toLowerCase();
+                if ((filterType === 'all' && chipText === 'all') ||
+                    (filterType === 'category' && chipText === normalizedFilter)) {
+                    chip.classList.add('bg-primary', 'text-white', 'shadow-md');
+                    chip.classList.remove('bg-secondary', 'dark:bg-surface-dark', 'text-primary', 'dark:text-primary-dark');
+                } else {
+                    chip.classList.remove('bg-primary', 'text-white', 'shadow-md');
+                    chip.classList.add('bg-secondary', 'dark:bg-surface-dark', 'text-primary', 'dark:text-primary-dark');
+                }
+            });
+
+            // Update Header Input
+            if (filterType !== 'all') {
+                headerTitle.value = filterValue;
+            } else {
+                headerTitle.value = '';
+            }
+
+            if (!searchOverlay.classList.contains('hidden')) {
+                closeSearch();
+            }
+        }
+
+        function updateSearchState(query) {
+            const searchTerm = query.toLowerCase().trim();
+
+            if (searchTerm.length === 0) {
+                // Empty state
+                searchCategories.classList.remove('hidden');
+                searchResults.classList.add('hidden');
+                noResults.classList.add('hidden');
+                clearSearchBtn.classList.add('hidden');
+            } else {
+                // Typing state
+                searchCategories.classList.add('hidden');
+                clearSearchBtn.classList.remove('hidden');
+
+                const filteredItems = furnitureItems.filter(item =>
+                    item.toLowerCase().includes(searchTerm)
+                );
+
+                if (filteredItems.length > 0) {
+                    renderResults(filteredItems, new RegExp(`(${searchTerm})`, 'gi'));
+                    searchResults.classList.remove('hidden');
+                    noResults.classList.add('hidden');
+                } else {
+                    searchResults.classList.add('hidden');
+                    noResults.classList.remove('hidden');
+                }
+            }
+        }
+
+        function renderResults(items, regex) {
+            searchResults.innerHTML = items.map(item => {
+                const highlightedText = item.replace(regex, '<span class="font-semibold text-primary">$1</span>');
+
+                return `
+                    <button class="w-full flex items-center gap-4 px-2 py-3.5 hover:bg-white dark:hover:bg-white/5 transition-colors group text-left border-b border-gray-100 dark:border-white/5 last:border-0" onclick="filterFeed('keyword', '${item.replace(/'/g, "\\'")}')">
+                        <div class="shrink-0 text-text-sub bg-secondary dark:bg-white/5 group-hover:bg-white dark:group-hover:bg-white/10 rounded-full p-2 flex items-center justify-center transition-colors">
+                            <span class="material-symbols-outlined" style="font-size: 20px;">search</span>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-text-main dark:text-gray-100 text-base font-normal truncate">${highlightedText}</p>
+                        </div>
+                        <div class="shrink-0 text-gray-300 dark:text-gray-600 group-hover:text-primary transition-colors">
+                            <span class="material-symbols-outlined -rotate-45" style="font-size: 24px;">arrow_outward</span>
+                        </div>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        // Setup Category Buttons
+        const categoryButtons = document.querySelectorAll('#searchCategories button');
+        // Manually binding correct categories based on visual order
+        if (categoryButtons.length >= 4) {
+            categoryButtons[0].onclick = () => filterFeed('category', 'sofas');
+            categoryButtons[1].onclick = () => filterFeed('category', 'lighting');
+            categoryButtons[2].onclick = () => filterFeed('category', 'tables');
+            categoryButtons[3].onclick = () => filterFeed('category', 'shelves');
+        }
+
+        // Event Listeners
+        if (searchTriggerInput) {
+            searchTriggerInput.addEventListener('click', (e) => {
+                e.preventDefault();
+                openSearch();
+            });
+            searchTriggerInput.addEventListener('focus', openSearch);
+            searchTriggerInput.addEventListener('input', (e) => {
+                if (e.target.value === '') {
+                    filterFeed('all', '');
+                    updateSearchState('');
+                } else {
+                    updateSearchState(e.target.value);
+                }
+            });
+        }
+
+        if (searchTriggerContainer) {
+            searchTriggerContainer.addEventListener('click', openSearch);
+        }
+
+        cancelSearchBtn.addEventListener('click', closeSearch);
+
+        clearSearchBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            searchInput.focus();
+            updateSearchState('');
+        });
+
+        searchInput.addEventListener('input', (e) => {
+            updateSearchState(e.target.value);
+        });
+
+    </script>
+</body>
+
+</html>

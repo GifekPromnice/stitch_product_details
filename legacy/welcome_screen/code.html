@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Again - Sign Up / Login</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#698679",
+            "background-light": "#f7f7f7",
+            "background-dark": "#181a19",
+          },
+          fontFamily: {
+            "display": ["Inter", "sans-serif"]
+          },
+          borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" },
+        },
+      },
+    }
+  </script>
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      -webkit-tap-highlight-color: transparent;
+      min-height: max(884px, 100dvh);
+    }
+
+    ::-webkit-scrollbar {
+      width: 0px;
+      background: transparent;
+    }
+  </style>
+  <style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  <style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  <style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  <style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+
+<body
+  class="bg-background-light dark:bg-background-dark font-display text-[#131515] dark:text-[#f7f7f7] min-h-screen flex flex-col overflow-x-hidden">
+  <div class="relative w-full max-w-md mx-auto flex-grow flex flex-col pb-4">
+    <div
+      class="relative w-full h-[35vh] min-h-[260px] bg-neutral-200 dark:bg-neutral-800 rounded-b-lg overflow-hidden shrink-0 group/design-root">
+      <div class="absolute inset-0 bg-cover bg-center transition-transform duration-1000 ease-out hover:scale-105"
+        data-alt="Green velvet sofa in a modern living room with plants"
+        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDsIAMIHhUp829ipJYyDY3FjSDunlxujGtmQMv8RYT5SAo15RTHJIafD6KMH9KMXjNWQd6aMVIEkV99IF_7O7IUBcZJFuaVm2ldMhS9LtoPDUCc-SDJVhf2KM0GvfNbtbkQJ3GSboLTGA8z3_BJfOJJPnlsAlGXSoo99e-9CamEDz2X_WYBgSrMxgHjROnqhGd8qAMmMuEl7GujK6YGBZpBt-puE8elnjwYywMcE922UdwRRRf4UzRg6OCOWwgJg-CHCJreYLtQaEKv");'>
+      </div>
+      <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+      <div class="absolute bottom-0 left-0 w-full p-6 flex flex-col justify-end h-full">
+        <div class="flex items-center gap-2 mb-2 opacity-90">
+          <span class="material-symbols-outlined text-white text-[28px]">chair</span>
+          <p class="text-white tracking-wide text-sm font-semibold uppercase">Again</p>
+        </div>
+        <h1 class="text-white tracking-tight text-[32px] font-bold leading-tight">Find your next<br />treasure.</h1>
+      </div>
+    </div>
+    <div class="flex-1 flex flex-col px-5 relative z-10 -mt-6">
+      <form class="flex flex-col gap-5"
+        onsubmit="window.location.href='../home_discovery_feed/code.html'; return false;">
+        <input checked="" class="peer/login hidden" id="mode_login" name="auth_mode" type="radio" />
+        <input class="peer/signup hidden" id="mode_signup" name="auth_mode" type="radio" />
+        <div
+          class="bg-white dark:bg-[#232524] rounded-full shadow-lg shadow-black/5 p-1.5 flex mb-1 mx-2 peer-checked/login:[&amp;_label:first-of-type_div]:bg-primary peer-checked/login:[&amp;_label:first-of-type_div]:text-white peer-checked/login:[&amp;_label:first-of-type_div]:shadow-md peer-checked/signup:[&amp;_label:last-of-type_div]:bg-primary peer-checked/signup:[&amp;_label:last-of-type_div]:text-white peer-checked/signup:[&amp;_label:last-of-type_div]:shadow-md">
+          <label class="flex-1 cursor-pointer h-12 relative" for="mode_login">
+            <div
+              class="w-full h-full flex items-center justify-center rounded-full text-sm font-bold text-neutral-500 dark:text-neutral-400 transition-all duration-300">
+              Log In
+            </div>
+          </label>
+          <label class="flex-1 cursor-pointer h-12 relative" for="mode_signup">
+            <div
+              class="w-full h-full flex items-center justify-center rounded-full text-sm font-bold text-neutral-500 dark:text-neutral-400 transition-all duration-300">
+              Sign Up
+            </div>
+          </label>
+        </div>
+        <div class="hidden peer-checked/login:block mb-1">
+          <h2 class="text-2xl font-bold text-[#131515] dark:text-white">Welcome Back</h2>
+          <p class="text-neutral-500 dark:text-neutral-400 text-sm mt-1">Enter your details to access your account.</p>
+        </div>
+        <div class="hidden peer-checked/signup:block mb-1">
+          <h2 class="text-2xl font-bold text-[#131515] dark:text-white">Create Account</h2>
+          <p class="text-neutral-500 dark:text-neutral-400 text-sm mt-1">Join Again to find unique furniture.</p>
+        </div>
+        <div class="group hidden peer-checked/signup:block">
+          <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2 pl-1">Full Name</label>
+          <div
+            class="relative flex items-center w-full rounded bg-neutral-100 dark:bg-[#2c2e2d] focus-within:ring-2 focus-within:ring-primary/50 transition-all border border-transparent focus-within:bg-white dark:focus-within:bg-black focus-within:border-primary">
+            <span
+              class="material-symbols-outlined absolute left-4 text-neutral-400 group-focus-within:text-primary transition-colors">person</span>
+            <input
+              class="w-full h-14 pl-12 pr-4 bg-transparent border-none rounded text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:ring-0 text-base font-normal leading-normal"
+              placeholder="John Doe" type="text" />
+          </div>
+        </div>
+        <div class="group">
+          <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2 pl-1">Email
+            Address</label>
+          <div
+            class="relative flex items-center w-full rounded bg-neutral-100 dark:bg-[#2c2e2d] focus-within:ring-2 focus-within:ring-primary/50 transition-all border border-transparent focus-within:bg-white dark:focus-within:bg-black focus-within:border-primary">
+            <span
+              class="material-symbols-outlined absolute left-4 text-neutral-400 group-focus-within:text-primary transition-colors">mail</span>
+            <input
+              class="w-full h-14 pl-12 pr-4 bg-transparent border-none rounded text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:ring-0 text-base font-normal leading-normal"
+              placeholder="hello@again.com" type="email" />
+          </div>
+        </div>
+        <div class="group hidden peer-checked/login:block">
+          <div class="flex justify-between items-center mb-2 pl-1">
+            <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Password</label>
+            <a class="text-xs font-semibold text-primary hover:text-primary/80 transition-colors" href="#">Forgot
+              Password?</a>
+          </div>
+          <div
+            class="relative flex items-center w-full rounded bg-neutral-100 dark:bg-[#2c2e2d] focus-within:ring-2 focus-within:ring-primary/50 transition-all border border-transparent focus-within:bg-white dark:focus-within:bg-black focus-within:border-primary">
+            <span
+              class="material-symbols-outlined absolute left-4 text-neutral-400 group-focus-within:text-primary transition-colors">lock</span>
+            <input
+              class="w-full h-14 pl-12 pr-12 bg-transparent border-none rounded text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:ring-0 text-base font-normal leading-normal"
+              placeholder="••••••••" type="password" />
+            <button
+              class="absolute right-4 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 flex items-center transition-colors"
+              type="button">
+              <span class="material-symbols-outlined">visibility</span>
+            </button>
+          </div>
+        </div>
+        <div class="group hidden peer-checked/signup:block">
+          <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2 pl-1">Password</label>
+          <div
+            class="relative flex items-center w-full rounded bg-neutral-100 dark:bg-[#2c2e2d] focus-within:ring-2 focus-within:ring-primary/50 transition-all border border-transparent focus-within:bg-white dark:focus-within:bg-black focus-within:border-primary">
+            <span
+              class="material-symbols-outlined absolute left-4 text-neutral-400 group-focus-within:text-primary transition-colors">lock</span>
+            <input
+              class="w-full h-14 pl-12 pr-12 bg-transparent border-none rounded text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:ring-0 text-base font-normal leading-normal"
+              placeholder="••••••••" type="password" />
+            <button
+              class="absolute right-4 text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 flex items-center transition-colors"
+              type="button">
+              <span class="material-symbols-outlined">visibility</span>
+            </button>
+          </div>
+        </div>
+        <div class="group hidden peer-checked/signup:block">
+          <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2 pl-1">Confirm
+            Password</label>
+          <div
+            class="relative flex items-center w-full rounded bg-neutral-100 dark:bg-[#2c2e2d] focus-within:ring-2 focus-within:ring-primary/50 transition-all border border-transparent focus-within:bg-white dark:focus-within:bg-black focus-within:border-primary">
+            <span
+              class="material-symbols-outlined absolute left-4 text-neutral-400 group-focus-within:text-primary transition-colors">lock_reset</span>
+            <input
+              class="w-full h-14 pl-12 pr-12 bg-transparent border-none rounded text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:ring-0 text-base font-normal leading-normal"
+              placeholder="••••••••" type="password" />
+          </div>
+        </div>
+        <div class="flex items-start gap-3 mt-1 hidden peer-checked/signup:flex px-1">
+          <div class="flex items-center h-5 mt-0.5">
+            <input
+              class="w-5 h-5 border border-neutral-300 rounded text-primary focus:ring-primary/25 bg-neutral-50 dark:bg-[#2c2e2d] dark:border-neutral-600"
+              id="terms" type="checkbox" />
+          </div>
+          <label class="text-sm text-neutral-500 dark:text-neutral-400 leading-snug" for="terms">
+            I agree to the <a class="text-primary font-semibold hover:underline" href="#">Terms of Service</a> and <a
+              class="text-primary font-semibold hover:underline" href="#">Privacy Policy</a>.
+          </label>
+        </div>
+        <button
+          class="w-full h-14 mt-2 bg-primary hover:bg-[#5a7368] text-white font-bold text-lg rounded-full shadow-lg shadow-primary/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2 group">
+          <span class="hidden peer-checked/login:block">Log In</span>
+          <span class="hidden peer-checked/signup:block">Sign Up</span>
+          <span
+            class="material-symbols-outlined text-[20px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+        </button>
+      </form>
+      <div class="relative flex py-8 items-center">
+        <div class="flex-grow border-t border-neutral-200 dark:border-neutral-800"></div>
+        <span class="flex-shrink-0 mx-4 text-neutral-400 text-xs uppercase tracking-wider font-bold">Or continue
+          with</span>
+        <div class="flex-grow border-t border-neutral-200 dark:border-neutral-800"></div>
+      </div>
+      <div class="grid grid-cols-2 gap-4 mb-6">
+        <button
+          class="flex items-center justify-center h-14 bg-white dark:bg-[#232524] border border-neutral-200 dark:border-neutral-700 rounded-full hover:bg-neutral-50 dark:hover:bg-[#363837] transition-all active:scale-95 shadow-sm">
+          <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+              fill="#4285F4"></path>
+            <path
+              d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+              fill="#34A853"></path>
+            <path
+              d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.84z"
+              fill="#FBBC05"></path>
+            <path
+              d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+              fill="#EA4335"></path>
+          </svg>
+          <span class="text-sm font-semibold text-neutral-700 dark:text-neutral-200">Google</span>
+        </button>
+        <button
+          class="flex items-center justify-center h-14 bg-white dark:bg-[#232524] border border-neutral-200 dark:border-neutral-700 rounded-full hover:bg-neutral-50 dark:hover:bg-[#363837] transition-all active:scale-95 shadow-sm">
+          <span class="material-symbols-outlined mr-2 text-black dark:text-white text-[24px]">ios</span>
+          <span class="text-sm font-semibold text-neutral-900 dark:text-white">Apple</span>
+        </button>
+      </div>
+      <div class="mt-auto py-6 text-center border-t border-dashed border-neutral-200 dark:border-neutral-800">
+        <p class="text-sm text-neutral-500 dark:text-neutral-400 hidden peer-checked/login:block">
+          Don't have an account?
+          <label class="text-primary font-bold hover:underline cursor-pointer" for="mode_signup">Sign Up</label>
+        </p>
+        <p class="text-sm text-neutral-500 dark:text-neutral-400 hidden peer-checked/signup:block">
+          Already have an account?
+          <label class="text-primary font-bold hover:underline cursor-pointer" for="mode_login">Log In</label>
+        </p>
+        <div class="mt-4 flex justify-center gap-4 text-xs text-neutral-400">
+          <a class="hover:text-neutral-600 dark:hover:text-neutral-300" href="#">Terms of Service</a>
+          <span>•</span>
+          <a class="hover:text-neutral-600 dark:hover:text-neutral-300" href="#">Privacy Policy</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

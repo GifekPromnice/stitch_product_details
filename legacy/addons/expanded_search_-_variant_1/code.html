@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Again - Expanded Search</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#698679",
+                        "on-primary": "#ffffff",
+                        "primary-container": "#eef5f2",
+                        "background-light": "#fdfdfd",
+                        "background-dark": "#181a19",
+                        "surface": "#eff2f0",
+                        "surface-variant": "#dfe4e1",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "1.5rem",
+                        "xl": "2rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar hiding */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display bg-background-light dark:bg-background-dark overflow-hidden h-screen w-full text-[#1A1C19]">
+<!-- Background Layer (Simulated Home Feed to be blurred) -->
+<div aria-hidden="true" class="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-40">
+<div class="columns-2 gap-4 p-4 pt-20">
+<!-- Simulated Feed Items -->
+<div class="break-inside-avoid mb-4 rounded-xl bg-gray-200 h-64 w-full relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-br from-stone-200 to-stone-300"></div>
+</div>
+<div class="break-inside-avoid mb-4 rounded-xl bg-gray-200 h-40 w-full relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-br from-[#698679]/20 to-[#698679]/40"></div>
+</div>
+<div class="break-inside-avoid mb-4 rounded-xl bg-gray-200 h-56 w-full relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-br from-amber-100 to-amber-200"></div>
+</div>
+<div class="break-inside-avoid mb-4 rounded-xl bg-gray-200 h-48 w-full relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-br from-slate-200 to-slate-300"></div>
+</div>
+<div class="break-inside-avoid mb-4 rounded-xl bg-gray-200 h-72 w-full relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-br from-orange-50 to-orange-100"></div>
+</div>
+</div>
+</div>
+<!-- Active Search Overlay Layer -->
+<!-- Using backdrop-blur to blur the layer beneath -->
+<div class="relative z-10 flex h-full w-full flex-col bg-background-light/95 backdrop-blur-xl">
+<!-- Status Bar Spacer (Simulated) -->
+<div class="h-12 w-full shrink-0"></div>
+<!-- Header: Search Bar -->
+<div class="px-4 pb-2 shrink-0">
+<div class="flex items-center gap-3">
+<!-- Search Input Container -->
+<div class="flex flex-1 items-center h-12 bg-surface rounded-full px-4 gap-2 transition-all shadow-sm ring-1 ring-transparent focus-within:ring-[#698679] group">
+<span class="material-symbols-outlined text-[#698679]" style="font-size: 24px;">search</span>
+<input autofocus="" class="flex-1 bg-transparent border-none p-0 text-base text-[#1A1C19] placeholder:text-[#73796E] focus:ring-0 font-medium caret-[#698679]" placeholder="Search furniture, lamps, chairs..." type="text" value="Mid-c"/>
+<button class="flex items-center justify-center text-[#73796E] hover:text-[#1A1C19] transition-colors p-1 rounded-full hover:bg-black/5">
+<span class="material-symbols-outlined" style="font-size: 20px;">cancel</span>
+</button>
+</div>
+<!-- Cancel Action -->
+<button class="text-primary font-medium text-base shrink-0 active:opacity-70">
+                    Cancel
+                </button>
+</div>
+</div>
+<!-- Autocomplete Suggestions List -->
+<div class="flex-1 overflow-y-auto no-scrollbar pt-2">
+<!-- Recent Search Item -->
+<button class="w-full flex items-center gap-4 px-6 py-3.5 hover:bg-surface transition-colors group text-left">
+<div class="shrink-0 text-[#73796E] bg-surface group-hover:bg-white rounded-full p-2 flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-size: 20px;">history</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-[#1A1C19] text-base font-normal truncate">Mid-century <span class="font-semibold">modern sofa</span></p>
+</div>
+<div class="shrink-0 text-[#B0B5B1]">
+<span class="material-symbols-outlined -rotate-45" style="font-size: 24px;">arrow_outward</span>
+</div>
+</button>
+<!-- Suggestion Item -->
+<button class="w-full flex items-center gap-4 px-6 py-3.5 hover:bg-surface transition-colors group text-left">
+<div class="shrink-0 text-[#73796E] bg-surface group-hover:bg-white rounded-full p-2 flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-size: 20px;">search</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-[#1A1C19] text-base font-normal truncate">Mid-century <span class="font-semibold">desk</span></p>
+</div>
+<div class="shrink-0 text-[#B0B5B1]">
+<span class="material-symbols-outlined -rotate-45" style="font-size: 24px;">arrow_outward</span>
+</div>
+</button>
+<!-- Suggestion Item -->
+<button class="w-full flex items-center gap-4 px-6 py-3.5 hover:bg-surface transition-colors group text-left">
+<div class="shrink-0 text-[#73796E] bg-surface group-hover:bg-white rounded-full p-2 flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-size: 20px;">search</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-[#1A1C19] text-base font-normal truncate">Mid-century <span class="font-semibold">chair</span></p>
+</div>
+<div class="shrink-0 text-[#B0B5B1]">
+<span class="material-symbols-outlined -rotate-45" style="font-size: 24px;">arrow_outward</span>
+</div>
+</button>
+<!-- Suggestion Item -->
+<button class="w-full flex items-center gap-4 px-6 py-3.5 hover:bg-surface transition-colors group text-left">
+<div class="shrink-0 text-[#73796E] bg-surface group-hover:bg-white rounded-full p-2 flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-size: 20px;">search</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-[#1A1C19] text-base font-normal truncate">Mid-century <span class="font-semibold">dresser</span></p>
+</div>
+<div class="shrink-0 text-[#B0B5B1]">
+<span class="material-symbols-outlined -rotate-45" style="font-size: 24px;">arrow_outward</span>
+</div>
+</button>
+<!-- Trending Item -->
+<button class="w-full flex items-center gap-4 px-6 py-3.5 hover:bg-surface transition-colors group text-left">
+<div class="shrink-0 text-[#73796E] bg-surface group-hover:bg-white rounded-full p-2 flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-size: 20px;">trending_up</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-[#1A1C19] text-base font-normal truncate">Teak coffee table</p>
+</div>
+<div class="shrink-0 text-[#B0B5B1]">
+<span class="material-symbols-outlined -rotate-45" style="font-size: 24px;">arrow_outward</span>
+</div>
+</button>
+<!-- Category Item -->
+<button class="w-full flex items-center gap-4 px-6 py-3.5 hover:bg-surface transition-colors group text-left">
+<div class="shrink-0 text-[#73796E] bg-surface group-hover:bg-white rounded-full p-2 flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-size: 20px;">chair</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-[#1A1C19] text-base font-normal truncate">Browse all <span class="font-semibold">Sofas</span></p>
+</div>
+<div class="shrink-0 text-[#B0B5B1]">
+<span class="material-symbols-outlined -rotate-45" style="font-size: 24px;">arrow_outward</span>
+</div>
+</button>
+</div>
+<!-- Simulated iOS Keyboard -->
+<div class="w-full bg-[#D1D5DB] pb-6 pt-2 px-1 flex flex-col items-center gap-2.5 shadow-[0_-1px_10px_rgba(0,0,0,0.1)] shrink-0">
+<!-- Prediction Bar -->
+<div class="w-full flex justify-center gap-4 py-1">
+<span class="text-sm font-medium text-gray-500">"Mid-century modern"</span>
+<span class="w-px h-4 bg-gray-400"></span>
+<span class="text-sm font-medium text-gray-500">"Mid-century lamp"</span>
+<span class="w-px h-4 bg-gray-400"></span>
+<span class="text-sm font-medium text-gray-500">"Mid-century rug"</span>
+</div>
+<!-- Row 1 -->
+<div class="flex w-full px-1 gap-1.5 justify-center">
+<div class="h-[42px] flex-1 bg-white rounded-md shadow-sm flex items-center justify-center text-xl text-black font-normal">q</div>
+<div class="h-[42px] flex-1 bg-white rounded-md shadow-sm flex items-center justify-center text-xl text-black font-normal">w</div>
+<div class="h-[42px] flex-1 bg-white rounded-md shadow-sm flex items-center justify-center text-xl text-black font-normal">e</div>
+<div class="h-[42px] flex-1 bg-white rounded-md shadow-sm flex items-center justify-center text-xl text-black font-normal">r</div>
+<div class="h-[42px] flex-1 bg-white rounded-md shadow-sm flex items-center justify-center text-xl text-black font-normal">t</div>
+<div class="h-[42px] flex-1 bg-white rounded-md shadow-sm flex items-center justify-center text-xl text-black font-normal">y</div>
+<div class="h-[42px] flex-1 bg-white rounded-md shadow-sm flex items-center justify-center text-xl text-black font-normal">u</div>
+<div class="h-[42px] flex-1 bg-white rounded-md shadow-sm flex items-center justify-center text-xl text-black font-normal">i</div>
+<div class="h-[42px] flex-1 bg-white rounded-md shadow-sm flex items-center justify-center text-xl text-black font-normal">o</div>
+<div class="h-[42px] flex-1 bg-white rounded-md shadow-sm flex items-center justify-center text-xl text-black font-normal">p</div>
+</div>
+<!-- Row 2 -->
+<div class="flex w-[90%] px-1 gap-1.5 justify-center">
+<div class="h-[42px] flex-1 bg-white rounded-md shadow-sm flex items-center justify-center text-xl text-black font-normal">a</div>
+<div class="h-[42px] flex-1 bg-white rounded-md shadow-sm flex items-center justify-center text-xl text-black font-normal">s</div>
+<div class="h-[42px] flex-1 bg-white rounded-md shadow-sm flex items-center justify-center text-xl text-black font-normal">d</div>
+<div class="h-[42px] flex-1 bg-white rounded-md shadow-sm flex items-center justify-center text-xl text-black font-normal">f</div>
+<div class="h-[42px] flex-1 bg-white rounded-md shadow-sm flex items-center justify-center text-xl text-black font-normal">g</div>
+<div class="h-[42px] flex-1 bg-white rounded-md shadow-sm flex items-center justify-center text-xl text-black font-normal">h</div>
+<div class="h-[42px] flex-1 bg-white rounded-md shadow-sm flex items-center justify-center text-xl text-black font-normal">j</div>
+<div class="h-[42px] flex-1 bg-white rounded-md shadow-sm flex items-center justify-center text-xl text-black font-normal">k</div>
+<div class="h-[42px] flex-1 bg-white rounded-md shadow-sm flex items-center justify-center text-xl text-black font-normal">l</div>
+</div>
+<!-- Row 3 -->
+<div class="flex w-full px-1 gap-1.5 justify-center">
+<div class="h-[42px] w-[42px] bg-[#B0B5C1] rounded-md shadow-sm flex items-center justify-center">
+<span class="material-symbols-outlined text-black" style="font-size: 20px;">arrow_upward</span>
+</div>
+<div class="h-[42px] flex-1 bg-white rounded-md shadow-sm flex items-center justify-center text-xl text-black font-normal">z</div>
+<div class="h-[42px] flex-1 bg-white rounded-md shadow-sm flex items-center justify-center text-xl text-black font-normal">x</div>
+<div class="h-[42px] flex-1 bg-white rounded-md shadow-sm flex items-center justify-center text-xl text-black font-normal">c</div>
+<div class="h-[42px] flex-1 bg-white rounded-md shadow-sm flex items-center justify-center text-xl text-black font-normal">v</div>
+<div class="h-[42px] flex-1 bg-white rounded-md shadow-sm flex items-center justify-center text-xl text-black font-normal">b</div>
+<div class="h-[42px] flex-1 bg-white rounded-md shadow-sm flex items-center justify-center text-xl text-black font-normal">n</div>
+<div class="h-[42px] flex-1 bg-white rounded-md shadow-sm flex items-center justify-center text-xl text-black font-normal">m</div>
+<div class="h-[42px] w-[42px] bg-[#B0B5C1] rounded-md shadow-sm flex items-center justify-center">
+<span class="material-symbols-outlined text-black" style="font-size: 20px;">backspace</span>
+</div>
+</div>
+<!-- Row 4 -->
+<div class="flex w-full px-1 gap-1.5 justify-center mt-1">
+<div class="h-[42px] w-[88px] bg-[#B0B5C1] rounded-md shadow-sm flex items-center justify-center text-base font-medium text-black">123</div>
+<div class="h-[42px] flex-1 bg-white rounded-md shadow-sm flex items-center justify-center text-base font-normal text-black">space</div>
+<div class="h-[42px] w-[88px] bg-[#367CFE] rounded-md shadow-sm flex items-center justify-center text-base font-semibold text-white">Go</div>
+</div>
+</div>
+</div>
+</body></html>
