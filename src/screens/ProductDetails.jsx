@@ -23,11 +23,13 @@ const ProductDetails = () => {
                 rating: 4.8,
                 image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDRjBy5olySuBu-5aexKNm5gVzcaLVENlzMbx-eDhuhKvO1XxKLTh_gP-anraJdzXADlPSisSJdJm6FBU5zvj2inKqVkQCRQsbCkJQYUp-ohxlu73dGky0GaBcgG6bwvsAw_BERre9BPYg2kq2wzxJcoAVqlYRxoIkfQSNo4MMhuX66q4W5D19pjp2e_EkaeocBeACUM2IzuO1M2P9l7tExubYFO1fEfNqK95q6x4ys42VAsQTNID9FBxr9-UgOHRAMDWxmCIVnKzZs"
             },
-            images: [
-                passedProduct?.image || "https://lh3.googleusercontent.com/aida-public/AB6AXuBnL8q_KkKo5Zi5VoxcxzycrSt4lkiv-ZEldyK0qLnqvnNJgAI18mVpuV3YiZep8yuZGbu71VY0fxvyija031i5kiQQUAJ36Uqkkxi1Q4VJhF6CLlm6G6_b7ADtf0oOml8Yb0iyskMbt3RPrNTLpLJ-51U0Gcavj-w77FFZBUvzTXpydTS8yxf5GXJAUS-kS8_-Btq5JDrezeQf3K9Kh5VnHF3h6C8kNxIcL7ZoEM679z3Du-QZ3Bn_zKqNDWXEnfyr8nURQjHyKOo_",
-                "https://lh3.googleusercontent.com/aida-public/AB6AXuBnL8q_KkKo5Zi5VoxcxzycrSt4lkiv-ZEldyK0qLnqvnNJgAI18mVpuV3YiZep8yuZGbu71VY0fxvyija031i5kiQQUAJ36Uqkkxi1Q4VJhF6CLlm6G6_b7ADtf0oOml8Yb0iyskMbt3RPrNTLpLJ-51U0Gcavj-w77FFZBUvzTXpydTS8yxf5GXJAUS-kS8_-Btq5JDrezeQf3K9Kh5VnHF3h6C8kNxIcL7ZoEM679z3Du-QZ3Bn_zKqNDWXEnfyr8nURQjHyKOo_",
-                "https://lh3.googleusercontent.com/aida-public/AB6AXuBnL8q_KkKo5Zi5VoxcxzycrSt4lkiv-ZEldyK0qLnqvnNJgAI18mVpuV3YiZep8yuZGbu71VY0fxvyija031i5kiQQUAJ36Uqkkxi1Q4VJhF6CLlm6G6_b7ADtf0oOml8Yb0iyskMbt3RPrNTLpLJ-51U0Gcavj-w77FFZBUvzTXpydTS8yxf5GXJAUS-kS8_-Btq5JDrezeQf3K9Kh5VnHF3h6C8kNxIcL7ZoEM679z3Du-QZ3Bn_zKqNDWXEnfyr8nURQjHyKOo_"
-            ],
+            images: passedProduct?.image
+                ? [passedProduct.image]
+                : [
+                    "https://lh3.googleusercontent.com/aida-public/AB6AXuBnL8q_KkKo5Zi5VoxcxzycrSt4lkiv-ZEldyK0qLnqvnNJgAI18mVpuV3YiZep8yuZGbu71VY0fxvyija031i5kiQQUAJ36Uqkkxi1Q4VJhF6CLlm6G6_b7ADtf0oOml8Yb0iyskMbt3RPrNTLpLJ-51U0Gcavj-w77FFZBUvzTXpydTS8yxf5GXJAUS-kS8_-Btq5JDrezeQf3K9Kh5VnHF3h6C8kNxIcL7ZoEM679z3Du-QZ3Bn_zKqNDWXEnfyr8nURQjHyKOo_",
+                    "https://lh3.googleusercontent.com/aida-public/AB6AXuBnL8q_KkKo5Zi5VoxcxzycrSt4lkiv-ZEldyK0qLnqvnNJgAI18mVpuV3YiZep8yuZGbu71VY0fxvyija031i5kiQQUAJ36Uqkkxi1Q4VJhF6CLlm6G6_b7ADtf0oOml8Yb0iyskMbt3RPrNTLpLJ-51U0Gcavj-w77FFZBUvzTXpydTS8yxf5GXJAUS-kS8_-Btq5JDrezeQf3K9Kh5VnHF3h6C8kNxIcL7ZoEM679z3Du-QZ3Bn_zKqNDWXEnfyr8nURQjHyKOo_",
+                    "https://lh3.googleusercontent.com/aida-public/AB6AXuBnL8q_KkKo5Zi5VoxcxzycrSt4lkiv-ZEldyK0qLnqvnNJgAI18mVpuV3YiZep8yuZGbu71VY0fxvyija031i5kiQQUAJ36Uqkkxi1Q4VJhF6CLlm6G6_b7ADtf0oOml8Yb0iyskMbt3RPrNTLpLJ-51U0Gcavj-w77FFZBUvzTXpydTS8yxf5GXJAUS-kS8_-Btq5JDrezeQf3K9Kh5VnHF3h6C8kNxIcL7ZoEM679z3Du-QZ3Bn_zKqNDWXEnfyr8nURQjHyKOo_"
+                ],
             dimensions: { height: '32"', width: '28"', depth: '30"' },
             tags: ['Velvet', 'Armchair', 'Green', 'Vintage', 'Comfortable'],
             description: passedProduct?.title ? `Excellent quality ${passedProduct.title}. A beautiful piece for any home.` : 'Beautiful mid-century modern style velvet armchair in a rich emerald green. Perfect accent piece for a living room or reading nook.',
