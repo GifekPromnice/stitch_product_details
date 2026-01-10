@@ -83,6 +83,46 @@ const Home = () => {
         // For 'new arrivals', we might just filter by date in real app, here it's static.
     );
 
+    const toggleFavorite = async (e, productId) => {
+        e.stopPropagation();
+        e.preventDefault();
+
+        // 1. Optimistic Update
+        const isFavorite = favorites.includes(productId);
+        let newFavorites;
+
+        if (isFavorite) {
+            newFavorites = favorites.filter(id => id !== productId);
+        } else {
+            newFavorites = [...favorites, productId];
+        }
+        setFavorites(newFavorites);
+
+        // 2. Persist to DB if logged in
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+            try {
+                if (isFavorite) {
+                    // Remove
+                    await supabase
+                        .from('favorites')
+                        .delete()
+                        .eq('user_id', session.user.id)
+                        .eq('product_id', productId);
+                } else {
+                    // Add
+                    await supabase
+                        .from('favorites')
+                        .insert([{ user_id: session.user.id, product_id: productId }]);
+                }
+            } catch (err) {
+                console.error("Error syncing favorite:", err);
+                // Revert on error (optional, but good UX)
+                setFavorites(favorites);
+            }
+        }
+    };
+
     return (
         <div className="animate-in fade-in duration-500 bg-background-light dark:bg-background-dark">
             <header className="fixed top-0 left-0 right-0 z-50 px-4 pt-6 pb-2 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md">

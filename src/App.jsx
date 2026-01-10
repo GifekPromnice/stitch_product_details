@@ -11,6 +11,7 @@ import Features from './screens/Features';
 import Auth from './screens/Auth';
 import Chat from './screens/Chat';
 import AddListing from './screens/AddListing';
+import MyListings from './screens/MyListings';
 import Negotiate from './screens/Negotiate';
 import PersonalInformation from './screens/PersonalInformation';
 import PasswordSecurity from './screens/PasswordSecurity';
@@ -47,6 +48,7 @@ function App() {
                         <Route path="/wallet" element={<ProtectedRoute><Wallet /></ProtectedRoute>} />
                         <Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
                         <Route path="/add-listing" element={<ProtectedRoute><AddListing /></ProtectedRoute>} />
+                        <Route path="/my-listings" element={<ProtectedRoute><MyListings /></ProtectedRoute>} />
                         <Route path="/negotiate/:id" element={<ProtectedRoute><Negotiate /></ProtectedRoute>} />
                         <Route path="/personal-information" element={<ProtectedRoute><PersonalInformation /></ProtectedRoute>} />
                         <Route path="/password-security" element={<ProtectedRoute><PasswordSecurity /></ProtectedRoute>} />

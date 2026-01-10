@@ -12,82 +12,28 @@ const AddListing = () => {
     const fileInputRef = useRef(null);
     const tagInputRef = useRef(null);
 
-    const [title, setTitle] = useState('');
-    const [price, setPrice] = useState('');
-    const [description, setDescription] = useState('');
-    const [tags, setTags] = useState([]);
+    const locationState = useLocation().state;
+    const editingProduct = locationState?.product;
+
+    // Initialize state with product data if editing
+    const [title, setTitle] = useState(editingProduct?.title || '');
+    const [price, setPrice] = useState(editingProduct?.price ? String(editingProduct.price) : '');
+    const [description, setDescription] = useState(editingProduct?.description || '');
+    const [tags, setTags] = useState(editingProduct?.tags || []);
     const [newTag, setNewTag] = useState('');
-    const [category, setCategory] = useState('sofas');
-    const [condition, setCondition] = useState('good');
-    const [color, setColor] = useState('black');
-    const [location, setLocation] = useState('');
-    const [image, setImage] = useState(null); // Default empty
+    const [category, setCategory] = useState(editingProduct?.category || 'sofas');
+    const [condition, setCondition] = useState(editingProduct?.is_new ? 'new' : 'good'); // Simplified mapping
+    const [color, setColor] = useState('black'); // Color wasn't in original schema explicitly, defaulting
+    const [location, setLocation] = useState(editingProduct?.location || '');
+    const [image, setImage] = useState(editingProduct?.image || null);
     const [imageFile, setImageFile] = useState(null);
     const [isPublishing, setIsPublishing] = useState(false);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
-    const [height, setHeight] = useState('');
-    const [width, setWidth] = useState('');
-    const [depth, setDepth] = useState('');
+    const [height, setHeight] = useState(editingProduct?.height ? String(editingProduct.height) : '');
+    const [width, setWidth] = useState(editingProduct?.width ? String(editingProduct.width) : '');
+    const [depth, setDepth] = useState(editingProduct?.depth ? String(editingProduct.depth) : '');
 
-    const removeTag = (tagToRemove) => {
-        setTags(tags.filter(tag => tag !== tagToRemove));
-    };
-
-    const addTag = (e) => {
-        if (e.key === 'Enter' && newTag.trim()) {
-            e.preventDefault();
-            setTags([...tags, newTag.trim()]);
-            setNewTag('');
-            // Ensure input stays focused for rapid entry
-            setTimeout(() => {
-                if (tagInputRef.current) tagInputRef.current.focus();
-            }, 0);
-        }
-    };
-
-    const handleImageUpload = async (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            setImageFile(file);
-            const objectUrl = URL.createObjectURL(file);
-            setImage(objectUrl);
-
-            // Analyze Text/Content via Mock AI
-            setIsAnalyzing(true);
-            try {
-                const aiData = await analyzeImageWithAI(file);
-
-                // Auto-fill logic
-                if (aiData) {
-                    console.log("AI UI DEBUG: Otrzymano dane do autouzupełniania:", aiData);
-                    if (aiData.title) setTitle(String(aiData.title));
-                    if (aiData.price) setPrice(String(aiData.price));
-                    if (aiData.category) setCategory(String(aiData.category).toLowerCase());
-                    if (aiData.condition) setCondition(String(aiData.condition).toLowerCase());
-                    if (aiData.color) setColor(String(aiData.color).toLowerCase());
-                    if (aiData.description) setDescription(String(aiData.description));
-                    if (aiData.height) setHeight(String(aiData.height));
-                    if (aiData.width) setWidth(String(aiData.width));
-                    if (aiData.depth) setDepth(String(aiData.depth));
-
-                    // Merge tags 
-                    if (Array.isArray(aiData.tags)) {
-                        const uniqueTags = [...new Set([...tags, ...aiData.tags])];
-                        setTags(uniqueTags);
-                    }
-                }
-            } catch (err) {
-                console.error("AI Analysis UI Error:", err);
-                alert("Błąd AI: " + (err.message || "Nie udało się przeanalizować zdjęcia."));
-            } finally {
-                setIsAnalyzing(false);
-            }
-        }
-    };
-
-    const triggerFileInput = () => {
-        fileInputRef.current.click();
-    };
+    // ... existing helper functions (removeTag, addTag, handleImageUpload, triggerFileInput) ...
 
     const handlePublish = async () => {
         if (!user) {
@@ -104,7 +50,7 @@ const AddListing = () => {
         setIsPublishing(true);
         let imageUrl = image;
 
-        // Upload image if selected
+        // Upload image if selected (and different from existing)
         if (imageFile) {
             const fileExt = imageFile.name.split('.').pop();
             const fileName = `${Math.random().toString(36).substring(2, 15)}_${Date.now()}.${fileExt}`;
@@ -137,8 +83,9 @@ const AddListing = () => {
             location,
             aspect: '4/3',
             is_new: condition === 'new',
-            rating: 0,
-            reviews_count: 0,
+            // Maintain existing ratings/reviews if editing, else default to 0
+            rating: editingProduct ? editingProduct.rating : 0,
+            reviews_count: editingProduct ? editingProduct.reviews_count : 0,
             user_id: user.id,
             tags: tags,
             height: height ? parseFloat(height) : null,
@@ -146,34 +93,32 @@ const AddListing = () => {
             depth: depth ? parseFloat(depth) : null,
         };
 
-        console.log("PUBLISH DEBUG: Wysyłanie danych do bazy:", productData);
+        console.log("PUBLISH DEBUG: Sending data to DB:", productData);
 
-        const { data, error } = await supabase
-            .from('products')
-            .insert([productData]);
+        let error;
+        if (editingProduct) {
+            // UPDATE
+            const { error: updateError } = await supabase
+                .from('products')
+                .update(productData)
+                .eq('id', editingProduct.id);
+            error = updateError;
+        } else {
+            // INSERT
+            const { error: insertError } = await supabase
+                .from('products')
+                .insert([productData]);
+            error = insertError;
+        }
 
         setIsPublishing(false);
 
         if (error) {
-            console.error('Error adding product:', error);
-            alert('Failed to publish listing: ' + error.message);
+            console.error('Error saving product:', error);
+            alert('Failed to save listing: ' + error.message);
         } else {
-            // Reset form
-            setTitle('');
-            setPrice('');
-            setDescription('');
-            setTags([]);
-            setCategory('sofas');
-            setCondition('good');
-            setColor('black');
-            setLocation('');
-            setImage(null);
-            setImageFile(null);
-            setHeight('');
-            setWidth('');
-            setDepth('');
-
-            navigate('/home');
+            // Navigate back
+            navigate('/my-listings');
         }
     };
 

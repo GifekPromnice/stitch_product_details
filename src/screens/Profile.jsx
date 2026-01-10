@@ -10,6 +10,7 @@ const Profile = () => {
             category: t('profile.account'),
             items: [
                 { name: t('profile.personalInfo'), icon: 'person', onClick: () => navigate('/personal-information') },
+                { name: 'My Listings', icon: 'storefront', onClick: () => navigate('/my-listings') },
                 { name: t('profile.passwordSecurity'), icon: 'lock', onClick: () => navigate('/password-security') },
                 { name: t('profile.paymentMethods'), icon: 'credit_card', onClick: () => navigate('/wallet') },
             ]

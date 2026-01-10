@@ -42,7 +42,7 @@ const AdminUsers = () => {
             const to = from + itemsPerPage - 1;
 
             const { data, count, error } = await query
-                .order('created_at', { ascending: false })
+                .order('updated_at', { ascending: false })
                 .range(from, to);
 
             if (error) {
@@ -52,6 +52,9 @@ const AdminUsers = () => {
                 }
                 throw error;
             }
+
+            console.log(`Fetched ${data?.length} users. Total count: ${count}`);
+            // console.log("Users data:", data); // Uncomment for deep debugging if needed
 
             setUsers(data || []);
             setTotalCount(count || 0);
@@ -238,7 +241,7 @@ const AdminUsers = () => {
                                             </span>
                                         </td>
                                         <td className="px-6 py-4 text-gray-500 text-xs font-medium">
-                                            {u.created_at ? new Date(u.created_at).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' }) : '—'}
+                                            {u.updated_at ? new Date(u.updated_at).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' }) : (u.created_at ? new Date(u.created_at).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' }) : '—')}
                                         </td>
                                         <td className="px-6 py-4 text-right">
                                             <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
