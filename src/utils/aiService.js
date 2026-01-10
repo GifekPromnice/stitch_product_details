@@ -1,14 +1,6 @@
 // src/utils/aiService.js
 import { GoogleGenAI } from "@google/genai";
 
-// Initialize the Google Gen AI client with the API key from environment variables
-const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-
-// Base client for the SDK
-const genAI = new GoogleGenAI({
-    apiKey: apiKey,
-});
-
 /**
  * Converts a browser File object to a Base64 string for the Gemini API.
  */
@@ -30,10 +22,12 @@ async function fileToGenerativePart(file) {
 }
 
 /**
- * Analyzes an image using Gemini 2.0 Flash and returns structured product data.
- * This is a clean re-implementation using the latest SDK and model.
+ * Analyzes an image using Gemini 2.5 Flash and returns structured product data.
+ * Safe initialization to prevent app crash if API key is missing.
  */
 export const analyzeImageWithAI = async (imageFile) => {
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+
     // 1. Basic validation
     if (!apiKey || apiKey === "YOUR_API_KEY_HERE" || apiKey.trim() === "") {
         console.warn("AI DEBUG: Missing VITE_GEMINI_API_KEY. Falling back to mock data.");
@@ -51,6 +45,9 @@ export const analyzeImageWithAI = async (imageFile) => {
 
     try {
         console.log("%c AI DEBUG: Starting analysis with Gemini 2.5 Flash... ", "background: #222; color: #bada55");
+
+        // Initialize client INSIDE the function to avoid global scope crashes
+        const genAI = new GoogleGenAI({ apiKey });
 
         const imagePart = await fileToGenerativePart(imageFile);
 
@@ -90,7 +87,6 @@ export const analyzeImageWithAI = async (imageFile) => {
         // 3. Extract and parse response
         let responseText = "";
         try {
-            // result.text is a function in the recent @google/genai SDK
             responseText = typeof result.text === 'function' ? result.text() : result.text;
         } catch (e) {
             console.warn("AI DEBUG: result.text() failed, trying alternative paths...");
@@ -109,7 +105,8 @@ export const analyzeImageWithAI = async (imageFile) => {
 
         // Handle specific 404/not available errors by falling back to 1.5-flash
         if (error.message?.includes("404") || error.message?.includes("not found")) {
-            console.warn("AI DEBUG: Gemini 2.0 not found, trying fallback to 1.5-flash...");
+            console.warn("AI DEBUG: Gemini 2.5 not found, trying fallback to 1.5-flash...");
+            const genAI = new GoogleGenAI({ apiKey });
             const fallbackResult = await genAI.models.generateContent({
                 model: "gemini-1.5-flash",
                 contents: [{ role: "user", parts: [{ text: "Analyze as furniture JSON: " + imageFile.name }, await fileToGenerativePart(imageFile)] }]
