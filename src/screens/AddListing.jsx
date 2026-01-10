@@ -25,6 +25,9 @@ const AddListing = () => {
     const [imageFile, setImageFile] = useState(null);
     const [isPublishing, setIsPublishing] = useState(false);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
+    const [height, setHeight] = useState('');
+    const [width, setWidth] = useState('');
+    const [depth, setDepth] = useState('');
 
     const removeTag = (tagToRemove) => {
         setTags(tags.filter(tag => tag !== tagToRemove));
@@ -63,6 +66,9 @@ const AddListing = () => {
                     if (aiData.condition) setCondition(String(aiData.condition).toLowerCase());
                     if (aiData.color) setColor(String(aiData.color).toLowerCase());
                     if (aiData.description) setDescription(String(aiData.description));
+                    if (aiData.height) setHeight(String(aiData.height));
+                    if (aiData.width) setWidth(String(aiData.width));
+                    if (aiData.depth) setDepth(String(aiData.depth));
 
                     // Merge tags 
                     if (Array.isArray(aiData.tags)) {
@@ -134,7 +140,10 @@ const AddListing = () => {
             rating: 0,
             reviews_count: 0,
             user_id: user.id,
-            tags: tags
+            tags: tags,
+            height: height ? parseFloat(height) : null,
+            width: width ? parseFloat(width) : null,
+            depth: depth ? parseFloat(depth) : null,
         };
 
         console.log("PUBLISH DEBUG: Wysyłanie danych do bazy:", productData);
@@ -160,6 +169,9 @@ const AddListing = () => {
             setLocation('');
             setImage(null);
             setImageFile(null);
+            setHeight('');
+            setWidth('');
+            setDepth('');
 
             navigate('/home');
         }
@@ -276,6 +288,48 @@ const AddListing = () => {
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
                         ></textarea>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-4">
+                        <label className="flex flex-col gap-1.5 group">
+                            <span className="text-neutral-500 dark:text-neutral-400 text-xs font-medium uppercase tracking-wider px-1">{t('addListing.field.height')}</span>
+                            <div className="relative">
+                                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-neutral-400 uppercase">cm</span>
+                                <input
+                                    className="block w-full rounded-xl border-neutral-300 dark:border-neutral-700 bg-white dark:bg-[#232524] text-neutral-900 dark:text-white h-12 pl-3 pr-8 text-base font-medium focus:border-primary focus:ring-1 focus:ring-primary transition-all shadow-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                    type="number"
+                                    placeholder="0"
+                                    value={height}
+                                    onChange={(e) => setHeight(e.target.value)}
+                                />
+                            </div>
+                        </label>
+                        <label className="flex flex-col gap-1.5 group">
+                            <span className="text-neutral-500 dark:text-neutral-400 text-xs font-medium uppercase tracking-wider px-1">{t('addListing.field.width')}</span>
+                            <div className="relative">
+                                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-neutral-400 uppercase">cm</span>
+                                <input
+                                    className="block w-full rounded-xl border-neutral-300 dark:border-neutral-700 bg-white dark:bg-[#232524] text-neutral-900 dark:text-white h-12 pl-3 pr-8 text-base font-medium focus:border-primary focus:ring-1 focus:ring-primary transition-all shadow-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                    type="number"
+                                    placeholder="0"
+                                    value={width}
+                                    onChange={(e) => setWidth(e.target.value)}
+                                />
+                            </div>
+                        </label>
+                        <label className="flex flex-col gap-1.5 group">
+                            <span className="text-neutral-500 dark:text-neutral-400 text-xs font-medium uppercase tracking-wider px-1">{t('addListing.field.depth')}</span>
+                            <div className="relative">
+                                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-neutral-400 uppercase">cm</span>
+                                <input
+                                    className="block w-full rounded-xl border-neutral-300 dark:border-neutral-700 bg-white dark:bg-[#232524] text-neutral-900 dark:text-white h-12 pl-3 pr-8 text-base font-medium focus:border-primary focus:ring-1 focus:ring-primary transition-all shadow-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                    type="number"
+                                    placeholder="0"
+                                    value={depth}
+                                    onChange={(e) => setDepth(e.target.value)}
+                                />
+                            </div>
+                        </label>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">

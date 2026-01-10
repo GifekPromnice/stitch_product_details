@@ -5,7 +5,7 @@ import { useSettings } from '../context/SettingsContext';
 const ProductDetails = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { t, formatPrice } = useSettings();
+    const { t, formatPrice, formatDimension } = useSettings();
     const { id } = useParams();
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -37,12 +37,16 @@ const ProductDetails = () => {
             condition: passedProduct?.is_new ? t('cond.new') : t('cond.good'),
             timeListed: formatTimeListed(passedProduct?.created_at),
             seller: {
-                name: passedProduct?.user_name || 'Użytkownik',
+                name: passedProduct?.seller_username || 'Użytkownik',
                 rating: 5.0,
-                image: "https://ui-avatars.com/api/?name=" + (passedProduct?.user_name || 'U')
+                image: "https://ui-avatars.com/api/?background=random&name=" + (passedProduct?.seller_username || 'U')
             },
             images: [passedProduct?.image].filter(Boolean),
-            dimensions: { height: '32"', width: '28"', depth: '30"' },
+            dimensions: {
+                height: passedProduct?.height,
+                width: passedProduct?.width,
+                depth: passedProduct?.depth
+            },
             tags: Array.isArray(passedProduct?.tags) ? passedProduct.tags : [],
             description: passedProduct?.description || 'Brak opisu',
             mapImage: "https://lh3.googleusercontent.com/aida-public/AB6AXuAv416prnqJ93spioHVTa2lPQ4Y4I9NxkbED4cysFMsqRvAgm1aKCTjGWjub7grvVkyhcGsis7Gn_c0psDoV9M1EfEHdqybSjbMMxalTY6ckvZzAXDxDKpy7OuEL0R6vT-Jld6q9WFtaA2ZEhPqO7aJsTzJMi47Sv_iuyop0eWo3IeToaGqdYatdZznm-sNp2_kZAfkVvfhPzbPpw6BGSK8wpLc9IaMOuvxVo0o7BzFs83BoA541SswaC5laH-YfHUFTCSGOVm56rJE"
@@ -139,7 +143,7 @@ const ProductDetails = () => {
                             <span className="material-symbols-outlined text-primary text-[20px]">height</span>
                             <div className="flex flex-col">
                                 <span className="text-[10px] text-gray-400 uppercase tracking-wider font-bold">{t('product.height')}</span>
-                                <span className="text-sm font-bold text-gray-900 dark:text-white">{product.dimensions.height}</span>
+                                <span className="text-sm font-bold text-gray-900 dark:text-white">{formatDimension(product.dimensions.height)}</span>
                             </div>
                         </div>
                         <div className="w-px h-8 bg-gray-100 dark:bg-gray-800"></div>
@@ -147,7 +151,7 @@ const ProductDetails = () => {
                             <span className="material-symbols-outlined text-primary text-[20px]">straighten</span>
                             <div className="flex flex-col">
                                 <span className="text-[10px] text-gray-400 uppercase tracking-wider font-bold">{t('product.width')}</span>
-                                <span className="text-sm font-bold text-gray-900 dark:text-white">{product.dimensions.width}</span>
+                                <span className="text-sm font-bold text-gray-900 dark:text-white">{formatDimension(product.dimensions.width)}</span>
                             </div>
                         </div>
                         <div className="w-px h-8 bg-gray-100 dark:bg-gray-800"></div>
@@ -155,7 +159,7 @@ const ProductDetails = () => {
                             <span className="material-symbols-outlined text-primary text-[20px]">deployed_code</span>
                             <div className="flex flex-col">
                                 <span className="text-[10px] text-gray-400 uppercase tracking-wider font-bold">{t('product.depth')}</span>
-                                <span className="text-sm font-bold text-gray-900 dark:text-white">{product.dimensions.depth}</span>
+                                <span className="text-sm font-bold text-gray-900 dark:text-white">{formatDimension(product.dimensions.depth)}</span>
                             </div>
                         </div>
                     </div>

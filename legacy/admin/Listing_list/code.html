@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Again - Admin Listings Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style type="text/tailwindcss">
+        :root {
+            --primary-color: #698679;
+            --background-color: #F5F5F0;
+            --surface-color: #FFFFFF;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: var(--background-color);
+            font-family: 'DM Sans', sans-serif;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="text-slate-900 min-h-screen">
+<nav class="sticky top-0 z-50 bg-white border-b border-gray-200 px-6 py-4">
+<div class="max-w-[1440px] mx-auto flex items-center justify-between">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-2 cursor-pointer">
+<span class="material-symbols-outlined text-[var(--primary-color)] text-3xl">chair</span>
+<span class="text-xl font-bold tracking-tight">Again <span class="text-xs font-normal text-slate-400 ml-1 uppercase tracking-widest">Admin</span></span>
+</div>
+<div class="hidden md:flex items-center gap-6 ml-4">
+<a class="text-sm font-medium text-[var(--primary-color)] border-b-2 border-[var(--primary-color)] pb-1" href="#">Listings</a>
+<a class="text-sm font-medium text-slate-500 hover:text-slate-800 transition-colors" href="#">Users</a>
+<a class="text-sm font-medium text-slate-500 hover:text-slate-800 transition-colors" href="#">Analytics</a>
+<a class="text-sm font-medium text-slate-500 hover:text-slate-800 transition-colors" href="#">Settings</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-slate-100 relative">
+<span class="material-symbols-outlined text-slate-600">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+</button>
+<div class="flex items-center gap-3 pl-4 border-l border-slate-200">
+<div class="text-right hidden sm:block">
+<p class="text-sm font-bold leading-none">Admin User</p>
+<p class="text-[10px] text-slate-400 uppercase tracking-tighter mt-1">Super Admin</p>
+</div>
+<img alt="Admin Profile" class="w-10 h-10 rounded-full object-cover border border-slate-100" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2J7tpdX7w2NGIDDnqVTGp8QTpFRpBgugvWdkxJZT8y5eUZhFkLnzWsVEahpo0Vbjp4O46B88FD1HlA8fieAytSObKm4UIUggjgXidXNSWXZx5w7tTMx-bPGWPQB2fwzRd6vZBIAqRqD6anC8Y7Zh_po18dCU_ZRnfsv0Mho9c5yTC4tmjyo7_zwyPgwJjdOKLP6gZsGI72fIilfh9MxOvoT34JFGsdWV_ATtluEFZscKPtFBsIZUvHb61VzwnTD_Ulg2gSusvHlA"/>
+</div>
+</div>
+</div>
+</nav>
+<main class="max-w-[1440px] mx-auto px-6 py-8">
+<div class="mb-8">
+<h1 class="text-3xl font-bold text-slate-900 mb-6">Listings Management</h1>
+<div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 flex flex-wrap items-end gap-4">
+<div class="flex-1 min-w-[280px]">
+<label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Search Listings</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+<input class="w-full pl-12 pr-4 py-3 bg-slate-50 border-none rounded-2xl ring-1 ring-slate-200 focus:ring-2 focus:ring-[var(--primary-color)] transition-all" placeholder="Search by ID, title, or seller..." type="text"/>
+</div>
+</div>
+<div class="w-48">
+<label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Status</label>
+<select class="w-full py-3 px-4 bg-slate-50 border-none rounded-2xl ring-1 ring-slate-200 focus:ring-2 focus:ring-[var(--primary-color)]">
+<option>All Status</option>
+<option>Active</option>
+<option>Pending</option>
+<option>Sold</option>
+<option>Blocked</option>
+</select>
+</div>
+<div class="w-48">
+<label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Category</label>
+<select class="w-full py-3 px-4 bg-slate-50 border-none rounded-2xl ring-1 ring-slate-200 focus:ring-2 focus:ring-[var(--primary-color)]">
+<option>All Categories</option>
+<option>Sofas</option>
+<option>Chairs</option>
+<option>Tables</option>
+<option>Lighting</option>
+</select>
+</div>
+<div class="w-48">
+<label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Date Range</label>
+<button class="w-full py-3 px-4 bg-slate-50 border-none rounded-2xl ring-1 ring-slate-200 text-left text-slate-600 flex justify-between items-center">
+                        Last 30 Days
+                        <span class="material-symbols-outlined text-sm">expand_more</span>
+</button>
+</div>
+<button class="bg-[var(--primary-color)] hover:opacity-90 text-white px-8 py-3 rounded-2xl font-bold transition-all flex items-center gap-2">
+<span class="material-symbols-outlined">filter_list</span>
+                    Apply
+                </button>
+</div>
+</div>
+<div class="bg-white rounded-[24px] shadow-sm border border-slate-100 overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50/50 border-b border-slate-100">
+<th class="px-6 py-5 text-xs font-bold text-slate-400 uppercase tracking-widest">Listing</th>
+<th class="px-6 py-5 text-xs font-bold text-slate-400 uppercase tracking-widest">Seller</th>
+<th class="px-6 py-5 text-xs font-bold text-slate-400 uppercase tracking-widest">Price</th>
+<th class="px-6 py-5 text-xs font-bold text-slate-400 uppercase tracking-widest">Date Posted</th>
+<th class="px-6 py-5 text-xs font-bold text-slate-400 uppercase tracking-widest">Status</th>
+<th class="px-6 py-5 text-xs font-bold text-slate-400 uppercase tracking-widest text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-50">
+<tr class="hover:bg-slate-50/50 transition-colors group">
+<td class="px-6 py-5">
+<div class="flex items-center gap-4">
+<div class="w-14 h-14 rounded-xl overflow-hidden bg-slate-100 flex-shrink-0">
+<img alt="Sofa" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCNXzcQAsApTYcD0jUsCdTYUHRfrTbb6zcRk2dsE8F7mlJYshzqeh1mdVrLzSVODYbwOxuKC2PBqZf2_BoOgd-4KtCoZke5YFYCboBflI-gdqpOlsZnG0lE148VA5_9u3BSX44CGXK8fg3fKek0oUMVUT9615tY_lUBUsZdPZ3GuP38wtJqpheE51q8clkBkRy6ad_py6QpPRWkqfBKM9OsYNuFb0ek7-dGZOEMY0sgGY1uEPclUQ6AGcUpkG8u_XRXuWabnh5Dp1k"/>
+</div>
+<div>
+<p class="font-bold text-slate-900 group-hover:text-[var(--primary-color)] transition-colors">1970s Velvet Sofa</p>
+<p class="text-xs text-slate-400 mt-1">ID: #AG-88219</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full overflow-hidden">
+<img alt="Seller" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2J7tpdX7w2NGIDDnqVTGp8QTpFRpBgugvWdkxJZT8y5eUZhFkLnzWsVEahpo0Vbjp4O46B88FD1HlA8fieAytSObKm4UIUggjgXidXNSWXZx5w7tTMx-bPGWPQB2fwzRd6vZBIAqRqD6anC8Y7Zh_po18dCU_ZRnfsv0Mho9c5yTC4tmjyo7_zwyPgwJjdOKLP6gZsGI72fIilfh9MxOvoT34JFGsdWV_ATtluEFZscKPtFBsIZUvHb61VzwnTD_Ulg2gSusvHlA"/>
+</div>
+<span class="text-sm font-medium">Sarah Jenkins</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="text-sm font-bold text-slate-900">$450.00</span>
+</td>
+<td class="px-6 py-5">
+<span class="text-sm text-slate-500">Oct 24, 2023</span>
+</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-green-50 text-green-700">
+<span class="w-1.5 h-1.5 rounded-full bg-green-500 mr-2"></span>
+                                    Active
+                                </span>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center justify-end gap-2">
+<button class="p-2 text-slate-400 hover:text-[var(--primary-color)] hover:bg-slate-100 rounded-lg transition-all" title="Edit">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="p-2 text-slate-400 hover:text-amber-600 hover:bg-slate-100 rounded-lg transition-all" title="Block">
+<span class="material-symbols-outlined text-[20px]">block</span>
+</button>
+<button class="p-2 text-slate-400 hover:text-red-600 hover:bg-slate-100 rounded-lg transition-all" title="Delete">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-slate-50/50 transition-colors group">
+<td class="px-6 py-5">
+<div class="flex items-center gap-4">
+<div class="w-14 h-14 rounded-xl overflow-hidden bg-slate-100 flex-shrink-0">
+<img alt="Armchair" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2TnY8vxGQUq75wOLO9NIPIld5tj2kJpZITV9-ZIMFgwlzxUTDFvQdy7yUe1h69EaM37CFFkPxbyrIOMh4ETFn1aauv3fVDE9KWZhRqwDcd8cTrc9egtEasX2ZsSmAHgwFbdtkcRsPtY0C2llrjm8C1GeRJe1ZmsLnmZBUSMqvo8Phhd_NcvX5ULoHnV-jJcrjpKBE-mQrtNx9xXQ6YCaRPgC0cjuZ3WWnngJbSLrnmvadru3MM3JgZkDKCqzEBsS9GyRMDrhcUU4"/>
+</div>
+<div>
+<p class="font-bold text-slate-900 group-hover:text-[var(--primary-color)] transition-colors">Danish Armchair</p>
+<p class="text-xs text-slate-400 mt-1">ID: #AG-88218</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-[var(--primary-color)] flex items-center justify-center text-[10px] text-white font-bold">MW</div>
+<span class="text-sm font-medium">Marcus Webb</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="text-sm font-bold text-slate-900">$280.00</span>
+</td>
+<td class="px-6 py-5">
+<span class="text-sm text-slate-500">Oct 23, 2023</span>
+</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-green-50 text-green-700">
+<span class="w-1.5 h-1.5 rounded-full bg-green-500 mr-2"></span>
+                                    Active
+                                </span>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center justify-end gap-2">
+<button class="p-2 text-slate-400 hover:text-[var(--primary-color)] hover:bg-slate-100 rounded-lg transition-all" title="Edit">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="p-2 text-slate-400 hover:text-amber-600 hover:bg-slate-100 rounded-lg transition-all" title="Block">
+<span class="material-symbols-outlined text-[20px]">block</span>
+</button>
+<button class="p-2 text-slate-400 hover:text-red-600 hover:bg-slate-100 rounded-lg transition-all" title="Delete">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-slate-50/50 transition-colors group">
+<td class="px-6 py-5">
+<div class="flex items-center gap-4">
+<div class="w-14 h-14 rounded-xl overflow-hidden bg-slate-100 flex-shrink-0">
+<img alt="Table" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXibNN7cjKuNHrahcyXD0ngOOfHA2sWrcHfxW5mNk8dmr9wSk2qdIBHwQOH61O0N1YT_6NWfE7LuLCqQyA_ceeEFcCN8BFxwiMuK1sbWsGYOqam3iePooe84Q0nyYTp5gWb3TKAPxVcNNZhf9W5imXTPmTg4wPlLAbievNmL2-H4BXSU-I8G108toVST6qA7syTbbs2IaREUEVa3C8RjxGHvz_EeXWVAudqMDL1P_1g-VW8MuoXVBRdW4v1GuFeezyZs7MNtGV8Sc"/>
+</div>
+<div>
+<p class="font-bold text-slate-900 group-hover:text-[var(--primary-color)] transition-colors">Oak Coffee Table</p>
+<p class="text-xs text-slate-400 mt-1">ID: #AG-88217</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full overflow-hidden">
+<img alt="Seller" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2J7tpdX7w2NGIDDnqVTGp8QTpFRpBgugvWdkxJZT8y5eUZhFkLnzWsVEahpo0Vbjp4O46B88FD1HlA8fieAytSObKm4UIUggjgXidXNSWXZx5w7tTMx-bPGWPQB2fwzRd6vZBIAqRqD6anC8Y7Zh_po18dCU_ZRnfsv0Mho9c5yTC4tmjyo7_zwyPgwJjdOKLP6gZsGI72fIilfh9MxOvoT34JFGsdWV_ATtluEFZscKPtFBsIZUvHb61VzwnTD_Ulg2gSusvHlA"/>
+</div>
+<span class="text-sm font-medium">Elena Rodriguez</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="text-sm font-bold text-slate-900">$120.00</span>
+</td>
+<td class="px-6 py-5">
+<span class="text-sm text-slate-500">Oct 22, 2023</span>
+</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-600">
+<span class="w-1.5 h-1.5 rounded-full bg-slate-400 mr-2"></span>
+                                    Sold
+                                </span>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center justify-end gap-2">
+<button class="p-2 text-slate-400 hover:text-[var(--primary-color)] hover:bg-slate-100 rounded-lg transition-all" title="Edit">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="p-2 text-slate-400 hover:text-amber-600 hover:bg-slate-100 rounded-lg transition-all" title="Block">
+<span class="material-symbols-outlined text-[20px]">block</span>
+</button>
+<button class="p-2 text-slate-400 hover:text-red-600 hover:bg-slate-100 rounded-lg transition-all" title="Delete">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-slate-50/50 transition-colors group">
+<td class="px-6 py-5">
+<div class="flex items-center gap-4">
+<div class="w-14 h-14 rounded-xl overflow-hidden bg-slate-100 flex-shrink-0">
+<img alt="Lamp" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdAQcTFm19cOlK0yJLPGA6b8iLoQ10pIwIT8IqMV3nyRZGYli7T8sFK12CO5xNOQ0iMw_gRQJGYkaeMN9SvuIxPqH5aMmDdIQ9GiLxtuIx8TMTPu7T4XUjmP7DX62SFe-liblA_vjGz47nozRnkql96d7YkuLRb3KVUw0sZrBPqx9b-4nHZ4UaVpFFi_6RknsP5p6jGIsZN0q_VoThND0kGHz2YqWOMeOT4xxQIwdOmnviSrqafBsEhXxUxHXFdocOUe9xOhCj1zU"/>
+</div>
+<div>
+<p class="font-bold text-slate-900 group-hover:text-[var(--primary-color)] transition-colors">Industrial Lamp</p>
+<p class="text-xs text-slate-400 mt-1">ID: #AG-88216</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-indigo-500 flex items-center justify-center text-[10px] text-white font-bold">TC</div>
+<span class="text-sm font-medium">Tom Cook</span>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="text-sm font-bold text-slate-900">$45.00</span>
+</td>
+<td class="px-6 py-5">
+<span class="text-sm text-slate-500">Oct 21, 2023</span>
+</td>
+<td class="px-6 py-5">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-red-50 text-red-700">
+<span class="w-1.5 h-1.5 rounded-full bg-red-500 mr-2"></span>
+                                    Blocked
+                                </span>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center justify-end gap-2">
+<button class="p-2 text-slate-400 hover:text-[var(--primary-color)] hover:bg-slate-100 rounded-lg transition-all" title="Edit">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="p-2 text-amber-600 hover:bg-amber-50 rounded-lg transition-all" title="Unblock">
+<span class="material-symbols-outlined text-[20px]">lock_open</span>
+</button>
+<button class="p-2 text-slate-400 hover:text-red-600 hover:bg-slate-100 rounded-lg transition-all" title="Delete">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="px-6 py-6 border-t border-slate-100 flex items-center justify-between">
+<p class="text-sm text-slate-500">Showing <span class="font-bold text-slate-900">1-4</span> of <span class="font-bold text-slate-900">128</span> listings</p>
+<div class="flex gap-2">
+<button class="w-10 h-10 flex items-center justify-center rounded-xl border border-slate-200 text-slate-400 hover:bg-slate-50 transition-colors">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-xl bg-[var(--primary-color)] text-white font-bold">1</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors">2</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors">3</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-xl border border-slate-200 text-slate-400 hover:bg-slate-50 transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+
+</body></html>

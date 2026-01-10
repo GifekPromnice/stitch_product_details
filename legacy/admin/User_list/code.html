@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Again Admin - User Management Simplified</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style type="text/tailwindcss">
+        :root {
+            --primary: #698679;
+            --primary-hover: #567065;
+            --background: #FFFFFF;
+            --sidebar: #F9FAFB;
+            --text-main: #111827;
+            --text-sub: #6B7280;
+            --border: #E5E7EB;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+            font-size: 20px;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+        }
+    </style>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "var(--primary)",
+                        "primary-hover": "var(--primary-hover)",
+                        background: "var(--background)",
+                        sidebar: "var(--sidebar)",
+                        "text-main": "var(--text-main)",
+                        "text-sub": "var(--text-sub)",
+                        border: "var(--border)",
+                    },
+                    borderRadius: {
+                        'admin': '6px',
+                    }
+                },
+            },
+        };
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="text-text-main antialiased min-h-screen flex">
+<aside class="w-64 border-r border-border h-screen sticky top-0 bg-sidebar flex flex-col shrink-0">
+<div class="p-6">
+<div class="flex items-center gap-2 mb-8 px-2">
+<span class="material-symbols-outlined text-primary text-2xl">chair</span>
+<span class="text-xl font-bold tracking-tight">Again <span class="text-[10px] font-semibold text-primary/80 border border-primary/20 px-1.5 rounded uppercase">Admin</span></span>
+</div>
+<nav class="space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-text-sub hover:bg-gray-200/50 hover:text-text-main rounded-admin transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-text-sub hover:bg-gray-200/50 hover:text-text-main rounded-admin transition-colors" href="#">
+<span class="material-symbols-outlined">list_alt</span>
+<span class="font-medium">Listings</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-primary/10 text-primary rounded-admin transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-medium">Users</span>
+</a>
+</nav>
+</div>
+<div class="mt-auto p-4 border-t border-border">
+<div class="flex items-center gap-3 px-2">
+<img alt="Admin Profile" class="w-8 h-8 rounded-full border border-border" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2J7tpdX7w2NGIDDnqVTGp8QTpFRpBgugvWdkxJZT8y5eUZhFkLnzWsVEahpo0Vbjp4O46B88FD1HlA8fieAytSObKm4UIUggjgXidXNSWXZx5w7tTMx-bPGWPQB2fwzRd6vZBIAqRqD6anC8Y7Zh_po18dCU_ZRnfsv0Mho9c5yTC4tmjyo7_zwyPgwJjdOKLP6gZsGI72fIilfh9MxOvoT34JFGsdWV_ATtluEFZscKPtFBsIZUvHb61VzwnTD_Ulg2gSusvHlA"/>
+<div class="truncate">
+<p class="text-sm font-semibold truncate">Admin User</p>
+<p class="text-xs text-text-sub truncate">admin@again.com</p>
+</div>
+</div>
+</div>
+</aside>
+<main class="flex-1 min-w-0 p-8">
+<header class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+<div>
+<h1 class="text-2xl font-bold text-text-main">User Management</h1>
+<p class="text-sm text-text-sub">Review and manage marketplace user accounts.</p>
+</div>
+<button class="bg-primary hover:bg-primary-hover text-white px-4 py-2 rounded-admin text-sm font-medium flex items-center gap-2 transition-colors">
+<span class="material-symbols-outlined">person_add</span>
+            Add New User
+        </button>
+</header>
+<section class="bg-white border border-border rounded-admin p-3 mb-6 flex flex-wrap items-center gap-3">
+<div class="relative flex-1 min-w-[240px]">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+<input class="w-full pl-10 pr-4 py-2 text-sm border-gray-200 rounded-admin focus:ring-1 focus:ring-primary focus:border-primary border transition-all" placeholder="Search by name, ID or email..." type="text"/>
+</div>
+<div class="flex items-center gap-2">
+<select class="text-sm border-gray-200 rounded-admin focus:ring-1 focus:ring-primary focus:border-primary py-2 pr-10 pl-3">
+<option>All Statuses</option>
+<option>Active</option>
+<option>Suspended</option>
+<option>Inactive</option>
+</select>
+<select class="text-sm border-gray-200 rounded-admin focus:ring-1 focus:ring-primary focus:border-primary py-2 pr-10 pl-3">
+<option>All Roles</option>
+<option>Customer</option>
+<option>Merchant</option>
+<option>Admin</option>
+</select>
+<button class="p-2 border border-gray-200 rounded-admin text-text-sub hover:bg-gray-50">
+<span class="material-symbols-outlined">filter_list</span>
+</button>
+</div>
+</section>
+<div class="border border-border rounded-admin bg-white overflow-hidden shadow-sm">
+<div class="overflow-x-auto">
+<table class="w-full text-left text-sm">
+<thead class="bg-gray-50 border-b border-border">
+<tr>
+<th class="px-4 py-3 font-semibold text-text-sub uppercase text-[11px] tracking-wider">User / ID</th>
+<th class="px-4 py-3 font-semibold text-text-sub uppercase text-[11px] tracking-wider">Email</th>
+<th class="px-4 py-3 font-semibold text-text-sub uppercase text-[11px] tracking-wider">Status</th>
+<th class="px-4 py-3 font-semibold text-text-sub uppercase text-[11px] tracking-wider">Join Date</th>
+<th class="px-4 py-3 font-semibold text-text-sub uppercase text-[11px] tracking-wider text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-border">
+<tr class="hover:bg-gray-50/50 transition-colors">
+<td class="px-4 py-4">
+<div class="flex items-center gap-3">
+<img alt="User" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1fSGOpaS9I9EQAno3I72s5d2OnYbXPm4zWA8xJdN9EblTei3_J8BRXseY9wN2buCoycfVOC3mPUix3x4m_GkfGTzzuuCVBIsjRnjjgSsYV7_3-U_mHXowiH_lbxYs8gKb4zpUFeWPSmqZEoJUHI1VUR2yhGFW6txYd5MfIEMV3Ny4qk7DZ7jyIZ9ICShyE8tD5pEIC1nBF2qbDBN3U2gnBY2a5wu_Xpsw6nYqFHCc_nPdj6WY1jPSnBxDspkQFDCpDr1UTO2M_yM"/>
+<div>
+<div class="font-medium text-text-main">Alex Thompson</div>
+<div class="text-[11px] text-text-sub">ID: #92841</div>
+</div>
+</div>
+</td>
+<td class="px-4 py-4 text-text-sub">alex.t@example.com</td>
+<td class="px-4 py-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-50 text-green-700 border border-green-100">
+                                Active
+                            </span>
+</td>
+<td class="px-4 py-4 text-text-sub">Oct 24, 2023</td>
+<td class="px-4 py-4 text-right">
+<div class="flex items-center justify-end gap-1">
+<button class="p-1.5 text-text-sub hover:text-primary hover:bg-gray-100 rounded transition-all" title="Edit">
+<span class="material-symbols-outlined">edit</span>
+</button>
+<button class="p-1.5 text-text-sub hover:text-amber-600 hover:bg-gray-100 rounded transition-all" title="Block">
+<span class="material-symbols-outlined">block</span>
+</button>
+<button class="p-1.5 text-text-sub hover:text-red-600 hover:bg-gray-100 rounded transition-all" title="Delete">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-gray-50/50 transition-colors">
+<td class="px-4 py-4">
+<div class="flex items-center gap-3">
+<img alt="User" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWRUPWESyY_LzrW526yHen7FpgYLpOdlcCdlKpdZhEnLUSUnpkcFbe8fq9VBm4zjWQeCTVxO_3I6tw5czGNuH_WawSk0KHYjNKWncm-jhyXE2DZNOCdVlJRDXijdiHoTXk6V3g-bb7yYMw6M51sdcs32l0Ao0M5vvW0cPv30hBOqc3buMiaHj_x4tN62L8ECzEeyI0HSX2EavlAQxB6FoTJ1QWYFopKkldkQsbZpzxVaCwlL0rT37MmA2Sn2SWbMghf_IJJTU31zY"/>
+<div>
+<div class="font-medium text-text-main">Sarah Jenkins</div>
+<div class="text-[11px] text-text-sub">ID: #92842</div>
+</div>
+</div>
+</td>
+<td class="px-4 py-4 text-text-sub">sarah.j@outlook.com</td>
+<td class="px-4 py-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-50 text-green-700 border border-green-100">
+                                Active
+                            </span>
+</td>
+<td class="px-4 py-4 text-text-sub">Nov 12, 2023</td>
+<td class="px-4 py-4 text-right">
+<div class="flex items-center justify-end gap-1">
+<button class="p-1.5 text-text-sub hover:text-primary hover:bg-gray-100 rounded transition-all" title="Edit">
+<span class="material-symbols-outlined">edit</span>
+</button>
+<button class="p-1.5 text-text-sub hover:text-amber-600 hover:bg-gray-100 rounded transition-all" title="Block">
+<span class="material-symbols-outlined">block</span>
+</button>
+<button class="p-1.5 text-text-sub hover:text-red-600 hover:bg-gray-100 rounded transition-all" title="Delete">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-gray-50/50 transition-colors">
+<td class="px-4 py-4">
+<div class="flex items-center gap-3">
+<img alt="User" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBIYX3RtOWkMRQGck_KQnZhlYHpLgg7eFvVIUW0JrCTFqQ4GYgXTF_IZZ123ZxK3LYWC9CNpO2bJng3zUAJt6G1Zde1QypbpHBtMNs6stFPo1IGwi1-rv00mJkpqHH0x0nsHjBxxditjOFlRwC61vTAdE9_ipL1N5iv91hA875-SpluyBwEPdDqx6qsZywWvS8QW2hu2CaOc00iBIvf0PDHzuAve7jm5Szlyu5Syr7qFJm46imgaNlsS6jaHvyNM_90kSr922lP1zI"/>
+<div>
+<div class="font-medium text-text-main">Marcus Lee</div>
+<div class="text-[11px] text-text-sub">ID: #92845</div>
+</div>
+</div>
+</td>
+<td class="px-4 py-4 text-text-sub">m.lee@business.co</td>
+<td class="px-4 py-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-amber-50 text-amber-700 border border-amber-100">
+                                Suspended
+                            </span>
+</td>
+<td class="px-4 py-4 text-text-sub">Dec 05, 2023</td>
+<td class="px-4 py-4 text-right">
+<div class="flex items-center justify-end gap-1">
+<button class="p-1.5 text-text-sub hover:text-primary hover:bg-gray-100 rounded transition-all" title="Edit">
+<span class="material-symbols-outlined">edit</span>
+</button>
+<button class="p-1.5 text-amber-600 bg-amber-50 rounded transition-all" title="Unblock">
+<span class="material-symbols-outlined">lock_open</span>
+</button>
+<button class="p-1.5 text-text-sub hover:text-red-600 hover:bg-gray-100 rounded transition-all" title="Delete">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-gray-50/50 transition-colors">
+<td class="px-4 py-4">
+<div class="flex items-center gap-3">
+<img alt="User" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrIgsoCZh-rivjrAZa9ZTOxk_MwhlYKAD9FoGeNWMoviNl9GsO-jGc0eXhoDtyRUxhX2DlT4xB2QpLKW-ao5VDON0uv6G32_mNAwTWb3tr3kmC0YrjE9jugDfZTdLntAd-3sbbu-vdZRZIFeHY2996fGd3EFoNeCxJAS_ps2gKgheFEedlAKPZWLziLVE6sNMHfP1JLbaBzzt2Ogy6cgI10jKyW5iw23QvkYLk2su5pqMWItLZx-odx_Abecft9Z5MHs4aZCJuDG4"/>
+<div>
+<div class="font-medium text-text-main">Emily Chen</div>
+<div class="text-[11px] text-text-sub">ID: #92849</div>
+</div>
+</div>
+</td>
+<td class="px-4 py-4 text-text-sub">emily.chen@gmail.com</td>
+<td class="px-4 py-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-50 text-green-700 border border-green-100">
+                                Active
+                            </span>
+</td>
+<td class="px-4 py-4 text-text-sub">Jan 14, 2024</td>
+<td class="px-4 py-4 text-right">
+<div class="flex items-center justify-end gap-1">
+<button class="p-1.5 text-text-sub hover:text-primary hover:bg-gray-100 rounded transition-all" title="Edit">
+<span class="material-symbols-outlined">edit</span>
+</button>
+<button class="p-1.5 text-text-sub hover:text-amber-600 hover:bg-gray-100 rounded transition-all" title="Block">
+<span class="material-symbols-outlined">block</span>
+</button>
+<button class="p-1.5 text-text-sub hover:text-red-600 hover:bg-gray-100 rounded transition-all" title="Delete">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="px-4 py-3 bg-gray-50 border-t border-border flex items-center justify-between">
+<span class="text-xs text-text-sub">Showing 1-4 of 2,482 users</span>
+<div class="flex items-center gap-1">
+<button class="p-1 rounded hover:bg-white border border-transparent hover:border-border disabled:opacity-40" disabled="">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="w-7 h-7 rounded bg-primary text-white font-medium text-xs flex items-center justify-center">1</button>
+<button class="w-7 h-7 rounded hover:bg-white border border-transparent hover:border-border text-text-sub font-medium text-xs flex items-center justify-center">2</button>
+<button class="w-7 h-7 rounded hover:bg-white border border-transparent hover:border-border text-text-sub font-medium text-xs flex items-center justify-center">3</button>
+<span class="text-text-sub px-1 text-xs">...</span>
+<button class="p-1 rounded hover:bg-white border border-transparent hover:border-border">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+
+</body></html>

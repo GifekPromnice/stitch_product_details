@@ -25,26 +25,43 @@ const Home = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             setLoading(true);
-            let query = supabase.from('products').select('*');
+            let data = [];
 
-            // IF search query exists, use the RPC function 'search_products'
+            // 1. Fetch Products
             if (searchQuery.trim().length > 0) {
-                // We need to fetch via RPC if searching
-                const { data, error } = await supabase.rpc('search_products', { keyword: searchQuery });
-                if (!error) {
-                    setProducts(data || []);
-                } else {
-                    console.error("Search error:", error);
-                }
+                const { data: searchData, error } = await supabase.rpc('search_products', { keyword: searchQuery });
+                if (!error) data = searchData || [];
+                else console.error("Search error:", error);
             } else {
-                // Normal fetch
-                const { data, error } = await query;
-                if (error) {
-                    console.error('Error fetching products:', error);
-                } else {
-                    setProducts(data || []);
+                const { data: productsData, error } = await supabase.from('products').select('*');
+                if (!error) data = productsData || [];
+                else console.error('Error fetching products:', error);
+            }
+
+            // 2. Fetch Usernames (Join Profiles)
+            if (data.length > 0) {
+                const userIds = [...new Set(data.map(p => p.user_id).filter(Boolean))];
+
+                if (userIds.length > 0) {
+                    const { data: profiles, error: profilesError } = await supabase
+                        .from('profiles')
+                        .select('id, username')
+                        .in('id', userIds);
+
+                    if (!profilesError && profiles) {
+                        const userMap = {};
+                        profiles.forEach(p => userMap[p.id] = p.username);
+
+                        // Attach username to product
+                        data = data.map(p => ({
+                            ...p,
+                            seller_username: userMap[p.user_id] || 'Unknown User'
+                        }));
+                    }
                 }
             }
+
+            setProducts(data);
             setLoading(false);
         };
 

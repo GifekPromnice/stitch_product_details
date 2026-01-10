@@ -22,6 +22,7 @@ import AdminLogin from './screens/admin/AdminLogin';
 import AdminLayout from './screens/admin/AdminLayout';
 import Dashboard from './screens/admin/Dashboard';
 import AdminListings from './screens/admin/AdminListings';
+import AdminUsers from './screens/admin/AdminUsers';
 import { Navigate } from 'react-router-dom';
 
 function App() {
@@ -56,8 +57,9 @@ function App() {
                             <Route index element={<Navigate to="/admin/dashboard" replace />} />
                             <Route path="dashboard" element={<Dashboard />} />
                             <Route path="listings" element={<AdminListings />} />
+                            <Route path="users" element={<AdminUsers />} />
                             {/* Placeholder for future admin pages */}
-                            <Route path="*" element={<div className="p-10">Admin Page Under Construction</div>} />
+                            <Route path="*" element={<div className="p-10 text-xs font-bold uppercase tracking-widest text-gray-400">Admin Page Under Construction</div>} />
                         </Route>
 
                         {/* Fallback */}

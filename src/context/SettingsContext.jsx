@@ -136,6 +136,9 @@ export const SettingsProvider = ({ children }) => {
             'addListing.field.description': 'Description',
             'addListing.descriptionPlaceholder': 'Describe the condition, brand, age, and any flaws...',
             'addListing.field.price': 'Price',
+            'addListing.field.height': 'Height (cm)',
+            'addListing.field.width': 'Width (cm)',
+            'addListing.field.depth': 'Depth (cm)',
             'addListing.field.category': 'Category',
             'addListing.field.condition': 'Condition',
             'addListing.field.color': 'Color',
@@ -281,6 +284,9 @@ export const SettingsProvider = ({ children }) => {
             'addListing.field.description': 'Opis',
             'addListing.descriptionPlaceholder': 'Opisz stan, markę, wiek i ewentualne wady...',
             'addListing.field.price': 'Cena',
+            'addListing.field.height': 'Wysokość (cm)',
+            'addListing.field.width': 'Szerokość (cm)',
+            'addListing.field.depth': 'Głębokość (cm)',
             'addListing.field.category': 'Kategoria',
             'addListing.field.condition': 'Stan',
             'addListing.field.color': 'Kolor',
@@ -351,8 +357,26 @@ export const SettingsProvider = ({ children }) => {
         return `$${numericPrice.toFixed(2)}`;
     };
 
+    // Helper for dimensions
+    const formatDimension = (val) => {
+        if (val === undefined || val === null || val === '') return '—';
+        const num = parseFloat(val);
+        if (isNaN(num)) return val;
+
+        // Ensure we always have a language, default to 'pl' if missing
+        const activeLang = language || 'pl';
+
+        if (activeLang === 'pl') {
+            return `${Math.round(num)} cm`;
+        }
+
+        // Conversion to inches for English
+        const inches = num / 2.54;
+        return `${inches.toFixed(1)}"`;
+    };
+
     return (
-        <SettingsContext.Provider value={{ theme, toggleTheme, language, toggleLanguage, t, formatPrice }}>
+        <SettingsContext.Provider value={{ theme, toggleTheme, language, toggleLanguage, t, formatPrice, formatDimension }}>
             {children}
         </SettingsContext.Provider>
     );

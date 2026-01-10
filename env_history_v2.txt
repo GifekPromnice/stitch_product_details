@@ -1,0 +1,48 @@
+﻿commit ab151e81bebdcaf799b3a6ea8fcfc67fcd53ecca
+Author: Again Assistant <again@marketplace.com>
+Date:   Sat Jan 10 13:10:27 2026 +0100
+
+    security: stop tracking .env and add to .gitignore
+
+diff --git a/.env b/.env
+deleted file mode 100644
+index 329660f..0000000
+--- a/.env
++++ /dev/null
+@@ -1,4 +0,0 @@
+-VITE_SUPABASE_URL=https://ytmtnshjaexgiomqnlxp.supabase.co
+-VITE_SUPABASE_ANON_KEY=sb_publishable_sRmYEOiOMadRmX7VdveiRQ_h1exiXYc
+-DATABASE_URL=postgresql://postgres:Halohalo2026@db.ytmtnshjaexgiomqnlxp.supabase.co:5432/postgres
+-VITE_GEMINI_API_KEY=AIzaSyDHEHJMEORNjopZKWvOTcWku_kZlHhABEU
+
+commit fa12164fa6764dcd4c5bd7adb0340e73a3c34ef2
+Author: Again Assistant <again@marketplace.com>
+Date:   Sat Jan 10 00:03:54 2026 +0100
+
+    feat: integrate Google Gemini AI for auto-tagging and add Polish translations for search
+
+diff --git a/.env b/.env
+index a1b972a..329660f 100644
+--- a/.env
++++ b/.env
+@@ -1,3 +1,4 @@
+ VITE_SUPABASE_URL=https://ytmtnshjaexgiomqnlxp.supabase.co
+ VITE_SUPABASE_ANON_KEY=sb_publishable_sRmYEOiOMadRmX7VdveiRQ_h1exiXYc
+ DATABASE_URL=postgresql://postgres:Halohalo2026@db.ytmtnshjaexgiomqnlxp.supabase.co:5432/postgres
++VITE_GEMINI_API_KEY=AIzaSyDHEHJMEORNjopZKWvOTcWku_kZlHhABEU
+
+commit e0563ec7c093f98c8fd0d2e73ba63dffa3b147ff
+Author: Again Assistant <again@marketplace.com>
+Date:   Fri Jan 9 22:07:59 2026 +0100
+
+    feat: Integrate Supabase Auth, Products, Favorites, and DB Automation
+
+diff --git a/.env b/.env
+new file mode 100644
+index 0000000..a1b972a
+--- /dev/null
++++ b/.env
+@@ -0,0 +1,3 @@
++VITE_SUPABASE_URL=https://ytmtnshjaexgiomqnlxp.supabase.co
++VITE_SUPABASE_ANON_KEY=sb_publishable_sRmYEOiOMadRmX7VdveiRQ_h1exiXYc
++DATABASE_URL=postgresql://postgres:Halohalo2026@db.ytmtnshjaexgiomqnlxp.supabase.co:5432/postgres

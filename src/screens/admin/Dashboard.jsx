@@ -69,82 +69,78 @@ const Dashboard = () => {
     }, [formatPrice]);
 
     return (
-        <div className="p-8 md:p-12 animate-in fade-in duration-500">
+        <div className="p-8 animate-in fade-in duration-500">
             {/* Header */}
-            <header className="mb-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <header className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold mb-1 text-[#1A1A1A]">Overview</h1>
-                    <p className="text-[#666666]">Welcome back, here's what's happening today.</p>
+                    <h1 className="text-2xl font-bold mb-1 text-gray-900">Dashboard Overview</h1>
+                    <p className="text-sm text-gray-500">Welcome back, here's what's happening on the platform.</p>
                 </div>
-                <div className="flex items-center gap-3">
-                    <button className="bg-white border border-gray-200 px-4 py-2.5 rounded-full flex items-center gap-2 font-medium hover:bg-gray-50 transition-all text-[#1A1A1A]">
-                        <span className="material-symbols-outlined text-xl">calendar_today</span>
+                <div className="flex items-center gap-2">
+                    <button className="bg-white border border-gray-200 px-4 py-2 rounded-lg flex items-center gap-2 text-sm font-medium hover:bg-gray-50 transition-all text-gray-700 shadow-sm">
+                        <span className="material-symbols-outlined text-[18px]">calendar_today</span>
                         Last 30 Days
                     </button>
-                    <button className="bg-[#698679] text-white px-6 py-2.5 rounded-full flex items-center gap-2 font-medium hover:opacity-90 transition-all shadow-lg shadow-[#698679]/20">
-                        <span className="material-symbols-outlined text-xl">file_download</span>
-                        Export
+                    <button className="bg-[#698679] text-white px-4 py-2 rounded-lg flex items-center gap-2 text-sm font-medium hover:bg-[#567065] transition-all shadow-sm">
+                        <span className="material-symbols-outlined text-[18px]">file_download</span>
+                        Export Data
                     </button>
                 </div>
             </header>
 
             {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                 {stats.map((stat, idx) => (
-                    <div key={idx} className="bg-white p-8 rounded-[24px] shadow-sm border border-transparent hover:border-[#698679] transition-all group cursor-default">
-                        <div className="flex items-start justify-between mb-4">
-                            <div className="w-12 h-12 rounded-2xl bg-[#6986791a] flex items-center justify-center text-[#698679]">
-                                <span className="material-symbols-outlined">{stat.icon}</span>
+                    <div key={idx} className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:border-[#698679] transition-all group flex flex-col">
+                        <div className="flex items-center justify-between mb-4">
+                            <div className="w-10 h-10 rounded-lg bg-gray-50 flex items-center justify-center text-[#698679] border border-gray-100">
+                                <span className="material-symbols-outlined text-[20px]">{stat.icon}</span>
                             </div>
-                            {!stat.isTextTrend && (
-                                <span className={`bg-${stat.color}-50 text-${stat.color}-600 px-2 py-1 rounded-lg text-xs font-bold`}>
-                                    {stat.trend}
-                                </span>
+                            {stat.isTextTrend ? (
+                                <div className={`flex items-center gap-1 text-[11px] font-bold ${stat.label.includes('Transactions') ? 'text-amber-600' : 'text-emerald-600'} uppercase tracking-wider`}>
+                                    <span className="material-symbols-outlined text-[14px]">{stat.trendIcon}</span>
+                                    {stat.trend.split(' ')[0]}
+                                </div>
+                            ) : (
+                                <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Total</span>
                             )}
                         </div>
-                        <h3 className="text-[#666666] font-medium mb-1">{stat.label}</h3>
-                        <p className="text-4xl font-bold tracking-tight text-[#1A1A1A]">{stat.value}</p>
-
-                        {stat.isTextTrend && (
-                            <div className={`mt-4 flex items-center gap-2 text-xs font-medium text-emerald-600`}>
-                                <span className="material-symbols-outlined text-sm">{stat.trendIcon}</span>
-                                {stat.trend}
-                            </div>
-                        )}
+                        <h3 className="text-gray-500 text-xs font-bold uppercase tracking-wider mb-1">{stat.label}</h3>
+                        <p className="text-3xl font-bold tracking-tight text-gray-900">{stat.value}</p>
                     </div>
                 ))}
             </div>
 
             {/* Recent Listings Table */}
-            <div className="bg-white rounded-[24px] shadow-sm border border-gray-100 overflow-hidden">
-                <div className="p-6 border-b border-gray-50 flex items-center justify-between">
-                    <h2 className="text-xl font-bold text-[#1A1A1A]">Recent Listings</h2>
-                    <button className="text-[#698679] text-sm font-bold hover:underline">View All</button>
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
+                    <h2 className="text-base font-bold text-gray-900">Recent Listings Activity</h2>
+                    <button className="text-[#698679] text-xs font-bold hover:bg-[#69867910] px-3 py-1.5 rounded-md transition-all">View All Activity</button>
                 </div>
-                <div className="overflow-x-auto">
+                <div className="overflow-x-auto text-sm">
                     <table className="w-full text-left">
-                        <thead className="bg-gray-50 text-[#666666] text-sm font-medium">
+                        <thead className="bg-gray-50 text-gray-500 font-bold uppercase text-[10px] tracking-widest border-b border-gray-200">
                             <tr>
-                                <th className="px-6 py-4">Item</th>
-                                <th className="px-6 py-4">Seller</th>
-                                <th className="px-6 py-4">Price</th>
-                                <th className="px-6 py-4">Status</th>
-                                <th className="px-6 py-4">Time</th>
+                                <th className="px-6 py-3">Item Name</th>
+                                <th className="px-6 py-3">Seller</th>
+                                <th className="px-3 py-3">Price</th>
+                                <th className="px-6 py-3 text-center">Status</th>
+                                <th className="px-6 py-3 text-right">Time</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-gray-50">
+                        <tbody className="divide-y divide-gray-100">
                             {recentListings.map((listing) => (
                                 <tr key={listing.id} className="hover:bg-gray-50/50 transition-colors">
-                                    <td className="px-6 py-4 font-medium text-[#1A1A1A]">{listing.item}</td>
-                                    <td className="px-6 py-4 text-[#1A1A1A]">{listing.seller}</td>
-                                    <td className="px-6 py-4 text-[#1A1A1A]">{listing.price}</td>
-                                    <td className="px-6 py-4">
-                                        <span className={`px-3 py-1 rounded-full text-xs font-bold ${listing.status === 'Live' ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'
+                                    <td className="px-6 py-4 font-bold text-gray-900">{listing.item}</td>
+                                    <td className="px-6 py-4 text-gray-600">{listing.seller}</td>
+                                    <td className="px-3 py-4 font-bold text-gray-900">{listing.price}</td>
+                                    <td className="px-6 py-4 text-center">
+                                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase border ${listing.status === 'Live' ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : 'bg-amber-50 text-amber-700 border-amber-100'
                                             }`}>
                                             {listing.status}
                                         </span>
                                     </td>
-                                    <td className="px-6 py-4 text-sm text-[#666666]">{listing.time}</td>
+                                    <td className="px-6 py-4 text-right text-xs text-gray-400 font-medium">{listing.time}</td>
                                 </tr>
                             ))}
                         </tbody>

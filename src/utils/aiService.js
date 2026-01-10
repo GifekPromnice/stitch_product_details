@@ -60,7 +60,10 @@ export const analyzeImageWithAI = async (imageFile) => {
               "color": "One of: black, white, gray, beige, brown, red, blue, green, yellow, other",
               "price": Number (estimated price in PLN),
               "tags": ["tag1", "tag2", "tag3", "tag4", "tag5"],
-              "description": "2 sentence Polish description"
+              "description": "2 sentence Polish description",
+              "height": Number (estimated height in cm),
+              "width": Number (estimated width in cm),
+              "depth": Number (estimated depth in cm)
             }
         `;
 
