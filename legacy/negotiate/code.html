@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Make an Offer - Again</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#698679",
+              "background-light": "#F5F5F0",
+              "background-dark": "#181a19",
+              "card-light": "#ffffff",
+              "card-dark": "#242625",
+            },
+            fontFamily: {
+              "display": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "1.5rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-[#141514] dark:text-white">
+<div class="relative mx-auto flex h-full min-h-screen max-w-[480px] flex-col overflow-x-hidden">
+<!-- TopAppBar -->
+<header class="sticky top-0 z-10 flex items-center bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md p-4 justify-between">
+<div class="flex size-10 items-center justify-start cursor-pointer">
+<span class="material-symbols-outlined text-[#141514] dark:text-white">arrow_back_ios</span>
+</div>
+<h2 class="text-lg font-bold leading-tight tracking-tight flex-1 text-center">Make an Offer</h2>
+<div class="flex size-10 items-center justify-end">
+<button class="flex items-center justify-center rounded-full text-[#141514] dark:text-white">
+<span class="material-symbols-outlined">info</span>
+</button>
+</div>
+</header>
+<main class="flex-1 px-4">
+<!-- Card: Product Summary -->
+<div class="mt-4">
+<div class="flex items-center gap-4 p-4 bg-card-light dark:bg-card-dark rounded-lg shadow-sm border border-[#e8e8e3] dark:border-[#2d2f2e]">
+<div class="h-20 w-20 flex-shrink-0 bg-center bg-no-repeat bg-cover rounded-lg overflow-hidden" data-alt="Mid-century modern wooden chair thumbnail" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuATRBDKpNJ8oa5hkp0ouM1BEyucx5Tyf9q8i7NYkXnr59F64KAtw1bSWgMVk9UfK-xay3ztIf5Rn08nVTqoV7bdpzBOv6_TyOXiAmpKU1QMtjquTAwjMlN0luqrssJ8yjucxfdF0NYecc9nMgJaSsJLWCi62fGa6_PcKUNAtOejEpt-c3t9hecJUGOEZfVIPpy2X7Yj1M2Qlx5t4a1kvBOOGI_H_fvF0uVuPQeyv1hFW4gclrg08xj-y_GottIB9rcGxKKtR1LKLZvN");'>
+</div>
+<div class="flex flex-col gap-1 overflow-hidden">
+<p class="text-[#737876] text-xs font-medium uppercase tracking-wider">Item Details</p>
+<p class="text-base font-bold leading-tight truncate">Mid-Century Modern Chair</p>
+<p class="text-[#737876] text-sm font-normal">Original Price: $450</p>
+</div>
+</div>
+</div>
+<!-- HeadlineText & Numeric Input -->
+<div class="pt-10 pb-2">
+<p class="text-[#737876] text-sm font-medium leading-normal text-center mb-1">Your Offer Amount</p>
+<div class="flex items-center justify-center gap-1">
+<span class="text-4xl font-bold text-primary">$</span>
+<input class="w-40 bg-transparent text-center text-5xl font-bold border-none focus:ring-0 text-[#141514] dark:text-white placeholder-gray-300" placeholder="0" type="number" value="425"/>
+</div>
+</div>
+<!-- Chips: Guided Pricing -->
+<div class="mt-4 mb-8">
+<p class="text-[#737876] text-xs font-medium text-center uppercase tracking-widest mb-3">Quick Adjust</p>
+<div class="flex gap-3 justify-center flex-wrap">
+<button class="flex h-10 items-center justify-center rounded-full bg-[#e8e8e3] dark:bg-[#2d2f2e] px-5 hover:bg-primary/20 transition-colors">
+<p class="text-[#141514] dark:text-white text-sm font-medium leading-normal">-5% ($427.5)</p>
+</button>
+<button class="flex h-10 items-center justify-center rounded-full bg-primary px-5 shadow-md">
+<p class="text-white text-sm font-bold leading-normal">-10% ($405)</p>
+</button>
+<button class="flex h-10 items-center justify-center rounded-full bg-[#e8e8e3] dark:bg-[#2d2f2e] px-5 hover:bg-primary/20 transition-colors">
+<p class="text-[#141514] dark:text-white text-sm font-medium leading-normal">-15% ($382.5)</p>
+</button>
+</div>
+</div>
+<!-- Message Text Area -->
+<div class="flex flex-col gap-2">
+<label class="text-sm font-semibold text-[#141514] dark:text-white px-2">Message to Seller (Optional)</label>
+<textarea class="w-full bg-card-light dark:bg-card-dark border border-[#e8e8e3] dark:border-[#2d2f2e] rounded-lg p-4 text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none min-h-[120px] resize-none placeholder:text-[#737876]/60" placeholder="Hi! I love this chair and I'm ready to pick it up today if you accept my offer."></textarea>
+</div>
+<p class="mt-6 text-center text-[#737876] text-xs leading-relaxed px-6">
+                By sending this offer, you agree to Again's Terms of Service. Offers are binding for 24 hours.
+            </p>
+</main>
+<!-- Footer / Action Button -->
+<footer class="sticky bottom-0 bg-background-light dark:bg-background-dark p-6 pb-10">
+<button class="flex w-full cursor-pointer items-center justify-center rounded-full h-14 bg-primary text-white gap-2 text-lg font-bold shadow-lg active:scale-[0.98] transition-transform">
+<span>Send Offer</span>
+<span class="material-symbols-outlined">send</span>
+</button>
+</footer>
+</div>
+</body></html>

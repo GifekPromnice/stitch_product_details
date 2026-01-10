@@ -1,9 +1,13 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SearchOverlay from '../components/SearchOverlay';
+import { useSettings } from '../context/SettingsContext';
+import { supabase } from '../supabaseClient';
+import { useAuth } from '../context/AuthContext';
 
 const Home = () => {
     const navigate = useNavigate();
+    const { t, formatPrice } = useSettings();
     const [searchQuery, setSearchQuery] = useState('');
     const [activeCategory, setActiveCategory] = useState('all');
     const [favorites, setFavorites] = useState(() => {
@@ -11,39 +15,60 @@ const Home = () => {
         return saved ? JSON.parse(saved) : [];
     });
     const [showSearchOverlay, setShowSearchOverlay] = useState(false);
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         localStorage.setItem('favorites', JSON.stringify(favorites));
     }, [favorites]);
 
-    const toggleFavorite = (e, productId) => {
-        e.stopPropagation();
-        setFavorites(prev =>
-            prev.includes(productId)
-                ? prev.filter(id => id !== productId)
-                : [...prev, productId]
-        );
-    };
+    useEffect(() => {
+        const fetchProducts = async () => {
+            setLoading(true);
+            let query = supabase.from('products').select('*');
 
-    const products = [
-        { id: 1, title: '1970s Velvet Sofa', price: 450, location: 'Brooklyn, NY', category: 'sofas', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD_7CdCHlYZUxXinXnnjQHnTkP3fadL1tXiU0Oa_e5RenGOinu8N3_rGY1BqgmqANZdrxiBNIxCTDXrKt3hjjt155D1_RwGgB3HuisKKSRk1JZgOFRWBW9BBt_hE-MLSAPjSwMqmMQaxEvWsu9n8b8ZaGlRI9BzFJuk_h-W76FR9COf6Tt3Ha-_a3hfBvBxMPVgU6Nabdk55UE5pdlM0AC_uqSUgGfooV_4U0I0fP1dVX5p0mFjRIm_gstDlSUPFjy62rQB4lZHovNP', aspect: '3/4' },
-        { id: 2, title: 'Oak Coffee Table', price: 120, location: 'Austin, TX', category: 'tables', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCRk6ZkMR7el4beJA8EILmTZr97kl-B3chhZ9H6DiBfcqL8KlB9KUhURhiU9lBVwR0y93TKJfTOaMtnLWpSPajFWB0ORqHdaQldebmOsy4nCjFzpoOkdalCqvFqN90rdx6KJfDZZ20YBpN3GI7HF4YsEpFcW9_k4LL0L2FAZjk8CsjoboPMWj27VPIE-A7Hq65JIkEiiDCU2oORJhzI4I5fMYhqTYPa-WcIOvs36N1yejZkb24AO-y7oQNZ5DaV8PxpoFKwJELknBt5', aspect: '1/1' },
-        { id: 3, title: 'Industrial Lamp', price: 45, location: 'Portland, OR', category: 'lighting', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAiHEDozq89TyD9zpm9DAO9eEPUjKnTJl97HuP4jdeC2lP27Cc1sZIzzhG9d6yl5mF9NuyhXLtqm7yU97nwoSM1NG75h5S7LhaCxvGvXlnhvYkF0ujVB2Ktb4y6qWZvVVE6R0BmqmdZy3dcsS9UaRwc2bz5z74qSpxRXHDmWf5iY76KSIAllmPvF1mc8faHL31E3n_cV8eOHGu6lV6x2y9U7MZsmGEtt9s4W8G6yR8Zz2oelpHerqal_hoUyQP6o9YaHpFWcFZbSRvK', aspect: '3/5' },
-        { id: 4, title: 'Danish Armchair', price: 280, location: 'Seattle, WA', category: 'sofas', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC6S7b0zkYnUVsvWGjOMjnrrHGDKpXiDi00ALcCvzdC5Fe4ycpiOWdmRTW3VyQKX6qcVkIJ84NQOjXuhdnxe40UV6R3dMHqIK1yKe9exqJqjVDl-vf93VBcGoF9ARhh3vEq2626tU8FSFM4gHjL1tb6aJbdDyKlSecDWL8irPyEwEhD3DZfQWns47oR0KAIXJEImNP0lqOkIdGvdR-vstaMWkyMlg4c72uUEpGzDlrmIMcIWYxeW3syb-8GFtBBbYaoFC1tt2Z6HJ8k', aspect: '4/5' },
-        { id: 5, title: 'Large Monstera', price: 35, location: 'Los Angeles, CA', category: 'plants', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAjQh1gVJn_V3FJth3MUfKkh6EnWoiNcBByDF1U9FxUWXMK_IG01wwHI1FzIXiKPsqDFU2qYFcre_02CTisEU7nzVMJCSH9_twhNgk0rXLGy96or8u2il8TfKtq452mLBb5ZLIFJklHQPq0LgxrkKPKLh9Dp-SVRI8UenzpjRvMxt5ReAGP7IkmpT__r8Fr-YRlgfhvUBNzTln_km1KfYRzuUQolI7sYyl2c2H4CCSJXeNfb6Dd4i72rSreLybk3ljjHulWki8S-ygM', aspect: '1/1' },
-        { id: 6, title: 'Teak Bookshelf', price: 150, location: 'Chicago, IL', category: 'shelves', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDOCuicokfWi5DEcsTTXHxars9-hAmFIuCGAyuLi5goXG1L_SL0tMTsKTSqm2JK1w0Id4POEkgFON71Gq1NfqbD8dQh-pzJTyuw9TvRjpU71sYn1QP-mGo5EUGQqtzB9VyMRlX93Ua5NRLzK-KEzGGkUb1PTzeMjSL7wx7PCBi5rkaZvWKYQ1qU3Ose9sXDNO4K2jf2_u5dGUriA1OISMdk3dbQ_p_eZu-040A94AkYOpi718qr7OEJrLOgqUYCu4VkA-UeqOrhW8Y9', aspect: '3/4' },
-    ];
+            // IF search query exists, use the RPC function 'search_products'
+            if (searchQuery.trim().length > 0) {
+                // We need to fetch via RPC if searching
+                const { data, error } = await supabase.rpc('search_products', { keyword: searchQuery });
+                if (!error) {
+                    setProducts(data || []);
+                } else {
+                    console.error("Search error:", error);
+                }
+            } else {
+                // Normal fetch
+                const { data, error } = await query;
+                if (error) {
+                    console.error('Error fetching products:', error);
+                } else {
+                    setProducts(data || []);
+                }
+            }
+            setLoading(false);
+        };
+
+        fetchProducts();
+    }, [searchQuery]); // Re-run when searchQuery changes
 
     const categories = ['all', 'new arrivals', 'sofas', 'lighting', 'tables', 'rugs'];
 
+    const getCategoryLabel = (cat) => {
+        if (cat === 'all') return t('cat.all');
+        if (cat === 'new arrivals') return t('cat.newArrivals');
+        return t(`cat.${cat}`);
+    };
+
     const filteredProducts = products.filter(p =>
-        (activeCategory === 'all' || p.category === activeCategory || activeCategory === 'new arrivals') &&
-        p.title.toLowerCase().includes(searchQuery.toLowerCase())
+        (activeCategory === 'all' || p.category === activeCategory || activeCategory === 'new arrivals')
+        // Title filtering is now handled by the backend RPC search_products, but we can keep client-side backup/refinement if needed,
+        // or rely solely on Supabase for the search part.
+        // For 'new arrivals', we might just filter by date in real app, here it's static.
     );
 
     return (
-        <div className="animate-in fade-in duration-500 bg-background-light dark:bg-background-dark min-h-screen">
-            <header className="fixed top-0 left-0 right-0 z-50 px-4 pt-12 pb-4 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md">
+        <div className="animate-in fade-in duration-500 bg-background-light dark:bg-background-dark">
+            <header className="fixed top-0 left-0 right-0 z-50 px-4 pt-6 pb-2 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md">
                 <div className="flex gap-3 items-center w-full max-w-md mx-auto">
                     <div
                         className="flex-1 h-12 bg-white dark:bg-[#2C2E2D] shadow-soft rounded-full flex items-center px-4 transition-shadow hover:shadow-float group cursor-pointer"
@@ -52,7 +77,7 @@ const Home = () => {
                         <span className="material-symbols-outlined text-text-sub dark:text-gray-400 mr-3">search</span>
                         <input
                             className="flex-1 bg-transparent border-none p-0 text-text-main dark:text-white placeholder:text-text-sub focus:ring-0 text-base font-medium leading-normal cursor-pointer"
-                            placeholder="Search vintage chairs..."
+                            placeholder={t('home.searchPlaceholder')}
                             type="text"
                             value={searchQuery}
                             readOnly
@@ -72,8 +97,8 @@ const Home = () => {
                 products={products}
             />
 
-            <main className="w-full max-w-md mx-auto pt-32 pb-24 px-4 text-text-main dark:text-gray-100">
-                <div className="flex gap-2 overflow-x-auto no-scrollbar pb-6 -mx-4 px-4">
+            <main className="w-full max-w-md mx-auto pt-24 px-3 text-text-main dark:text-gray-100 pb-20">
+                <div className="flex gap-2 overflow-x-auto no-scrollbar pb-4 -mx-3 px-3">
                     {categories.map(cat => (
                         <button
                             key={cat}
@@ -83,16 +108,16 @@ const Home = () => {
                                 : 'bg-secondary dark:bg-[#2C2E2D] text-primary dark:text-primary-dark border border-transparent hover:bg-primary/10 dark:hover:bg-primary/20'
                                 }`}
                         >
-                            <span className={`text-sm ${activeCategory === cat ? 'font-semibold' : 'font-medium'}`}>{cat}</span>
+                            <span className={`text-sm ${activeCategory === cat ? 'font-semibold' : 'font-medium'}`}>{getCategoryLabel(cat)}</span>
                         </button>
                     ))}
                 </div>
 
                 <div className="masonry-grid w-full">
                     {filteredProducts.map(product => (
-                        <div key={product.id} className="masonry-item relative group" onClick={() => navigate(`/product/${product.id}`)}>
-                            <div className="bg-white dark:bg-[#2C2E2D] rounded-xl p-3 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer">
-                                <div className="relative w-full overflow-hidden rounded-lg mb-3">
+                        <div key={product.id} className="masonry-item relative group" onClick={() => navigate(`/product/${product.id}`, { state: { product } })}>
+                            <div className="bg-white dark:bg-[#2C2E2D] rounded-xl p-2.5 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer">
+                                <div className="relative w-full overflow-hidden rounded-lg mb-2">
                                     <div className="w-full h-auto bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
                                         style={{ backgroundImage: `url("${product.image}")`, aspectRatio: product.aspect }}>
                                     </div>
@@ -103,10 +128,10 @@ const Home = () => {
                                         <span className={`material-symbols-outlined text-primary text-[20px] transition-all ${favorites.includes(product.id) ? 'font-variation-settings-fill' : 'opacity-70 hover:opacity-100'}`}>favorite</span>
                                     </button>
                                 </div>
-                                <div className="flex flex-col gap-1 px-1">
-                                    <h3 className="text-primary dark:text-primary text-lg font-bold tracking-tight">${product.price}</h3>
-                                    <p className="text-text-main dark:text-gray-100 text-sm font-semibold leading-tight line-clamp-2">{product.title}</p>
-                                    <p className="text-text-sub dark:text-gray-400 text-xs font-normal mt-1">{product.location}</p>
+                                <div className="flex flex-col gap-0.5 px-1">
+                                    <h3 className="text-primary dark:text-primary text-base font-bold tracking-tight">{formatPrice(product.price)}</h3>
+                                    <p className="text-text-main dark:text-gray-100 text-[13px] font-semibold leading-tight line-clamp-2">{product.title}</p>
+                                    <p className="text-text-sub dark:text-gray-400 text-[11px] font-normal mt-0.5">{product.location}</p>
                                 </div>
                             </div>
                         </div>
