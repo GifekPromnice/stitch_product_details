@@ -342,10 +342,7 @@ export const SettingsProvider = ({ children }) => {
         if (isNaN(numericPrice)) return price;
 
         if (language === 'pl') {
-            // Simple conversion rate for demo: 1 USD = 4 PLN
-            // You might want to remove this if prices are stored in mixed currencies
-            const val = numericPrice * 4;
-            return `${val.toFixed(2)} zł`;
+            return `${numericPrice.toFixed(2)} zł`;
         }
         return `$${numericPrice.toFixed(2)}`;
     };

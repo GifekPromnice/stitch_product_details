@@ -122,24 +122,26 @@ const AddListing = () => {
             imageUrl = publicUrl;
         }
 
+        const productData = {
+            title,
+            price: parseFloat(price),
+            description,
+            category,
+            image: imageUrl,
+            location,
+            aspect: '4/3',
+            is_new: condition === 'new',
+            rating: 0,
+            reviews_count: 0,
+            user_id: user.id,
+            tags: tags
+        };
+
+        console.log("PUBLISH DEBUG: Wysyłanie danych do bazy:", productData);
+
         const { data, error } = await supabase
             .from('products')
-            .insert([
-                {
-                    title,
-                    price: parseFloat(price),
-                    description,
-                    category,
-                    image: imageUrl, // Use the uploaded URL
-                    location,
-                    aspect: '4/3',
-                    is_new: condition === 'new',
-                    rating: 0,
-                    reviews_count: 0,
-                    user_id: user.id,
-                    tags: tags // Add tags to database
-                }
-            ]);
+            .insert([productData]);
 
         setIsPublishing(false);
 
