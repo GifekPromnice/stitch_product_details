@@ -7,7 +7,7 @@ import { useSettings } from '../context/SettingsContext';
 const MyListings = () => {
     const navigate = useNavigate();
     const { user } = useAuth();
-    const { formatPrice } = useSettings();
+    const { formatPrice, t } = useSettings();
     const [listings, setListings] = useState([]);
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState('active'); // 'active' or 'sold'
@@ -51,7 +51,7 @@ const MyListings = () => {
 
     const handleMarkSold = async (id, e) => {
         e.stopPropagation();
-        if (!confirm("Mark this item as sold?")) return;
+        if (!confirm(t('myListings.markSoldConfirm'))) return;
         try {
             const { error } = await supabase.from('products').update({ status: 'sold' }).eq('id', id);
             if (error) throw error;
@@ -63,7 +63,7 @@ const MyListings = () => {
     };
 
     const handleDelete = async (id) => {
-        if (!confirm("Are you sure you want to delete this listing? This cannot be undone.")) return;
+        if (!confirm(t('myListings.deleteConfirm'))) return;
         try {
             const { error } = await supabase.from('products').delete().eq('id', id);
             if (error) throw error;
@@ -83,7 +83,7 @@ const MyListings = () => {
                         <button onClick={() => navigate('/profile')} className="p-2 -ml-2 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
                             <span className="material-symbols-outlined text-text-main dark:text-white">arrow_back</span>
                         </button>
-                        <h1 className="text-2xl font-bold tracking-tight text-text-main dark:text-white">My Listings</h1>
+                        <h1 className="text-2xl font-bold tracking-tight text-text-main dark:text-white">{t('myListings.title')}</h1>
                     </div>
                 </div>
             </header>
@@ -97,13 +97,13 @@ const MyListings = () => {
                             onClick={() => setActiveTab('active')}
                             className={`flex-1 py-2.5 px-4 rounded-full font-semibold text-sm transition-all duration-200 ${activeTab === 'active' ? 'bg-primary shadow-sm text-black' : 'text-text-secondary dark:text-gray-400 hover:text-text-main'}`}
                         >
-                            Active
+                            {t('myListings.active')}
                         </button>
                         <button
                             onClick={() => setActiveTab('sold')}
                             className={`flex-1 py-2.5 px-4 rounded-full font-semibold text-sm transition-all duration-200 ${activeTab === 'sold' ? 'bg-primary shadow-sm text-black' : 'text-text-secondary dark:text-gray-400 hover:text-text-main'}`}
                         >
-                            Sold
+                            {t('myListings.sold')}
                         </button>
                     </div>
                 </div>
@@ -111,11 +111,11 @@ const MyListings = () => {
                 {/* Listings Feed */}
                 <div className="flex flex-col gap-4">
                     {loading ? (
-                        <div className="text-center py-10 opacity-50">Loading your listings...</div>
+                        <div className="text-center py-10 opacity-50">{t('myListings.loading')}</div>
                     ) : currentListings.length === 0 ? (
                         <div className="text-center py-10 opacity-50">
-                            <p>No {activeTab} listings found.</p>
-                            <button onClick={() => navigate('/add-listing')} className="mt-4 text-primary font-bold">Create a new listing</button>
+                            <p>{t('myListings.noListings')}</p>
+                            <button onClick={() => navigate('/add-listing')} className="mt-4 text-primary font-bold">{t('myListings.create')}</button>
                         </div>
                     ) : (
                         currentListings.map(item => (
@@ -131,17 +131,17 @@ const MyListings = () => {
                                             style={{ backgroundImage: `url('${item.image}')` }}></div>
                                         {item.status === 'active' && (
                                             <div className="absolute top-2 left-2 bg-white/90 dark:bg-black/60 backdrop-blur-sm px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wide text-green-700 dark:text-primary">
-                                                Live
+                                                {t('myListings.live')}
                                             </div>
                                         )}
                                         {item.status === 'pending' && (
                                             <div className="absolute top-2 left-2 bg-orange-100 dark:bg-orange-900/50 backdrop-blur-sm px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wide text-orange-700 dark:text-orange-300">
-                                                Pending
+                                                {t('myListings.pending')}
                                             </div>
                                         )}
                                         {item.status === 'sold' && (
                                             <div className="absolute top-2 left-2 bg-gray-200 dark:bg-gray-700 backdrop-blur-sm px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wide text-gray-700 dark:text-gray-300">
-                                                Sold
+                                                {t('myListings.sold')}
                                             </div>
                                         )}
                                     </div>
@@ -152,13 +152,14 @@ const MyListings = () => {
                                                 <h3 className="font-semibold text-base leading-tight text-text-main dark:text-white line-clamp-2 pr-2">{item.title}</h3>
                                                 <button
                                                     onClick={(e) => { e.stopPropagation(); handleDelete(item.id); }}
-                                                    className="text-gray-400 hover:text-red-500 -mt-1 -mr-1 p-1 rounded-full transition-colors"
+                                                    className="group/delete text-gray-400 hover:text-red-500 -mt-1 -mr-1 p-1 rounded-full transition-colors"
+                                                    title="Delete Listing"
                                                 >
                                                     <span className="material-symbols-outlined text-[20px]">delete</span>
                                                 </button>
                                             </div>
                                             <p className="text-text-secondary dark:text-gray-400 text-sm mt-1">
-                                                {item.views} views • {item.observerCount} observers
+                                                {item.views} {t('myListings.views')} • {item.observerCount} {t('myListings.observers')}
                                             </p>
                                         </div>
                                         <div className="flex items-end justify-between mt-2">
@@ -174,19 +175,19 @@ const MyListings = () => {
                                                             <span className="material-symbols-outlined text-[18px]">edit</span>
                                                         </button>
                                                         <button
-                                                            onClick={(e) => { e.stopPropagation(); alert("Boost feature coming soon!"); }}
+                                                            onClick={(e) => { e.stopPropagation(); alert(t('myListings.boostFeature')); }}
                                                             aria-label="Boost Listing"
                                                             className="h-9 px-3 flex items-center justify-center rounded-full bg-primary text-black font-medium text-sm gap-1 hover:bg-primary-dark transition-colors shadow-lg shadow-primary/20">
                                                             <span className="material-symbols-outlined filled text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>bolt</span>
-                                                            <span>Boost</span>
+                                                            <span className="text-black">{t('myListings.boost')}</span>
                                                         </button>
                                                     </>
                                                 )}
                                                 {item.status === 'active' && (
                                                     <button
                                                         onClick={(e) => handleMarkSold(item.id, e)}
-                                                        className="h-9 px-3 flex items-center justify-center rounded-full bg-background-light dark:bg-white/10 text-xs font-semibold hover:bg-gray-200">
-                                                        Mark Sold
+                                                        className="h-9 px-3 flex items-center justify-center rounded-full bg-background-light dark:bg-white/10 text-xs font-semibold hover:bg-gray-200 dark:text-white">
+                                                        {t('myListings.markSold')}
                                                     </button>
                                                 )}
                                             </div>
