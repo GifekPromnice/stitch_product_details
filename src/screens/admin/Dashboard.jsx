@@ -1,21 +1,72 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { supabase } from '../../supabaseClient';
+import { useSettings } from '../../context/SettingsContext';
 
 const Dashboard = () => {
-    // Mock Data mimicking the HTML design
-    const stats = [
-        { label: 'Total Listings', value: '12,842', trend: '+12.5%', icon: 'chair', color: 'emerald' },
-        { label: 'Total Users', value: '85,290', trend: '+8.2%', icon: 'group', color: 'emerald' },
-        { label: 'Total Transactions', value: '4,320', trend: '+15.1%', icon: 'payments', color: 'emerald' },
-        { label: 'Listings Today', value: '142', trend: 'Higher than average', icon: 'add_circle', color: 'emerald', trendIcon: 'trending_up', isTextTrend: true },
-        { label: 'New Users Today', value: '56', trend: 'Up from yesterday', icon: 'person_add', color: 'emerald', trendIcon: 'trending_up', isTextTrend: true },
-        { label: 'Transactions Today', value: '28', trend: 'Same as yesterday', icon: 'shopping_bag', color: 'amber', trendIcon: 'trending_flat', isTextTrend: true },
-    ];
+    const { formatPrice } = useSettings();
+    const [stats, setStats] = useState([
+        { label: 'Total Listings', value: '...', trend: '...', icon: 'chair', color: 'emerald' },
+        { label: 'Total Users', value: '...', trend: '...', icon: 'group', color: 'emerald' },
+        { label: 'Total Transactions', value: '...', trend: '...', icon: 'payments', color: 'emerald' },
+        { label: 'Listings Today', value: '...', trend: '...', icon: 'add_circle', color: 'emerald', trendIcon: 'trending_up', isTextTrend: true },
+        { label: 'New Users Today', value: '...', trend: '...', icon: 'person_add', color: 'emerald', trendIcon: 'trending_up', isTextTrend: true },
+        { label: 'Transactions Today', value: '...', trend: '...', icon: 'shopping_bag', color: 'amber', trendIcon: 'trending_flat', isTextTrend: true },
+    ]);
+    const [recentListings, setRecentListings] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    const recentListings = [
-        { id: 1, item: '1970s Velvet Sofa', seller: 'Sarah J.', price: '$450', status: 'Live', time: '2m ago' },
-        { id: 2, item: 'Danish Armchair', seller: 'Mike R.', price: '$280', status: 'Pending', time: '15m ago' },
-        { id: 3, item: 'Oak Coffee Table', seller: 'Elena W.', price: '$120', status: 'Live', time: '42m ago' },
-    ];
+    useEffect(() => {
+        const fetchDashboardData = async () => {
+            try {
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const todayISO = today.toISOString();
+
+                // 1. Fetch Totals
+                const { count: productsCount } = await supabase.from('products').select('*', { count: 'exact', head: true });
+                const { count: usersCount } = await supabase.from('profiles').select('*', { count: 'exact', head: true });
+                const { count: ordersCount } = await supabase.from('orders').select('*', { count: 'exact', head: true });
+
+                // 2. Fetch Daily Stats
+                const { count: productsToday } = await supabase.from('products').select('*', { count: 'exact', head: true }).gt('created_at', todayISO);
+                const { count: ordersToday } = await supabase.from('orders').select('*', { count: 'exact', head: true }).gt('created_at', todayISO);
+
+                // 3. Fetch Recent Listings
+                const { data: listings } = await supabase
+                    .from('products')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+                    .limit(5);
+
+                const formattedListings = listings?.map(item => ({
+                    id: item.id,
+                    item: item.title,
+                    seller: 'User ' + (item.user_id ? item.user_id.slice(0, 4) : 'Unknown'),
+                    price: formatPrice(item.price),
+                    status: 'Live',
+                    time: new Date(item.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                })) || [];
+
+                setRecentListings(formattedListings);
+
+                setStats([
+                    { label: 'Total Listings', value: productsCount || 0, trend: '', icon: 'chair', color: 'emerald' },
+                    { label: 'Total Users', value: usersCount || 0, trend: '', icon: 'group', color: 'emerald' },
+                    { label: 'Total Transactions', value: ordersCount || 0, trend: '', icon: 'payments', color: 'emerald' },
+                    { label: 'Listings Today', value: productsToday || 0, trend: 'since midnight', icon: 'add_circle', color: 'emerald', trendIcon: 'trending_up', isTextTrend: true },
+                    { label: 'New Users Today', value: '-', trend: 'Data unavailable', icon: 'person_add', color: 'gray', trendIcon: 'remove', isTextTrend: true },
+                    { label: 'Transactions Today', value: ordersToday || 0, trend: 'since midnight', icon: 'shopping_bag', color: 'amber', trendIcon: 'trending_flat', isTextTrend: true },
+                ]);
+
+            } catch (error) {
+                console.error("Dashboard Fetch Error:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchDashboardData();
+    }, [formatPrice]);
 
     return (
         <div className="p-8 md:p-12 animate-in fade-in duration-500">

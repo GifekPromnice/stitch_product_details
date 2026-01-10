@@ -3,15 +3,63 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useMemo, useState } from 'react';
 import { useSettings } from '../context/SettingsContext';
 
+import { supabase } from '../supabaseClient';
+import { useAuth } from '../context/AuthContext';
+
 const Checkout = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const { t, formatPrice } = useSettings();
+    const { user } = useAuth(); // Assuming AuthContext exposes user
 
     const passedProduct = location.state?.product;
 
     const [deliveryMethod, setDeliveryMethod] = useState('courier');
     const [paymentMethod, setPaymentMethod] = useState('credit_card');
+    const [loading, setLoading] = useState(false);
+
+    const handlePlaceOrder = async () => {
+        if (!user) {
+            alert("Please log in to place an order.");
+            return;
+        }
+
+        setLoading(true);
+        try {
+            // Calculate total again to be safe (or passed from Memo)
+            // Ideally backend calculates this, but for MVP frontend calc is fine
+
+            // NOTE: product.id might be missing if it was a mock passedProduct without ID. 
+            // We should check if we have a real product ID.
+            const productId = location.state?.product?.id;
+
+            const orderData = {
+                user_id: user.id,
+                product_id: productId || null, // Allow null for demo products not in DB
+                amount: fees.total,
+                status: 'pending',
+                payment_method: paymentMethod,
+                delivery_method: deliveryMethod,
+                // delivery_address: ... (Would need to collect this from form, skipping for MVP/Privacy)
+            };
+
+            const { data, error } = await supabase
+                .from('orders')
+                .insert([orderData])
+                .select();
+
+            if (error) throw error;
+
+            console.log("Order placed:", data);
+            navigate('/order-confirmation', { state: { order: data[0], product } });
+
+        } catch (error) {
+            console.error("Error placing order:", error);
+            alert("Failed to place order: " + error.message);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     // Use passed data or fallback to mock
     const product = useMemo(() => {
@@ -257,10 +305,19 @@ const Checkout = () => {
                         <span className="text-xs text-gray-500 dark:text-gray-400">{t('checkout.totalAmount')}</span>
                         <span className="text-xl font-bold">{formatPrice(fees.total)}</span>
                     </div>
-                    <button onClick={() => navigate('/order-confirmation')}
-                        className="flex-1 bg-primary hover:bg-primary/90 active:scale-[0.98] transition-all text-white font-bold h-14 rounded-full shadow-lg shadow-primary/25 flex items-center justify-center gap-2 text-lg">
-                        <span>{t('checkout.placeOrder')}</span>
-                        <span className="material-symbols-outlined text-xl">arrow_forward</span>
+                    <button
+                        onClick={handlePlaceOrder}
+                        disabled={loading}
+                        className="flex-1 bg-primary hover:bg-primary/90 active:scale-[0.98] transition-all text-white font-bold h-14 rounded-full shadow-lg shadow-primary/25 flex items-center justify-center gap-2 text-lg disabled:opacity-70 disabled:cursor-not-allowed"
+                    >
+                        {loading ? (
+                            <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                        ) : (
+                            <>
+                                <span>{t('checkout.placeOrder')}</span>
+                                <span className="material-symbols-outlined text-xl">arrow_forward</span>
+                            </>
+                        )}
                     </button>
                 </div>
             </div>
