@@ -1,15 +1,4 @@
-// src/utils/aiService.js
 import { GoogleGenAI } from "@google/genai";
-
-// Initialize the Google Gen AI client with the API key from environment variables
-const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-
-// Base client for the SDK
-const genAI = new GoogleGenAI({
-    apiKey: apiKey,
-});
-
-const client = genAI;
 
 /**
  * Converts a browser File object to a Base64 string for the Gemini API.
@@ -35,6 +24,8 @@ async function fileToGenerativePart(file) {
  * Analyzes an image using Gemini 2.5 Flash and returns structured product data.
  */
 export const analyzeImageWithAI = async (imageFile) => {
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+
     if (!apiKey || apiKey === "YOUR_API_KEY_HERE" || apiKey.trim() === "") {
         console.warn("AI DEBUG: Missing VITE_GEMINI_API_KEY. Using mock data fallback.");
         await new Promise(r => setTimeout(r, 1500));
@@ -50,6 +41,9 @@ export const analyzeImageWithAI = async (imageFile) => {
     }
 
     try {
+        const genAI = new GoogleGenAI({ apiKey });
+        const client = genAI;
+
         console.log("%c AI DEBUG: Starting analysis with Gemini 2.5 Flash... ", "background: #222; color: #bada55");
 
         const imagePart = await fileToGenerativePart(imageFile);
