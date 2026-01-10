@@ -1,6 +1,16 @@
 // src/utils/aiService.js
 import { GoogleGenAI } from "@google/genai";
 
+// Initialize the Google Gen AI client with the API key from environment variables
+const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+
+// Base client for the SDK
+const genAI = new GoogleGenAI({
+    apiKey: apiKey,
+});
+
+const client = genAI;
+
 /**
  * Converts a browser File object to a Base64 string for the Gemini API.
  */
@@ -23,15 +33,11 @@ async function fileToGenerativePart(file) {
 
 /**
  * Analyzes an image using Gemini 2.5 Flash and returns structured product data.
- * Safe initialization to prevent app crash if API key is missing.
  */
 export const analyzeImageWithAI = async (imageFile) => {
-    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-
-    // 1. Basic validation
     if (!apiKey || apiKey === "YOUR_API_KEY_HERE" || apiKey.trim() === "") {
-        console.warn("AI DEBUG: Missing VITE_GEMINI_API_KEY. Falling back to mock data.");
-        await new Promise(r => setTimeout(r, 1500)); // Simulate delay
+        console.warn("AI DEBUG: Missing VITE_GEMINI_API_KEY. Using mock data fallback.");
+        await new Promise(r => setTimeout(r, 1500));
         return {
             title: "Stylowy Mebel (Podgląd)",
             price: 250,
@@ -39,15 +45,12 @@ export const analyzeImageWithAI = async (imageFile) => {
             condition: "good",
             color: "beige",
             tags: ["retro", "drewno", "odnowiony"],
-            description: "To jest przykładowy opis. Skonfiguruj klucz Gemini w .env, aby uzyskać prawdziwą analizę."
+            description: "To jest przykładowy opis. Skonfiguruj klucz Gemini w .env."
         };
     }
 
     try {
         console.log("%c AI DEBUG: Starting analysis with Gemini 2.5 Flash... ", "background: #222; color: #bada55");
-
-        // Initialize client INSIDE the function to avoid global scope crashes
-        const genAI = new GoogleGenAI({ apiKey });
 
         const imagePart = await fileToGenerativePart(imageFile);
 
@@ -67,8 +70,7 @@ export const analyzeImageWithAI = async (imageFile) => {
             }
         `;
 
-        // 2. Call the Gemini 2.5 Flash model
-        const result = await genAI.models.generateContent({
+        const result = await client.models.generateContent({
             model: "gemini-2.5-flash",
             contents: [
                 {
@@ -84,32 +86,24 @@ export const analyzeImageWithAI = async (imageFile) => {
             }
         });
 
-        // 3. Extract and parse response
         let responseText = "";
         try {
             responseText = typeof result.text === 'function' ? result.text() : result.text;
         } catch (e) {
-            console.warn("AI DEBUG: result.text() failed, trying alternative paths...");
             responseText = result.candidates?.[0]?.content?.parts?.[0]?.text || "";
         }
 
         console.log("AI DEBUG: Raw Response:", responseText);
-
-        const parsedData = JSON.parse(responseText);
-        console.log("AI DEBUG: Parsed Data:", parsedData);
-
-        return parsedData;
+        return JSON.parse(responseText);
 
     } catch (error) {
-        console.error("AI DEBUG: Analysis Critical Error:", error);
+        console.error("AI DEBUG: Error:", error);
 
-        // Handle specific 404/not available errors by falling back to 1.5-flash
-        if (error.message?.includes("404") || error.message?.includes("not found")) {
-            console.warn("AI DEBUG: Gemini 2.5 not found, trying fallback to 1.5-flash...");
-            const genAI = new GoogleGenAI({ apiKey });
+        if (error.message?.includes("404")) {
+            console.warn("AI DEBUG: Gemini 2.5 not found, fallback to 1.5-flash");
             const fallbackResult = await genAI.models.generateContent({
                 model: "gemini-1.5-flash",
-                contents: [{ role: "user", parts: [{ text: "Analyze as furniture JSON: " + imageFile.name }, await fileToGenerativePart(imageFile)] }]
+                contents: [{ role: "user", parts: [{ text: "Analyze furniture as JSON: " + imageFile.name }, await fileToGenerativePart(imageFile)] }]
             });
             return JSON.parse(fallbackResult.text());
         }
