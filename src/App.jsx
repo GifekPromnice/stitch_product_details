@@ -18,6 +18,10 @@ import Layout from './components/Layout';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import ScrollToTop from './components/ScrollToTop';
+import AdminLogin from './screens/admin/AdminLogin';
+import AdminLayout from './screens/admin/AdminLayout';
+import Dashboard from './screens/admin/Dashboard';
+import { Navigate } from 'react-router-dom';
 
 function App() {
     return (
@@ -44,6 +48,15 @@ function App() {
                         <Route path="/negotiate/:id" element={<ProtectedRoute><Negotiate /></ProtectedRoute>} />
                         <Route path="/personal-information" element={<ProtectedRoute><PersonalInformation /></ProtectedRoute>} />
                         <Route path="/password-security" element={<ProtectedRoute><PasswordSecurity /></ProtectedRoute>} />
+
+                        {/* Admin Routes */}
+                        <Route path="/admin/login" element={<AdminLogin />} />
+                        <Route path="/admin" element={<AdminLayout />}>
+                            <Route index element={<Navigate to="/admin/dashboard" replace />} />
+                            <Route path="dashboard" element={<Dashboard />} />
+                            {/* Placeholder for future admin pages */}
+                            <Route path="*" element={<div className="p-10">Admin Page Under Construction</div>} />
+                        </Route>
 
                         {/* Fallback */}
                         <Route path="*" element={<div className="p-10 text-center">Screen in development</div>} />
