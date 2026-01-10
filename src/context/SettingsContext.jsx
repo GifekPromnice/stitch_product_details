@@ -191,55 +191,54 @@ export const SettingsProvider = ({ children }) => {
             'product.buyNow': 'Buy Now',
             'time.ago': 'ago',
             'time.justNow': 'just now',
+            // Personal Information
+            'personalInfo.title': 'Personal Information',
+            'personalInfo.changePhoto': 'Change Photo',
+            'personalInfo.fullName': 'Full Name',
+            'personalInfo.phone': 'Phone Number',
+            'personalInfo.city': 'City',
+            'personalInfo.bio': 'Bio',
+            'personalInfo.bioOptional': 'Optional',
+            'personalInfo.bioPlaceholder': 'Tell us a little about yourself...',
+            'personalInfo.save': 'Save Changes',
+            'personalInfo.saving': 'Saving...',
+
+            // My Listings
+            'myListings.title': 'My Listings',
+            'myListings.active': 'Active',
+            'myListings.sold': 'Sold',
+            'myListings.loading': 'Loading your listings...',
+            'myListings.noListings': 'No listings found.',
+            'myListings.create': 'Create a new listing',
+            'myListings.live': 'Live',
+            'myListings.pending': 'Pending',
+            'myListings.views': 'views',
+            'myListings.observers': 'observers',
+            'myListings.edit': 'Edit',
+            'myListings.markSold': 'Mark Sold',
+            'myListings.boost': 'Boost',
+            'myListings.deleteConfirm': 'Are you sure you want to delete this listing? This cannot be undone.',
+            'myListings.markSoldConfirm': 'Mark this item as sold?',
+            'myListings.boostFeature': 'Boost feature coming soon!',
+
+            // Password & Security
+            'security.title': 'Password & Security',
+            'security.loginMethods': 'Login Methods',
+            'security.changeEmail': 'Change Email',
+            'security.changePassword': 'Change Password',
+            'security.updatePhone': 'Update Phone Number',
+            'security.lastUpdated': 'Last updated',
+            'security.securityOptions': 'Security Options',
+            'security.2fa': 'Two-Factor Authentication',
+            'security.2faDesc': 'Recommended for security',
+            'security.biometric': 'Biometric Login',
+            'security.biometricDesc': 'FaceID or TouchID',
+            'security.2faDisclaimer': 'Turning on Two-Factor Authentication will require a verification code sent to your email or phone.',
+            'security.newPassword': 'New Password',
+            'security.confirmPassword': 'Confirm Password',
+            'security.updatePassword': 'Update Password',
+            'security.passwordUpdated': 'Password updated successfully',
         },
-        // Personal Information
-        'personalInfo.title': 'Personal Information',
-        'personalInfo.changePhoto': 'Change Photo',
-        'personalInfo.fullName': 'Full Name',
-        'personalInfo.phone': 'Phone Number',
-        'personalInfo.city': 'City',
-        'personalInfo.bio': 'Bio',
-        'personalInfo.bioOptional': 'Optional',
-        'personalInfo.bioPlaceholder': 'Tell us a little about yourself...',
-        'personalInfo.save': 'Save Changes',
-        'personalInfo.saving': 'Saving...',
-
-        // My Listings
-        'myListings.title': 'My Listings',
-        'myListings.active': 'Active',
-        'myListings.sold': 'Sold',
-        'myListings.loading': 'Loading your listings...',
-        'myListings.noListings': 'No listings found.',
-        'myListings.create': 'Create a new listing',
-        'myListings.live': 'Live',
-        'myListings.pending': 'Pending',
-        'myListings.views': 'views',
-        'myListings.observers': 'observers',
-        'myListings.edit': 'Edit',
-        'myListings.markSold': 'Mark Sold',
-        'myListings.boost': 'Boost',
-        'myListings.deleteConfirm': 'Are you sure you want to delete this listing? This cannot be undone.',
-        'myListings.markSoldConfirm': 'Mark this item as sold?',
-        'myListings.boostFeature': 'Boost feature coming soon!',
-
-        // Password & Security
-        'security.title': 'Password & Security',
-        'security.loginMethods': 'Login Methods',
-        'security.changeEmail': 'Change Email',
-        'security.changePassword': 'Change Password',
-        'security.updatePhone': 'Update Phone Number',
-        'security.lastUpdated': 'Last updated',
-        'security.securityOptions': 'Security Options',
-        'security.2fa': 'Two-Factor Authentication',
-        'security.2faDesc': 'Recommended for security',
-        'security.biometric': 'Biometric Login',
-        'security.biometricDesc': 'FaceID or TouchID',
-        'security.2faDisclaimer': 'Turning on Two-Factor Authentication will require a verification code sent to your email or phone.',
-        'security.newPassword': 'New Password',
-        'security.confirmPassword': 'Confirm Password',
-        'security.updatePassword': 'Update Password',
-        'security.passwordUpdated': 'Password updated successfully',
-    },
         pl: {
             // Navigation
             'nav.home': 'Główna',
@@ -436,44 +435,44 @@ export const SettingsProvider = ({ children }) => {
             'time.ago': 'temu',
             'time.justNow': 'przed chwilą',
         }
-};
+    };
 
-const t = (key) => {
-    return translations[language][key] || key;
-};
+    const t = (key) => {
+        return translations[language][key] || key;
+    };
 
-// Helper for currency formatting
-const formatPrice = (price) => {
-    const numericPrice = parseFloat(price);
-    if (isNaN(numericPrice)) return price;
+    // Helper for currency formatting
+    const formatPrice = (price) => {
+        const numericPrice = parseFloat(price);
+        if (isNaN(numericPrice)) return price;
 
-    if (language === 'pl') {
-        return `${numericPrice.toFixed(2)} zł`;
-    }
-    return `$${numericPrice.toFixed(2)}`;
-};
+        if (language === 'pl') {
+            return `${numericPrice.toFixed(2)} zł`;
+        }
+        return `$${numericPrice.toFixed(2)}`;
+    };
 
-// Helper for dimensions
-const formatDimension = (val) => {
-    if (val === undefined || val === null || val === '') return '—';
-    const num = parseFloat(val);
-    if (isNaN(num)) return val;
+    // Helper for dimensions
+    const formatDimension = (val) => {
+        if (val === undefined || val === null || val === '') return '—';
+        const num = parseFloat(val);
+        if (isNaN(num)) return val;
 
-    // Ensure we always have a language, default to 'pl' if missing
-    const activeLang = language || 'pl';
+        // Ensure we always have a language, default to 'pl' if missing
+        const activeLang = language || 'pl';
 
-    if (activeLang === 'pl') {
-        return `${Math.round(num)} cm`;
-    }
+        if (activeLang === 'pl') {
+            return `${Math.round(num)} cm`;
+        }
 
-    // Conversion to inches for English
-    const inches = num / 2.54;
-    return `${inches.toFixed(1)}"`;
-};
+        // Conversion to inches for English
+        const inches = num / 2.54;
+        return `${inches.toFixed(1)}"`;
+    };
 
-return (
-    <SettingsContext.Provider value={{ theme, toggleTheme, language, toggleLanguage, t, formatPrice, formatDimension }}>
-        {children}
-    </SettingsContext.Provider>
-);
+    return (
+        <SettingsContext.Provider value={{ theme, toggleTheme, language, toggleLanguage, t, formatPrice, formatDimension }}>
+            {children}
+        </SettingsContext.Provider>
+    );
 };
