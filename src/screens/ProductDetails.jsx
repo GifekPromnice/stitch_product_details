@@ -28,22 +28,23 @@ const ProductDetails = () => {
     };
 
     const product = useMemo(() => {
+        console.log("PRODUCT DETAILS DEBUG v2: Dane z lokacji:", passedProduct);
         return {
             title: passedProduct?.title || '',
             price: passedProduct?.price || 0,
-            originalPrice: passedProduct?.price ? (passedProduct.price * 1.2) : 0, // Simplified markup for demo
-            location: passedProduct?.location || '',
+            originalPrice: passedProduct?.price ? (passedProduct.price * 1.2) : 0,
+            location: passedProduct?.location || 'Brak lokalizacji',
             condition: passedProduct?.is_new ? t('cond.new') : t('cond.good'),
             timeListed: formatTimeListed(passedProduct?.created_at),
             seller: {
-                name: 'Sarah J.', // Fallback for fixed seller for now
-                rating: 4.8,
-                image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDRjBy5olySuBu-5aexKNm5gVzcaLVENlzMbx-eDhuhKvO1XxKLTh_gP-anraJdzXADlPSisSJdJm6FBU5zvj2inKqVkQCRQsbCkJQYUp-ohxlu73dGky0GaBcgG6bwvsAw_BERre9BPYg2kq2wzxJcoAVqlYRxoIkfQSNo4MMhuX66q4W5D19pjp2e_EkaeocBeACUM2IzuO1M2P9l7tExubYFO1fEfNqK95q6x4ys42VAsQTNID9FBxr9-UgOHRAMDWxmCIVnKzZs"
+                name: passedProduct?.user_name || 'Użytkownik',
+                rating: 5.0,
+                image: "https://ui-avatars.com/api/?name=" + (passedProduct?.user_name || 'U')
             },
             images: [passedProduct?.image].filter(Boolean),
-            dimensions: { height: '32"', width: '28"', depth: '30"' }, // Default dimensions
+            dimensions: { height: '32"', width: '28"', depth: '30"' },
             tags: Array.isArray(passedProduct?.tags) ? passedProduct.tags : [],
-            description: passedProduct?.description || '',
+            description: passedProduct?.description || 'Brak opisu',
             mapImage: "https://lh3.googleusercontent.com/aida-public/AB6AXuAv416prnqJ93spioHVTa2lPQ4Y4I9NxkbED4cysFMsqRvAgm1aKCTjGWjub7grvVkyhcGsis7Gn_c0psDoV9M1EfEHdqybSjbMMxalTY6ckvZzAXDxDKpy7OuEL0R6vT-Jld6q9WFtaA2ZEhPqO7aJsTzJMi47Sv_iuyop0eWo3IeToaGqdYatdZznm-sNp2_kZAfkVvfhPzbPpw6BGSK8wpLc9IaMOuvxVo0o7BzFs83BoA541SswaC5laH-YfHUFTCSGOVm56rJE"
         };
     }, [passedProduct, t]);
