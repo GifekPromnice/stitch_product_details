@@ -21,6 +21,7 @@ import ScrollToTop from './components/ScrollToTop';
 import AdminLogin from './screens/admin/AdminLogin';
 import AdminLayout from './screens/admin/AdminLayout';
 import Dashboard from './screens/admin/Dashboard';
+import AdminListings from './screens/admin/AdminListings';
 import { Navigate } from 'react-router-dom';
 
 function App() {
@@ -54,6 +55,7 @@ function App() {
                         <Route path="/admin" element={<AdminLayout />}>
                             <Route index element={<Navigate to="/admin/dashboard" replace />} />
                             <Route path="dashboard" element={<Dashboard />} />
+                            <Route path="listings" element={<AdminListings />} />
                             {/* Placeholder for future admin pages */}
                             <Route path="*" element={<div className="p-10">Admin Page Under Construction</div>} />
                         </Route>
