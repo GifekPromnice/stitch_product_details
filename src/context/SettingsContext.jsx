@@ -186,6 +186,8 @@ export const SettingsProvider = ({ children }) => {
             'product.estimateTransport': 'Estimate Transport',
             'product.soldBy': 'Sold by',
             'product.buyNow': 'Buy Now',
+            'time.ago': 'ago',
+            'time.justNow': 'just now',
         },
         pl: {
             // Navigation
@@ -329,6 +331,8 @@ export const SettingsProvider = ({ children }) => {
             'product.estimateTransport': 'Oszacuj Transport',
             'product.soldBy': 'Sprzedawane przez',
             'product.buyNow': 'Kup Teraz',
+            'time.ago': 'temu',
+            'time.justNow': 'przed chwilą',
         }
     };
 

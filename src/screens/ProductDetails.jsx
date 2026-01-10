@@ -11,34 +11,42 @@ const ProductDetails = () => {
 
     const passedProduct = location.state?.product;
 
-    // Mock data supplemented by passed data
+    // Format relative time helper
+    const formatTimeListed = (dateString) => {
+        if (!dateString) return t('time.justNow');
+        const date = new Date(dateString);
+        const now = new Date();
+        const diffInSeconds = Math.floor((now - date) / 1000);
+
+        if (diffInSeconds < 60) return t('time.justNow');
+        const diffInMinutes = Math.floor(diffInSeconds / 60);
+        if (diffInMinutes < 60) return `${diffInMinutes}m ${t('time.ago')}`;
+        const diffInHours = Math.floor(diffInMinutes / 60);
+        if (diffInHours < 24) return `${diffInHours}h ${t('time.ago')}`;
+        const diffInDays = Math.floor(diffInHours / 24);
+        return `${diffInDays}d ${t('time.ago')}`;
+    };
+
     const product = useMemo(() => {
-        const baseProduct = {
-            title: passedProduct?.title || 'Vintage Velvet Armchair',
-            price: passedProduct?.price || 120.00,
-            originalPrice: (passedProduct?.price ? passedProduct.price * 1.5 : 180.00),
-            location: passedProduct?.location || 'Brooklyn, NY',
-            condition: 'Good Condition',
-            timeListed: 'Listed 2h ago',
+        return {
+            title: passedProduct?.title || '',
+            price: passedProduct?.price || 0,
+            originalPrice: passedProduct?.price ? (passedProduct.price * 1.2) : 0, // Simplified markup for demo
+            location: passedProduct?.location || '',
+            condition: passedProduct?.is_new ? t('cond.new') : t('cond.good'),
+            timeListed: formatTimeListed(passedProduct?.created_at),
             seller: {
-                name: 'Sarah J.',
+                name: 'Sarah J.', // Fallback for fixed seller for now
                 rating: 4.8,
                 image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDRjBy5olySuBu-5aexKNm5gVzcaLVENlzMbx-eDhuhKvO1XxKLTh_gP-anraJdzXADlPSisSJdJm6FBU5zvj2inKqVkQCRQsbCkJQYUp-ohxlu73dGky0GaBcgG6bwvsAw_BERre9BPYg2kq2wzxJcoAVqlYRxoIkfQSNo4MMhuX66q4W5D19pjp2e_EkaeocBeACUM2IzuO1M2P9l7tExubYFO1fEfNqK95q6x4ys42VAsQTNID9FBxr9-UgOHRAMDWxmCIVnKzZs"
             },
-            images: passedProduct?.image
-                ? [passedProduct.image]
-                : [
-                    "https://lh3.googleusercontent.com/aida-public/AB6AXuBnL8q_KkKo5Zi5VoxcxzycrSt4lkiv-ZEldyK0qLnqvnNJgAI18mVpuV3YiZep8yuZGbu71VY0fxvyija031i5kiQQUAJ36Uqkkxi1Q4VJhF6CLlm6G6_b7ADtf0oOml8Yb0iyskMbt3RPrNTLpLJ-51U0Gcavj-w77FFZBUvzTXpydTS8yxf5GXJAUS-kS8_-Btq5JDrezeQf3K9Kh5VnHF3h6C8kNxIcL7ZoEM679z3Du-QZ3Bn_zKqNDWXEnfyr8nURQjHyKOo_",
-                    "https://lh3.googleusercontent.com/aida-public/AB6AXuBnL8q_KkKo5Zi5VoxcxzycrSt4lkiv-ZEldyK0qLnqvnNJgAI18mVpuV3YiZep8yuZGbu71VY0fxvyija031i5kiQQUAJ36Uqkkxi1Q4VJhF6CLlm6G6_b7ADtf0oOml8Yb0iyskMbt3RPrNTLpLJ-51U0Gcavj-w77FFZBUvzTXpydTS8yxf5GXJAUS-kS8_-Btq5JDrezeQf3K9Kh5VnHF3h6C8kNxIcL7ZoEM679z3Du-QZ3Bn_zKqNDWXEnfyr8nURQjHyKOo_",
-                    "https://lh3.googleusercontent.com/aida-public/AB6AXuBnL8q_KkKo5Zi5VoxcxzycrSt4lkiv-ZEldyK0qLnqvnNJgAI18mVpuV3YiZep8yuZGbu71VY0fxvyija031i5kiQQUAJ36Uqkkxi1Q4VJhF6CLlm6G6_b7ADtf0oOml8Yb0iyskMbt3RPrNTLpLJ-51U0Gcavj-w77FFZBUvzTXpydTS8yxf5GXJAUS-kS8_-Btq5JDrezeQf3K9Kh5VnHF3h6C8kNxIcL7ZoEM679z3Du-QZ3Bn_zKqNDWXEnfyr8nURQjHyKOo_"
-                ],
-            dimensions: { height: '32"', width: '28"', depth: '30"' },
-            tags: ['Velvet', 'Armchair', 'Green', 'Vintage', 'Comfortable'],
-            description: passedProduct?.title ? `Excellent quality ${passedProduct.title}. A beautiful piece for any home.` : 'Beautiful mid-century modern style velvet armchair in a rich emerald green. Perfect accent piece for a living room or reading nook.',
+            images: [passedProduct?.image].filter(Boolean),
+            dimensions: { height: '32"', width: '28"', depth: '30"' }, // Default dimensions
+            tags: Array.isArray(passedProduct?.tags) ? passedProduct.tags : [],
+            description: passedProduct?.description || '',
             mapImage: "https://lh3.googleusercontent.com/aida-public/AB6AXuAv416prnqJ93spioHVTa2lPQ4Y4I9NxkbED4cysFMsqRvAgm1aKCTjGWjub7grvVkyhcGsis7Gn_c0psDoV9M1EfEHdqybSjbMMxalTY6ckvZzAXDxDKpy7OuEL0R6vT-Jld6q9WFtaA2ZEhPqO7aJsTzJMi47Sv_iuyop0eWo3IeToaGqdYatdZznm-sNp2_kZAfkVvfhPzbPpw6BGSK8wpLc9IaMOuvxVo0o7BzFs83BoA541SswaC5laH-YfHUFTCSGOVm56rJE"
         };
-        return baseProduct;
-    }, [passedProduct]);
+    }, [passedProduct, t]);
 
     const handleScroll = (e) => {
         const width = e.target.offsetWidth;
