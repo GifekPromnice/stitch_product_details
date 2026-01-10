@@ -16,9 +16,11 @@ const Auth = () => {
         setLoading(true);
         setError(null);
 
+        console.log(`Starting Auth: Mode=${mode}, Email=${email}`);
+
         try {
             if (mode === 'signup') {
-                const { error } = await supabase.auth.signUp({
+                const result = await supabase.auth.signUp({
                     email,
                     password,
                     options: {
@@ -27,19 +29,24 @@ const Auth = () => {
                         },
                     },
                 });
-                if (error) throw error;
-                // You might want to show a message to check email for verification
+                console.log('SignUp Result:', result);
+                if (result.error) throw result.error;
+
                 alert('Success! Check your email to verify your account.');
             } else {
-                const { error } = await supabase.auth.signInWithPassword({
+                const result = await supabase.auth.signInWithPassword({
                     email,
                     password,
                 });
-                if (error) throw error;
+                console.log('SignIn Result:', result);
+                if (result.error) throw result.error;
+
                 navigate('/home');
             }
         } catch (err) {
-            setError(err.message);
+            console.error('Auth Error Full Object:', err);
+            console.error('Auth Error Message:', err.message);
+            setError(err.message || "An unexpected error occurred");
         } finally {
             setLoading(false);
         }
