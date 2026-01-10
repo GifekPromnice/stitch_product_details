@@ -3,15 +3,20 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useMemo, useState } from 'react';
 import { useSettings } from '../context/SettingsContext';
 
+import { supabase } from '../supabaseClient';
+import { useAuth } from '../context/AuthContext';
+
 const Checkout = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const { user } = useAuth();
     const { t, formatPrice } = useSettings();
 
     const passedProduct = location.state?.product;
 
     const [deliveryMethod, setDeliveryMethod] = useState('courier');
     const [paymentMethod, setPaymentMethod] = useState('credit_card');
+    const [isProcessing, setIsProcessing] = useState(false);
 
     // Use passed data or fallback to mock
     const product = useMemo(() => {
@@ -36,6 +41,46 @@ const Checkout = () => {
             total: subtotal + delivery + service
         };
     }, [product, deliveryMethod]);
+
+    const handlePlaceOrder = async () => {
+        if (!user) {
+            alert('You must be logged in to place an order.');
+            navigate('/auth');
+            return;
+        }
+
+        setIsProcessing(true);
+
+        try {
+            const orderData = {
+                user_id: user.id,
+                total_amount: fees.total,
+                status: 'paid', // Simulating successful payment
+                items: [{
+                    title: product.title,
+                    price: product.price,
+                    image: product.image,
+                    quantity: 1
+                }]
+            };
+
+            const { data, error } = await supabase
+                .from('orders')
+                .insert([orderData])
+                .select()
+                .single();
+
+            if (error) throw error;
+
+            navigate('/order-confirmation', { state: { orderId: data.id } });
+
+        } catch (error) {
+            console.error('Error placing order:', error);
+            alert('Failed to place order: ' + error.message);
+        } finally {
+            setIsProcessing(false);
+        }
+    };
 
     return (
         <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden bg-background-light dark:bg-background-dark animate-in fade-in duration-500 pb-32">
@@ -257,10 +302,17 @@ const Checkout = () => {
                         <span className="text-xs text-gray-500 dark:text-gray-400">{t('checkout.totalAmount')}</span>
                         <span className="text-xl font-bold">{formatPrice(fees.total)}</span>
                     </div>
-                    <button onClick={() => navigate('/order-confirmation')}
-                        className="flex-1 bg-primary hover:bg-primary/90 active:scale-[0.98] transition-all text-white font-bold h-14 rounded-full shadow-lg shadow-primary/25 flex items-center justify-center gap-2 text-lg">
-                        <span>{t('checkout.placeOrder')}</span>
-                        <span className="material-symbols-outlined text-xl">arrow_forward</span>
+                    <button onClick={handlePlaceOrder}
+                        disabled={isProcessing}
+                        className={`flex-1 bg-primary hover:bg-primary/90 active:scale-[0.98] transition-all text-white font-bold h-14 rounded-full shadow-lg shadow-primary/25 flex items-center justify-center gap-2 text-lg ${isProcessing ? 'opacity-70 cursor-not-allowed' : ''}`}>
+                        {isProcessing ? (
+                            <span className="material-symbols-outlined animate-spin">progress_activity</span>
+                        ) : (
+                            <>
+                                <span>{t('checkout.placeOrder')}</span>
+                                <span className="material-symbols-outlined text-xl">arrow_forward</span>
+                            </>
+                        )}
                     </button>
                 </div>
             </div>

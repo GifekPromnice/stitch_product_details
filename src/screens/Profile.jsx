@@ -11,6 +11,7 @@ const Profile = () => {
             items: [
                 { name: t('profile.personalInfo'), icon: 'person', onClick: () => navigate('/personal-information') },
                 { name: t('profile.passwordSecurity'), icon: 'lock', onClick: () => navigate('/password-security') },
+                { name: 'Order History', icon: 'receipt_long', onClick: () => navigate('/orders') },
                 { name: t('profile.paymentMethods'), icon: 'credit_card', onClick: () => navigate('/wallet') },
             ]
         },

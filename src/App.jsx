@@ -14,6 +14,7 @@ import AddListing from './screens/AddListing';
 import Negotiate from './screens/Negotiate';
 import PersonalInformation from './screens/PersonalInformation';
 import PasswordSecurity from './screens/PasswordSecurity';
+import OrderHistory from './screens/OrderHistory';
 import Layout from './components/Layout';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -44,6 +45,7 @@ function App() {
                         <Route path="/negotiate/:id" element={<ProtectedRoute><Negotiate /></ProtectedRoute>} />
                         <Route path="/personal-information" element={<ProtectedRoute><PersonalInformation /></ProtectedRoute>} />
                         <Route path="/password-security" element={<ProtectedRoute><PasswordSecurity /></ProtectedRoute>} />
+                        <Route path="/orders" element={<ProtectedRoute><OrderHistory /></ProtectedRoute>} />
 
                         {/* Fallback */}
                         <Route path="*" element={<div className="p-10 text-center">Screen in development</div>} />

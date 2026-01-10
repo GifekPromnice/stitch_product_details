@@ -1,9 +1,13 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useSettings } from '../context/SettingsContext';
 
 const OrderConfirmation = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    const { t } = useSettings();
 
-    const orderId = "AGAIN-8921";
+    const orderId = location.state?.orderId || "7821-9231";
+    const shortOrderId = orderId.slice(0, 8).toUpperCase();
     const product = {
         title: 'Eames Molded Plastic Chair',
         price: 150.00,
@@ -83,6 +87,10 @@ const OrderConfirmation = () => {
                             <p className="text-gray-900 dark:text-white text-sm font-medium leading-none">Shipped</p>
                             <p className="text-gray-500 dark:text-gray-500 text-xs mt-1">Est. Oct 22</p>
                         </div>
+                    </div>
+                    <div className="flex items-center gap-2 bg-stone-100 dark:bg-stone-800 px-4 py-2 rounded-full">
+                        <span className="text-stone-500 dark:text-stone-400 font-medium">Order ID:</span>
+                        <span className="font-mono font-bold text-stone-900 dark:text-white tracking-wider">#{shortOrderId}</span>
                     </div>
                 </div>
             </main>
