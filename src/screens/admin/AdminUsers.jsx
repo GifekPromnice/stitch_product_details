@@ -9,6 +9,7 @@ const AdminUsers = () => {
     const [page, setPage] = useState(1);
     const itemsPerPage = 10;
     const [totalCount, setTotalCount] = useState(0);
+    const [dbError, setDbError] = useState(false);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalMode, setModalMode] = useState('add');
@@ -18,12 +19,19 @@ const AdminUsers = () => {
     const fetchUsers = async () => {
         setLoading(true);
         try {
+            // First, get the session to make sure we're authenticated
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) return;
+
             let query = supabase
                 .from('profiles')
                 .select('*', { count: 'exact' });
 
+            // Apply filters only if searchQuery exists
             if (searchQuery) {
-                query = query.or(`username.ilike.%${searchQuery}%,full_name.ilike.%${searchQuery}%,email.ilike.%${searchQuery}%`);
+                // If 'email' column doesn't exist yet, this will error. 
+                // We'll try a safer search first and catch specific errors if possible.
+                query = query.or(`username.ilike.%${searchQuery}%,full_name.ilike.%${searchQuery}%`);
             }
 
             if (filterStatus !== 'All Statuses') {
@@ -37,12 +45,21 @@ const AdminUsers = () => {
                 .order('created_at', { ascending: false })
                 .range(from, to);
 
-            if (error) throw error;
+            if (error) {
+                console.error("Supabase error fetching users:", error);
+                if (error.code === '42703') {
+                    setDbError(true);
+                }
+                throw error;
+            }
 
             setUsers(data || []);
             setTotalCount(count || 0);
+            setDbError(false);
         } catch (err) {
-            console.error("Error fetching users:", err);
+            console.error("Error in fetchUsers:", err);
+            // Optionally set users to empty to avoid crashing child components
+            setUsers([]);
         } finally {
             setLoading(false);
         }
@@ -137,6 +154,16 @@ const AdminUsers = () => {
                     Add New User
                 </button>
             </header>
+
+            {dbError && (
+                <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3 text-red-800 animate-in fade-in slide-in-from-top-2">
+                    <span className="material-symbols-outlined text-red-500">warning</span>
+                    <div className="text-sm">
+                        <p className="font-bold">Database Schema Incomplete</p>
+                        <p className="opacity-90">Required columns (status, role) are missing from the profiles table. Please run the <code className="bg-red-100 px-1 rounded">FIX_DATABASE_COLUMNS.sql</code> script in your Supabase SQL Editor.</p>
+                    </div>
+                </div>
+            )}
 
             {/* Filters */}
             <section className="bg-white border border-gray-200 rounded-lg p-3 mb-6 flex flex-wrap items-center gap-3 shadow-sm">

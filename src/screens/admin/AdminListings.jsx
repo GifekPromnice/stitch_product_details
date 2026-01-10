@@ -12,6 +12,7 @@ const AdminListings = () => {
     const [page, setPage] = useState(1);
     const itemsPerPage = 10;
     const [totalCount, setTotalCount] = useState(0);
+    const [dbError, setDbError] = useState(false);
 
     // Bulk Actions State
     const [selectedIds, setSelectedIds] = useState([]);
@@ -30,17 +31,24 @@ const AdminListings = () => {
     const fetchListings = async () => {
         setLoading(true);
         try {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) return;
+
             let query = supabase
                 .from('products')
                 .select('*', { count: 'exact' });
 
             // Filters
+            // Defense: Only apply status filter if it's not the default
+            // If the column doesn't exist, this will cause error 42703
             if (filterStatus !== 'All Status') {
                 query = query.eq('status', filterStatus.toLowerCase());
             }
+
             if (filterCategory !== 'All Categories') {
                 query = query.eq('category', filterCategory.toLowerCase());
             }
+
             if (debouncedSearch) {
                 query = query.ilike('title', `%${debouncedSearch}%`);
             }
@@ -53,32 +61,39 @@ const AdminListings = () => {
                 .order('created_at', { ascending: false })
                 .range(from, to);
 
-            if (error) throw error;
+            if (error) {
+                console.error("Listings fetch error:", error);
+                if (error.code === '42703') {
+                    setDbError(true);
+                }
+                throw error;
+            }
+
+            setDbError(false);
 
             // Fetch Profiles manually
             if (productsData && productsData.length > 0) {
                 const userIds = [...new Set(productsData.map(p => p.user_id).filter(Boolean))];
                 if (userIds.length > 0) {
-                    const { data: profilesData } = await supabase
+                    const { data: profilesData, error: profilesError } = await supabase
                         .from('profiles')
                         .select('id, full_name, username')
                         .in('id', userIds);
 
                     const profileMap = {};
-                    profilesData?.forEach(p => {
-                        // Prioritize username, fallback to full_name, then 'Unknown'
-                        profileMap[p.id] = p.username ? `${p.username} (${p.full_name})` : (p.full_name || 'Unknown');
-                    });
+                    if (!profilesError && profilesData) {
+                        profilesData.forEach(p => {
+                            profileMap[p.id] = p.username ? `${p.username} (${p.full_name || ''})` : (p.full_name || 'Anonymous');
+                        });
+                    }
 
                     const productsWithNames = productsData.map(p => ({
                         ...p,
                         sellerName: profileMap[p.user_id] || 'Unknown User'
                     }));
-                    setListings(productsWithNames);
+                    setListings(productsWithNames || []);
                 } else {
-                    // No user ids found (all null)
-                    const productsWithNames = productsData.map(p => ({ ...p, sellerName: 'Unknown User' }));
-                    setListings(productsWithNames);
+                    setListings(productsData.map(p => ({ ...p, sellerName: 'Unknown User' })));
                 }
             } else {
                 setListings([]);
@@ -87,7 +102,8 @@ const AdminListings = () => {
             setTotalCount(count || 0);
 
         } catch (err) {
-            console.error("Error fetching listings:", err);
+            console.error("Error in fetchListings:", err);
+            setListings([]);
         } finally {
             setLoading(false);
         }
@@ -183,6 +199,15 @@ const AdminListings = () => {
                         <h1 className="text-2xl font-bold text-gray-900 mb-1">Listings Management</h1>
                         <p className="text-sm text-gray-500">Manage, moderate and filter all marketplace listings.</p>
                     </div>
+                    {dbError && (
+                        <div className="flex-1 max-w-md p-3 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3 text-red-800 animate-in fade-in slide-in-from-right-2">
+                            <span className="material-symbols-outlined text-red-500">warning</span>
+                            <div className="text-[11px]">
+                                <p className="font-bold">Schema Fix Required</p>
+                                <p className="opacity-90">Please run <code className="bg-red-100 px-1 rounded">FIX_DATABASE_COLUMNS.sql</code> in Supabase.</p>
+                            </div>
+                        </div>
+                    )}
                     {selectedIds.length > 0 && (
                         <div className="flex items-center gap-1 bg-[#1A1A1A] text-white px-3 py-1.5 rounded-lg shadow-lg animate-in slide-in-from-bottom-2">
                             <span className="text-[11px] font-bold px-2 border-r border-gray-700 mr-1">{selectedIds.length} Selected</span>
@@ -293,14 +318,14 @@ const AdminListings = () => {
                                                 </div>
                                                 <div>
                                                     <p className="font-bold text-gray-900 line-clamp-1 max-w-[240px]">{listing.title}</p>
-                                                    <p className="text-[10px] text-gray-400 mt-0.5 font-medium uppercase tracking-wider">ID: #{listing.id.slice(0, 8)}</p>
+                                                    <p className="text-[10px] text-gray-400 mt-0.5 font-medium uppercase tracking-wider">ID: #{listing.id ? String(listing.id).slice(0, 8) : 'N/A'}</p>
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="px-6 py-4">
                                             <div className="flex items-center gap-2">
                                                 <div className="w-7 h-7 rounded-md bg-indigo-50 text-indigo-600 flex items-center justify-center text-[10px] font-bold uppercase border border-indigo-100">
-                                                    {listing.sellerName ? listing.sellerName.slice(0, 1) : 'U'}
+                                                    {listing.sellerName ? String(listing.sellerName).slice(0, 1) : 'U'}
                                                 </div>
                                                 <span className="text-xs font-semibold text-gray-700">{listing.sellerName}</span>
                                             </div>

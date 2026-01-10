@@ -9,6 +9,7 @@ const AdminLayout = () => {
     const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024);
     const navigate = useNavigate();
     const location = useLocation();
+    const { language, toggleLanguage } = useSettings();
 
     // 1. Desktop Check
     useEffect(() => {
@@ -81,8 +82,6 @@ const AdminLayout = () => {
         { name: 'Transactions', icon: 'payments', path: '/admin/transactions' },
         { name: 'Reports', icon: 'analytics', path: '/admin/reports' },
     ];
-
-    const { language, toggleLanguage } = useSettings();
 
     const handleLogout = async () => {
         await supabase.auth.signOut();
