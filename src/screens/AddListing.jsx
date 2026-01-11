@@ -126,6 +126,37 @@ const AddListing = () => {
         fileInputRef.current.click();
     };
 
+    const handleImageUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setImage(reader.result);
+            setIsAnalyzing(true);
+            analyzeImageWithAI(file).then(data => {
+                if (data) {
+                    setTitle(data.title || '');
+                    setPrice(data.price || '');
+                    setDescription(data.description || '');
+                    setCategory(data.category || 'Tables');
+                    setCondition(data.condition || 'Good');
+                    setColor(data.color || 'Brown');
+                    setDimensions({
+                        height: data.dimensions?.height || '',
+                        width: data.dimensions?.width || '',
+                        depth: data.dimensions?.depth || ''
+                    });
+                }
+                setIsAnalyzing(false);
+            }).catch(err => {
+                console.error("AI Analysis failed", err);
+                setIsAnalyzing(false);
+            });
+        };
+        reader.readAsDataURL(file);
+    };
+
     return (
         <div className="relative flex min-h-screen w-full flex-col bg-background-light dark:bg-background-dark text-neutral-900 dark:text-gray-100 antialiased selection:bg-primary/30 pb-24 mx-auto max-w-md shadow-2xl overflow-hidden">
             {/* Header */}
