@@ -157,6 +157,20 @@ const AddListing = () => {
         reader.readAsDataURL(file);
     };
 
+    const addTag = (e) => {
+        if (e.key === 'Enter' && newTag.trim() !== '') {
+            e.preventDefault();
+            if (!tags.includes(newTag.trim())) {
+                setTags([...tags, newTag.trim()]);
+            }
+            setNewTag('');
+        }
+    };
+
+    const removeTag = (tagToRemove) => {
+        setTags(tags.filter(tag => tag !== tagToRemove));
+    };
+
     return (
         <div className="relative flex min-h-screen w-full flex-col bg-background-light dark:bg-background-dark text-neutral-900 dark:text-gray-100 antialiased selection:bg-primary/30 pb-24 mx-auto max-w-md shadow-2xl overflow-hidden">
             {/* Header */}
