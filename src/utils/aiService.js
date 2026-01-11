@@ -91,7 +91,10 @@ export const analyzeImageWithAI = async (imageFile) => {
         }
 
         console.log("AI DEBUG: Raw Response:", responseText);
-        return JSON.parse(responseText);
+
+        // Clean markdown backticks if present
+        const cleanJson = responseText.replace(/```json|```/g, '').trim();
+        return JSON.parse(cleanJson);
 
     } catch (error) {
         console.error("AI DEBUG: Error:", error);
