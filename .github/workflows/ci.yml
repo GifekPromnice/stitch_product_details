@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main", "dk-test" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build
+      run: npm run build
+      env:
+        # Dummy values for build process (secrets should be configured in repo settings for prod)
+        VITE_SUPABASE_URL: "https://placeholder.supabase.co"
+        VITE_SUPABASE_ANON_KEY: "placeholder-key"
+
+  docker-build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          tags: stitch_product_details:latest
+          build-args: |
+            VITE_SUPABASE_URL=https://placeholder.supabase.co
+            VITE_SUPABASE_ANON_KEY=placeholder-key
