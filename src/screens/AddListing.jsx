@@ -33,55 +33,7 @@ const AddListing = () => {
     const [width, setWidth] = useState(editingProduct?.width ? String(editingProduct.width) : '');
     const [depth, setDepth] = useState(editingProduct?.depth ? String(editingProduct.depth) : '');
 
-    const triggerFileInput = () => {
-        fileInputRef.current.click();
-    };
 
-    const handleImageUpload = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            setImageFile(file);
-            const objectUrl = URL.createObjectURL(file);
-            setImage(objectUrl);
-
-            // Optional: Auto-analyze image with AI
-            // analyzeImage(file); 
-        }
-    };
-
-    const addTag = (e) => {
-        if (e.key === 'Enter' && newTag.trim() !== '') {
-            e.preventDefault();
-            if (!tags.includes(newTag.trim())) {
-                setTags([...tags, newTag.trim()]);
-            }
-            setNewTag('');
-        }
-    };
-
-    const removeTag = (tagToRemove) => {
-        setTags(tags.filter(tag => tag !== tagToRemove));
-    };
-
-    const analyzeImage = async (file) => {
-        setIsAnalyzing(true);
-        try {
-            const analysis = await analyzeImageWithAI(file);
-            if (analysis) {
-                if (analysis.title && !title) setTitle(analysis.title);
-                if (analysis.category && category === 'sofas') setCategory(analysis.category);
-                if (analysis.description && !description) setDescription(analysis.description);
-                if (analysis.tags) {
-                    const uniqueTags = [...new Set([...tags, ...analysis.tags])];
-                    setTags(uniqueTags);
-                }
-            }
-        } catch (error) {
-            console.error("AI Analysis failed:", error);
-        } finally {
-            setIsAnalyzing(false);
-        }
-    };
 
     const handlePublish = async () => {
         if (!user) {
@@ -178,29 +130,31 @@ const AddListing = () => {
         const file = e.target.files[0];
         if (!file) return;
 
+        setImageFile(file);
+
         const reader = new FileReader();
         reader.onloadend = () => {
             setImage(reader.result);
             setIsAnalyzing(true);
             analyzeImageWithAI(file).then(data => {
                 if (data) {
-                    setTitle(data.title || '');
-                    setPrice(data.price || '');
-                    setDescription(data.description || '');
-                    setCategory(data.category || 'Tables');
-                    setCondition(data.condition || 'Good');
-                    setColor(data.color || 'Brown');
-                    setDimensions({
-                        height: data.height || '',
-                        width: data.width || '',
-                        depth: data.depth || ''
-                    });
-                    setTags(data.tags || []);
+                    if (data.title) setTitle(data.title);
+                    if (data.price) setPrice(String(data.price));
+                    if (data.description) setDescription(data.description);
+                    if (data.category) setCategory(data.category);
+
+                    if (data.height) setHeight(String(data.height));
+                    if (data.width) setWidth(String(data.width));
+                    if (data.depth) setDepth(String(data.depth));
+
+                    if (data.tags) {
+                        const uniqueTags = [...new Set([...tags, ...data.tags])];
+                        setTags(uniqueTags);
+                    }
                 }
                 setIsAnalyzing(false);
             }).catch(err => {
                 console.error("AI Analysis failed", err);
-                alert("AI Analysis failed: " + err.message);
                 setIsAnalyzing(false);
             });
         };
