@@ -92,7 +92,16 @@ export const analyzeImageWithAI = async (imageFile) => {
 
         console.log("AI DEBUG: Raw Response:", responseText);
 
-        // Clean markdown backticks if present
+        // Robust JSON extraction
+        const jsonStart = responseText.indexOf('{');
+        const jsonEnd = responseText.lastIndexOf('}');
+
+        if (jsonStart !== -1 && jsonEnd !== -1) {
+            const jsonString = responseText.substring(jsonStart, jsonEnd + 1);
+            return JSON.parse(jsonString);
+        }
+
+        // Fallback or if no braces found (unlikely with this prompt)
         const cleanJson = responseText.replace(/```json|```/g, '').trim();
         return JSON.parse(cleanJson);
 
