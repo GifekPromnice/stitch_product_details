@@ -147,6 +147,7 @@ const AddListing = () => {
                         width: data.dimensions?.width || '',
                         depth: data.dimensions?.depth || ''
                     });
+                    setTags(data.tags || []);
                 }
                 setIsAnalyzing(false);
             }).catch(err => {
