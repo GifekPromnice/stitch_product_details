@@ -143,15 +143,16 @@ const AddListing = () => {
                     setCondition(data.condition || 'Good');
                     setColor(data.color || 'Brown');
                     setDimensions({
-                        height: data.dimensions?.height || '',
-                        width: data.dimensions?.width || '',
-                        depth: data.dimensions?.depth || ''
+                        height: data.height || '',
+                        width: data.width || '',
+                        depth: data.depth || ''
                     });
                     setTags(data.tags || []);
                 }
                 setIsAnalyzing(false);
             }).catch(err => {
                 console.error("AI Analysis failed", err);
+                alert("AI Analysis failed: " + err.message);
                 setIsAnalyzing(false);
             });
         };
