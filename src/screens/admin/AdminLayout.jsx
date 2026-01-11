@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Outlet, useNavigate, useLocation, Link } from 'react-router-dom';
 import { supabase } from '../../supabaseClient';
-import { useSettings } from '../../context/SettingsContext';
+import { useSettings } from '../../context/SettingsContext.jsx';
 
 const AdminLayout = () => {
     const [user, setUser] = useState(null);
@@ -23,21 +23,32 @@ const AdminLayout = () => {
     // 2. Auth Check
     useEffect(() => {
         const checkAuth = async () => {
-            const { data: { session } } = await supabase.auth.getSession();
+            // Check for persistent Admin Token
+            const adminToken = localStorage.getItem('SB_ADMIN_TOKEN');
+            console.log("AdminLayout: Checking token", adminToken);
 
-            if (!session) {
+            if (!adminToken) {
+                // If no token, check if we have a supabase session that is an admin (first login case)
+                // But AdminLogin sets the token, so we strictly require it here to maintain separation.
+                console.log("AdminLayout: No token found, redirecting");
                 navigate('/admin/login');
                 return;
             }
 
-            const email = session.user.email;
-            if (email === 'admin@again.app' || email === 'admin@gifek.pl' || email.includes('admin')) {
-                setUser(session.user);
-            } else {
-                alert("Access Denied: You are not an administrator.");
-                await supabase.auth.signOut();
+            try {
+                const session = JSON.parse(adminToken);
+                // console.log("AdminLayout: Parsed session", session); // Reduce noise if needed
+                if (session && session.user && session.user.email) {
+                    setUser(session.user);
+                } else {
+                    throw new Error("Invalid token structure: missing user or email");
+                }
+            } catch (e) {
+                console.error("Auth Error in AdminLayout:", e.message);
+                localStorage.removeItem('SB_ADMIN_TOKEN');
                 navigate('/admin/login');
             }
+
             setLoading(false);
         };
 
@@ -85,7 +96,8 @@ const AdminLayout = () => {
     ];
 
     const handleLogout = async () => {
-        await supabase.auth.signOut();
+        // await supabase.auth.signOut(); // Do not sign out of Supabase to catch client session
+        localStorage.removeItem('SB_ADMIN_TOKEN');
         navigate('/admin/login');
     };
 

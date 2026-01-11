@@ -1,9 +1,11 @@
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
+import { useAuth } from '../context/AuthContext';
 
 const Auth = () => {
     const navigate = useNavigate();
+    const { user } = useAuth(); // Get user from context
     const [mode, setMode] = useState('login'); // 'login' or 'signup'
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -13,6 +15,12 @@ const Auth = () => {
     const [address, setAddress] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+
+    useEffect(() => {
+        if (user) {
+            navigate('/home');
+        }
+    }, [user, navigate]);
 
     const handleAuth = async (e) => {
         e.preventDefault();

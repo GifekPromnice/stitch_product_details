@@ -16,14 +16,41 @@ const OrderHistory = () => {
             if (!user) return;
 
             try {
-                const { data, error } = await supabase
+                // 1. Fetch Orders
+                const { data: ordersData, error } = await supabase
                     .from('orders')
                     .select('*')
                     .eq('user_id', user.id)
                     .order('created_at', { ascending: false });
 
                 if (error) throw error;
-                setOrders(data || []);
+
+                let enrichedOrders = ordersData || [];
+
+                if (enrichedOrders.length > 0) {
+                    // 2. Fetch Product Details
+                    const productIds = [...new Set(enrichedOrders.map(o => o.product_id).filter(Boolean))];
+
+                    if (productIds.length > 0) {
+                        const { data: productsData } = await supabase
+                            .from('products')
+                            .select('id, title, price, image')
+                            .in('id', productIds);
+
+                        // Join product data
+                        enrichedOrders = enrichedOrders.map(order => {
+                            const product = productsData?.find(p => p.id === order.product_id);
+                            return {
+                                ...order,
+                                product_title: product?.title || 'Unknown Product',
+                                product_image: product?.image,
+                                product_price: product?.price
+                            };
+                        });
+                    }
+                }
+
+                setOrders(enrichedOrders);
             } catch (error) {
                 console.error('Error fetching orders:', error);
             } finally {
@@ -84,7 +111,7 @@ const OrderHistory = () => {
                             <div key={order.id} className="bg-white dark:bg-[#232524] rounded-2xl p-4 shadow-sm border border-neutral-100 dark:border-neutral-800">
                                 <div className="flex justify-between items-start mb-3">
                                     <div className="flex flex-col">
-                                        <span className="text-xs text-neutral-500 font-medium">Order #{order.id.slice(0, 8)}</span>
+                                        <span className="text-xs text-neutral-500 font-medium">Order #{order.id}</span>
                                         <span className="text-sm font-semibold mt-1">
                                             {new Date(order.created_at).toLocaleDateString()}
                                         </span>
@@ -94,23 +121,22 @@ const OrderHistory = () => {
                                     </span>
                                 </div>
 
-                                <div className="border-t border-neutral-100 dark:border-neutral-700 py-3 flex flex-col gap-2">
-                                    {order.items && order.items.map((item, idx) => (
-                                        <div key={idx} className="flex justify-between items-center text-sm">
-                                            <span className="text-neutral-700 dark:text-neutral-300 truncate max-w-[200px]">
-                                                {item.quantity}x {item.title}
-                                            </span>
-                                            <span className="font-medium">
-                                                {currency} {item.price * item.quantity}
-                                            </span>
+                                <div className="border-t border-neutral-100 dark:border-neutral-700 py-3 flex gap-3">
+                                    {order.product_image && (
+                                        <div className="w-16 h-16 rounded-lg bg-gray-100 overflow-hidden shrink-0">
+                                            <img src={order.product_image} alt={order.product_title} className="w-full h-full object-cover" />
                                         </div>
-                                    ))}
+                                    )}
+                                    <div className="flex flex-col justify-center">
+                                        <p className="font-semibold text-neutral-900 dark:text-neutral-100 line-clamp-2">{order.product_title}</p>
+                                        <p className="text-sm text-neutral-500 mt-1">Qty: 1</p>
+                                    </div>
                                 </div>
 
                                 <div className="border-t border-neutral-100 dark:border-neutral-700 pt-3 flex justify-between items-center">
                                     <span className="text-sm font-medium text-neutral-500">Total Amount</span>
                                     <span className="text-lg font-bold text-primary">
-                                        {currency} {order.total_amount}
+                                        {formatPrice(order.amount)}
                                     </span>
                                 </div>
                             </div>

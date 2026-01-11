@@ -1,4 +1,4 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const ProtectedRoute = ({ children }) => {
@@ -8,7 +8,8 @@ const ProtectedRoute = ({ children }) => {
         return <Navigate to="/auth" replace />;
     }
 
-    return children;
+    // Support both wrapper usage and Layout Route usage
+    return children ? children : <Outlet />;
 };
 
 export default ProtectedRoute;

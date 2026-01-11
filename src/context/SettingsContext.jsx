@@ -7,16 +7,24 @@ export const useSettings = () => useContext(SettingsContext);
 export const SettingsProvider = ({ children }) => {
     // Theme State
     const [theme, setTheme] = useState(() => {
-        if (typeof window !== 'undefined') {
-            return localStorage.getItem('theme') || 'light';
+        try {
+            if (typeof window !== 'undefined') {
+                return localStorage.getItem('theme') || 'light';
+            }
+        } catch (e) {
+            console.error("Theme storage error:", e);
         }
         return 'light';
     });
 
     // Language State ('pl' is default)
     const [language, setLanguage] = useState(() => {
-        if (typeof window !== 'undefined') {
-            return localStorage.getItem('language') || 'pl';
+        try {
+            if (typeof window !== 'undefined') {
+                return localStorage.getItem('language') || 'pl';
+            }
+        } catch (e) {
+            console.error("Language storage error:", e);
         }
         return 'pl';
     });
@@ -106,19 +114,7 @@ export const SettingsProvider = ({ children }) => {
             'checkout.payment.payu': 'PayU',
             'checkout.payment.transfer': 'Classic Transfer',
             'checkout.payment.cod': 'Cash on Delivery',
-            'checkout.title': 'Checkout',
-            'checkout.shippingAddress': 'Shipping Address',
-            'checkout.deliveryMethod': 'Delivery Method',
-            'checkout.paymentMethod': 'Payment Method',
-            'checkout.subtotal': 'Subtotal',
-            'checkout.deliveryFee': 'Delivery Fee',
-            'checkout.serviceFee': 'Service Fee',
-            'checkout.free': 'Free',
-            'checkout.address.home': 'Home',
-            'checkout.address.edit': 'Edit',
-            'checkout.quantity': 'Quantity',
-            'checkout.totalAmount': 'Total Amount',
-            'checkout.placeOrder': 'Place Order',
+            'checkout.payment.cod': 'Cash on Delivery',
             'checkout.step': 'Step 2/3',
 
             // Generic
@@ -332,27 +328,7 @@ export const SettingsProvider = ({ children }) => {
             'favorites.startExploring': 'Zacznij Odkrywać',
 
             // Checkout
-            'checkout.title': 'Podsumowanie',
-            'checkout.orderSummary': 'Zamówienie',
-            'checkout.shippingAddress': 'Adres Dostawy',
-            'checkout.deliveryMethod': 'Metoda Dostawy',
-            'checkout.paymentMethod': 'Metoda Płatności',
-            'checkout.total': 'Razem',
-            'checkout.placeOrder': 'Złóż Zamówienie',
-            'checkout.delivery.courier': 'Kurier',
-            'checkout.delivery.furgonetka': 'Furgonetka.pl',
-            'checkout.delivery.pickup': 'Odbiór Osobisty',
-            'checkout.delivery.estimate': 'Szacowana cena',
-            'checkout.delivery.time': 'Dostawa do 24 Paź', // Static for demo
-            'checkout.delivery.distance': '15 km stąd',
-            'checkout.payment.card': 'Karta Kredytowa',
-            'checkout.payment.payu': 'PayU',
-            'checkout.payment.transfer': 'Przelew Tradycyjny',
             'checkout.payment.cod': 'Za Pobraniem',
-            'checkout.title': 'Podsumowanie',
-            'checkout.shippingAddress': 'Adres Dostawy',
-            'checkout.deliveryMethod': 'Metoda Dostawy',
-            'checkout.paymentMethod': 'Metoda Płatności',
             'checkout.subtotal': 'Suma częściowa',
             'checkout.deliveryFee': 'Dostawa',
             'checkout.serviceFee': 'Opłata serwisowa',

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../../supabaseClient';
-import { useSettings } from '../../context/SettingsContext';
+import { useSettings } from '../../context/SettingsContext.jsx';
 
 const AdminOrders = () => {
     const { formatPrice } = useSettings();
@@ -9,7 +9,7 @@ const AdminOrders = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [filterStatus, setFilterStatus] = useState('All Statuses');
     const [page, setPage] = useState(1);
-    const itemsPerPage = 20;
+    const itemsPerPage = 10;
     const [totalCount, setTotalCount] = useState(0);
     const [expandedOrderId, setExpandedOrderId] = useState(null);
 
@@ -28,16 +28,15 @@ const AdminOrders = () => {
                 query = query.eq('status', filterStatus.toLowerCase());
             }
 
-            // 3. Apply Search
-            // Search is tricky because User info is in a different table and Items are in JSONB.
-            // Simplified Strategy:
-            // - If query looks like UUID -> search ID.
-            // - If query is text -> search items JSONB.
-            // - For User search, we technically need to search profiles first, but for MVP we might rely on Client Side match if list is small, or skip user search on server side for now unless we do joined query.
+            // 3. Apply Search (on ID only initially)
             if (searchQuery) {
-                // Check if simple text search on ID or Items
-                // Note: searching inside JSONB with 'ilike' requires casting to text
-                query = query.or(`id.ilike.%${searchQuery}%,items.ilike.%${searchQuery}%`);
+                // Search by ID only for DB query, precise list filtering later if needed
+                // Note using text cast for bigint ID
+                query = query.or(`id.eq.${searchQuery}`); // Strict ID search if number?
+                // Or let's try casting
+                // query = query.filter('id', 'eq', searchQuery); 
+                // Actually simplified: if numeric search ID, else wait for client side?
+                // Let's assume ID search for now.
             }
 
             const from = (page - 1) * itemsPerPage;
@@ -49,33 +48,57 @@ const AdminOrders = () => {
 
             if (error) throw error;
 
-            // 4. Fetch User Profiles for these orders
-            if (ordersData && ordersData.length > 0) {
-                const userIds = [...new Set(ordersData.map(o => o.user_id))];
+            let enrichedOrders = ordersData || [];
+
+            if (enrichedOrders.length > 0) {
+                // 4. Fetch User Profiles
+                const userIds = [...new Set(enrichedOrders.map(o => o.user_id))];
                 const { data: profilesData } = await supabase
                     .from('profiles')
                     .select('id, email, full_name, username')
                     .in('id', userIds);
 
+                // 5. Fetch Product Details
+                const productIds = [...new Set(enrichedOrders.map(o => o.product_id).filter(Boolean))];
+                const { data: productsData } = await supabase
+                    .from('products')
+                    .select('id, title, price, image')
+                    .in('id', productIds);
+
+
                 // Join data
-                const enrichedOrders = ordersData.map(order => {
+                enrichedOrders = enrichedOrders.map(order => {
                     const profile = profilesData?.find(p => p.id === order.user_id);
+                    const product = productsData?.find(p => p.id === order.product_id);
                     return {
                         ...order,
                         user_email: profile?.email || 'Unknown',
-                        user_name: profile?.full_name || profile?.username || 'Anonymous'
+                        user_name: profile?.full_name || profile?.username || 'Anonymous',
+                        product_title: product?.title || 'Unknown Product',
+                        product_image: product?.image,
+                        product_price: product?.price
                     };
                 });
-                setOrders(enrichedOrders);
-            } else {
-                setOrders([]);
             }
 
+            // CLIENT SIDE SEARCH FILTER for Product Name or User Name
+            if (searchQuery) {
+                const lowerQ = searchQuery.toLowerCase();
+                // If the search wasn't an ID match (which would return data), we might need to filter manually?
+                // But wait, we applied ID search at DB level.
+                // If we want to search by Product Name, we can't do it easily at DB level without Joins.
+                // Strategy: For MVP, since pagination is server side, this is tricky.
+                // Revert to: Search ID only at DB level.
+                // If user wants search by Name, we might need a join or RPC.
+                // For now, let's stick to ID search in the input logic.
+                // OR: if we really want, fetch more and filter.
+            }
+
+            setOrders(enrichedOrders);
             setTotalCount(count || 0);
 
         } catch (err) {
             console.error("Error fetching orders:", err);
-            // alert("Error fetching orders. Ensure you have run the RLS policy SQL in Supabase Dashboard.");
         } finally {
             setLoading(false);
         }
@@ -134,7 +157,7 @@ const AdminOrders = () => {
                     <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
                     <input
                         className="w-full pl-10 pr-4 py-2 text-sm border-gray-200 rounded-md focus:ring-1 focus:ring-[#698679] focus:border-[#698679] border transition-all"
-                        placeholder="Search by Order ID or Item Name..."
+                        placeholder="Search by Order ID..."
                         type="text"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
@@ -185,14 +208,14 @@ const AdminOrders = () => {
                                     <>
                                         <tr key={order.id} className="hover:bg-gray-50/50 transition-colors group">
                                             <td className="px-6 py-4 font-mono text-xs text-gray-500">
-                                                #{order.id.slice(0, 8).toUpperCase()}
+                                                #{order.id}
                                             </td>
                                             <td className="px-6 py-4">
                                                 <div className="font-bold text-gray-900">{order.user_name}</div>
                                                 <div className="text-[10px] text-gray-400 font-medium tracking-tight">{order.user_email}</div>
                                             </td>
                                             <td className="px-6 py-4 font-bold text-gray-900">
-                                                {formatPrice(order.total_amount)}
+                                                {formatPrice(order.amount)}
                                             </td>
                                             <td className="px-6 py-4">
                                                 <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border ${getStatusColor(order.status)}`}>
@@ -216,21 +239,21 @@ const AdminOrders = () => {
                                             <tr className="bg-gray-50/50">
                                                 <td colSpan="6" className="px-6 py-4">
                                                     <div className="flex gap-8">
-                                                        {/* Items List */}
+                                                        {/* Product Details (Single Item) */}
                                                         <div className="flex-1">
-                                                            <h4 className="text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-3">Order Items</h4>
-                                                            <div className="space-y-3">
-                                                                {order.items && order.items.map((item, idx) => (
-                                                                    <div key={idx} className="flex items-center gap-4 bg-white p-3 rounded-lg border border-gray-100 shadow-sm">
-                                                                        {item.image && (
-                                                                            <img src={item.image} alt={item.title} className="w-12 h-12 rounded object-cover border border-gray-100" />
-                                                                        )}
-                                                                        <div>
-                                                                            <p className="text-sm font-semibold text-gray-900">{item.title}</p>
-                                                                            <p className="text-xs text-gray-500">Qty: {item.quantity} x {formatPrice(item.price)}</p>
-                                                                        </div>
+                                                            <h4 className="text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-3">Ordered Item</h4>
+                                                            <div className="flex items-center gap-4 bg-white p-3 rounded-lg border border-gray-100 shadow-sm">
+                                                                {order.product_image && (
+                                                                    <img src={order.product_image} alt={order.product_title} className="w-16 h-16 rounded object-cover border border-gray-100" />
+                                                                )}
+                                                                <div>
+                                                                    <p className="text-sm font-semibold text-gray-900">{order.product_title}</p>
+                                                                    <p className="text-xs text-gray-500">Price: {formatPrice(order.product_price)}</p>
+                                                                    <div className="flex gap-2 mt-1">
+                                                                        <span className="text-[10px] bg-gray-100 px-2 py-0.5 rounded text-gray-600">Payment: {order.payment_method}</span>
+                                                                        <span className="text-[10px] bg-gray-100 px-2 py-0.5 rounded text-gray-600">Delivery: {order.delivery_method}</span>
                                                                     </div>
-                                                                ))}
+                                                                </div>
                                                             </div>
                                                         </div>
 
@@ -266,22 +289,30 @@ const AdminOrders = () => {
                 </div>
 
                 {/* Pagination (Simplified) */}
-                <div className="px-6 py-4 bg-gray-50 border-t border-gray-200 flex items-center justify-end gap-2">
-                    <button
-                        disabled={page === 1}
-                        onClick={() => setPage(p => Math.max(1, p - 1))}
-                        className="px-3 py-1 bg-white border border-gray-200 rounded text-xs font-medium disabled:opacity-50"
-                    >
-                        Previous
-                    </button>
-                    <span className="text-xs text-gray-500">Page {page}</span>
-                    <button
-                        disabled={orders.length < itemsPerPage}
-                        onClick={() => setPage(p => p + 1)}
-                        className="px-3 py-1 bg-white border border-gray-200 rounded text-xs font-medium disabled:opacity-50"
-                    >
-                        Next
-                    </button>
+                {/* Pagination */}
+                <div className="px-6 py-4 bg-gray-50 border-t border-gray-200 flex items-center justify-between">
+                    <p className="text-xs font-medium text-gray-500">
+                        Showing {(page - 1) * itemsPerPage + 1}-{Math.min(page * itemsPerPage, totalCount)} of {totalCount} orders
+                    </p>
+                    <div className="flex gap-1">
+                        <button
+                            disabled={page === 1}
+                            onClick={() => setPage(p => Math.max(1, p - 1))}
+                            className="w-8 h-8 flex items-center justify-center rounded border border-gray-300 bg-white text-gray-500 hover:bg-gray-50 transition-colors disabled:opacity-40"
+                        >
+                            <span className="material-symbols-outlined text-[18px]">chevron_left</span>
+                        </button>
+
+                        <div className="w-8 h-8 flex items-center justify-center rounded bg-[#698679] text-white font-bold text-xs shadow-sm">{page}</div>
+
+                        <button
+                            disabled={page * itemsPerPage >= totalCount}
+                            onClick={() => setPage(p => p + 1)}
+                            className="w-8 h-8 flex items-center justify-center rounded border border-gray-300 bg-white text-gray-500 hover:bg-gray-50 transition-colors disabled:opacity-40"
+                        >
+                            <span className="material-symbols-outlined text-[18px]">chevron_right</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

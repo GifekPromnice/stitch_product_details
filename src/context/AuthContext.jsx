@@ -14,14 +14,16 @@ export const AuthProvider = ({ children }) => {
         // Check active sessions and sets the user
         const getSession = async () => {
             try {
-                const { data: { session }, error } = await supabase.auth.getSession();
-                if (error) console.warn('Error checking session:', error);
+                const { data: { session: fetchedSession }, error } = await supabase.auth.getSession();
+                if (error) console.warn('AuthContext: Error checking session:', error);
 
-                setSession(session);
-                setUser(session?.user ?? null);
+                console.log("AuthContext: Session Check Result:", fetchedSession ? "Active Session Found" : "No Active Session");
+                setSession(fetchedSession);
+                setUser(fetchedSession?.user ?? null);
             } catch (err) {
                 console.error('Unexpected error checking session:', err);
             } finally {
+                // Use state setter or check logic, here we just indicate done
                 setLoading(false);
             }
         };
@@ -29,7 +31,8 @@ export const AuthProvider = ({ children }) => {
         getSession();
 
         // Listen for changes on auth state (logged in, signed out, etc.)
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+            console.log(`AuthContext: Auth State Change: ${event}`, session?.user?.email);
             setSession(session);
             setUser(session?.user ?? null);
             setLoading(false);

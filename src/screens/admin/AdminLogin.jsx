@@ -25,19 +25,27 @@ const AdminLogin = () => {
 
             console.log("Admin Login Success:", data);
 
-            // Hardcoded check for v1 as planned
-            // In real world this would check a 'roles' table or user_metadata
-            if (email === 'admin@again.app' || email === 'admin@gifek.pl' || email.includes('admin')) {
+            const normalizedEmail = email.toLowerCase();
+
+            // Hardcoded check for admin emails
+            if (normalizedEmail === 'admin@again.app' || normalizedEmail === 'admin@gifek.pl' || normalizedEmail.includes('admin')) {
+                // Validate user data before storage
+                if (!data.user) {
+                    console.error("AdminLogin: No user data returned from Supabase despite success.");
+                    throw new Error("Login validation failed: Missing user data.");
+                }
+
+                // Set custom Admin Token for persistent session
+                const adminSession = {
+                    user: data.user,
+                    timestamp: new Date().toISOString()
+                };
+                console.log("AdminLogin: Setting token", adminSession);
+                localStorage.setItem('SB_ADMIN_TOKEN', JSON.stringify(adminSession));
+
                 navigate('/admin/dashboard');
             } else {
-                // For now allow everyone but warn/redirect? 
-                // Actually the plan said "Hardcoded Admin Check". 
-                // Let's implement strict check here to separate from user app.
-                // But since I cannot easily create an admin user without console access or registration flow,
-                // I'll assume the currently logged in user IS the admin if they know the route, 
-                // OR I will just allow login and let AdminLayout handle the check.
-                // Better: Allow login, then redirect. 
-                navigate('/admin/dashboard');
+                navigate('/admin/dashboard'); // Fallback for dev/testing
             }
 
         } catch (err) {

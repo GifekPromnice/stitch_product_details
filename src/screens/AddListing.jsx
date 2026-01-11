@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useState, useRef } from 'react';
 import { useSettings } from '../context/SettingsContext';
 import { supabase } from '../supabaseClient';
@@ -33,7 +33,55 @@ const AddListing = () => {
     const [width, setWidth] = useState(editingProduct?.width ? String(editingProduct.width) : '');
     const [depth, setDepth] = useState(editingProduct?.depth ? String(editingProduct.depth) : '');
 
-    // ... existing helper functions (removeTag, addTag, handleImageUpload, triggerFileInput) ...
+    const triggerFileInput = () => {
+        fileInputRef.current.click();
+    };
+
+    const handleImageUpload = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setImageFile(file);
+            const objectUrl = URL.createObjectURL(file);
+            setImage(objectUrl);
+
+            // Optional: Auto-analyze image with AI
+            // analyzeImage(file); 
+        }
+    };
+
+    const addTag = (e) => {
+        if (e.key === 'Enter' && newTag.trim() !== '') {
+            e.preventDefault();
+            if (!tags.includes(newTag.trim())) {
+                setTags([...tags, newTag.trim()]);
+            }
+            setNewTag('');
+        }
+    };
+
+    const removeTag = (tagToRemove) => {
+        setTags(tags.filter(tag => tag !== tagToRemove));
+    };
+
+    const analyzeImage = async (file) => {
+        setIsAnalyzing(true);
+        try {
+            const analysis = await analyzeImageWithAI(file);
+            if (analysis) {
+                if (analysis.title && !title) setTitle(analysis.title);
+                if (analysis.category && category === 'sofas') setCategory(analysis.category);
+                if (analysis.description && !description) setDescription(analysis.description);
+                if (analysis.tags) {
+                    const uniqueTags = [...new Set([...tags, ...analysis.tags])];
+                    setTags(uniqueTags);
+                }
+            }
+        } catch (error) {
+            console.error("AI Analysis failed:", error);
+        } finally {
+            setIsAnalyzing(false);
+        }
+    };
 
     const handlePublish = async () => {
         if (!user) {

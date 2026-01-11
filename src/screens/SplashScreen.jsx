@@ -1,15 +1,21 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const SplashScreen = () => {
     const navigate = useNavigate();
+    const { user } = useAuth();
 
     useEffect(() => {
         const timer = setTimeout(() => {
-            navigate('/features');
+            if (user) {
+                navigate('/home');
+            } else {
+                navigate('/features');
+            }
         }, 3000);
         return () => clearTimeout(timer);
-    }, [navigate]);
+    }, [navigate, user]);
 
     return (
         <div className="relative flex h-screen w-full flex-col items-center justify-between overflow-hidden bg-primary bg-gradient-to-br from-[#698679] to-[#516b5c]">

@@ -1,7 +1,7 @@
 
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useMemo, useState } from 'react';
-import { useSettings } from '../context/SettingsContext';
+import { useSettings } from '../context/SettingsContext.jsx';
 
 import { supabase } from '../supabaseClient';
 import { useAuth } from '../context/AuthContext';
@@ -22,6 +22,7 @@ const Checkout = () => {
     // Use passed data or fallback to mock
     const product = useMemo(() => {
         return {
+            id: passedProduct?.id, // Ensure we have the ID for the foreign key
             title: passedProduct?.title || 'Mid-Century Modern Sofa',
             price: passedProduct?.price || 450.00,
             image: passedProduct?.image || "https://lh3.googleusercontent.com/aida-public/AB6AXuBkE3rA2NIQskELOYMgSnSUxwAR9E9oG5x0CGhleUTVUuFxDwy3Z9vP8lyxnNEQy2jXldAodnybheumIhj4ZbG3W5Qpy7oEicrvFVRsPCkAKpoNbO2CqVFzhtRxD5yz8_19pT5H1Ds_1Sc6X9vt43wHMCWN-7nLHkxKflQkTagb4gV17wGu5aAFluGVQ3HFJnkqtBUcMnuO8KEtdKciYNtceDc1OceSWTZssPucfT2FsudbLXjKevK49PIozGIk6fqll4GXyy2QEeqB"
@@ -55,14 +56,11 @@ const Checkout = () => {
         try {
             const orderData = {
                 user_id: user.id,
-                total_amount: fees.total,
+                product_id: product.id, // Assuming product object has id, logic below needs to ensure it
+                amount: fees.total,
                 status: 'paid', // Simulating successful payment
-                items: [{
-                    title: product.title,
-                    price: product.price,
-                    image: product.image,
-                    quantity: 1
-                }]
+                payment_method: paymentMethod,
+                delivery_method: deliveryMethod
             };
 
             const { data, error } = await supabase

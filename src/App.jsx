@@ -25,6 +25,7 @@ import AdminLayout from './screens/admin/AdminLayout';
 import Dashboard from './screens/admin/Dashboard';
 import AdminListings from './screens/admin/AdminListings';
 import AdminUsers from './screens/admin/AdminUsers';
+import AdminOrders from './screens/admin/AdminOrders';
 import { Navigate } from 'react-router-dom';
 
 function App() {
@@ -34,26 +35,20 @@ function App() {
             <AuthProvider>
                 <div className="min-h-screen bg-background-light dark:bg-background-dark font-display">
                     <Routes>
-                        {/* Public Routes */}
+                        {/* Public Routes - Testing Phase */}
                         <Route path="/" element={<SplashScreen />} />
                         <Route path="/features" element={<Features />} />
                         <Route path="/auth" element={<Auth />} />
-                        <Route path="/home" element={<Layout><Home /></Layout>} />
-                        <Route path="/product/:id" element={<ProductDetails />} />
 
-                        {/* Protected Routes */}
-                        <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
-                        <Route path="/order-confirmation" element={<ProtectedRoute><OrderConfirmation /></ProtectedRoute>} />
-                        <Route path="/profile" element={<ProtectedRoute><Layout><Profile /></Layout></ProtectedRoute>} />
-                        <Route path="/favorites" element={<ProtectedRoute><Layout><Favorites /></Layout></ProtectedRoute>} />
-                        <Route path="/wallet" element={<ProtectedRoute><Wallet /></ProtectedRoute>} />
-                        <Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
-                        <Route path="/add-listing" element={<ProtectedRoute><AddListing /></ProtectedRoute>} />
-                        <Route path="/my-listings" element={<ProtectedRoute><MyListings /></ProtectedRoute>} />
-                        <Route path="/negotiate/:id" element={<ProtectedRoute><Negotiate /></ProtectedRoute>} />
-                        <Route path="/personal-information" element={<ProtectedRoute><PersonalInformation /></ProtectedRoute>} />
-                        <Route path="/password-security" element={<ProtectedRoute><PasswordSecurity /></ProtectedRoute>} />
-                        <Route path="/orders" element={<ProtectedRoute><OrderHistory /></ProtectedRoute>} />
+                        <Route element={<ProtectedRoute />}>
+                            <Route path="/home" element={<Layout><Home /></Layout>} />
+                            <Route path="/product/:id" element={<Layout><ProductDetails /></Layout>} />
+                            <Route path="/checkout" element={<Checkout />} />
+                            <Route path="/order-confirmation" element={<OrderConfirmation />} />
+                            <Route path="/profile" element={<Layout><Profile /></Layout>} />
+                            <Route path="/orders" element={<Layout><OrderHistory /></Layout>} />
+                            <Route path="/add-listing" element={<Layout><AddListing /></Layout>} />
+                        </Route>
 
                         {/* Admin Routes */}
                         <Route path="/admin/login" element={<AdminLogin />} />
@@ -63,12 +58,8 @@ function App() {
                             <Route path="orders" element={<AdminOrders />} />
                             <Route path="listings" element={<AdminListings />} />
                             <Route path="users" element={<AdminUsers />} />
-                            {/* Placeholder for future admin pages */}
                             <Route path="*" element={<div className="p-10 text-xs font-bold uppercase tracking-widest text-gray-400">Admin Page Under Construction</div>} />
                         </Route>
-
-                        {/* Fallback */}
-                        <Route path="*" element={<div className="p-10 text-center">Screen in development</div>} />
                     </Routes>
                 </div>
             </AuthProvider>

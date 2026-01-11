@@ -23,9 +23,14 @@ const Dashboard = () => {
                 const todayISO = today.toISOString();
 
                 // 1. Fetch Totals
-                const { count: productsCount } = await supabase.from('products').select('*', { count: 'exact', head: true });
-                const { count: usersCount } = await supabase.from('profiles').select('*', { count: 'exact', head: true });
-                const { count: ordersCount } = await supabase.from('orders').select('*', { count: 'exact', head: true });
+                const { count: productsCount, error: productsError } = await supabase.from('products').select('*', { count: 'exact', head: true });
+                if (productsError) console.error("Dashboard: Error fetching products count", productsError);
+
+                const { count: usersCount, error: usersError } = await supabase.from('profiles').select('*', { count: 'exact', head: true });
+                if (usersError) console.error("Dashboard: Error fetching users count", usersError);
+
+                const { count: ordersCount, error: ordersError } = await supabase.from('orders').select('*', { count: 'exact', head: true });
+                if (ordersError) console.error("Dashboard: Error fetching orders count", ordersError);
 
                 // 2. Fetch Daily Stats
                 const { count: productsToday } = await supabase.from('products').select('*', { count: 'exact', head: true }).gt('created_at', todayISO);
