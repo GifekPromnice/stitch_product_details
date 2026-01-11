@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useState, useRef } from 'react';
 import { useSettings } from '../context/SettingsContext';
 import { supabase } from '../supabaseClient';
