@@ -136,6 +136,9 @@ export const SettingsProvider = ({ children }) => {
             'addListing.field.description': 'Description',
             'addListing.descriptionPlaceholder': 'Describe the condition, brand, age, and any flaws...',
             'addListing.field.price': 'Price',
+            'addListing.field.height': 'Height (cm)',
+            'addListing.field.width': 'Width (cm)',
+            'addListing.field.depth': 'Depth (cm)',
             'addListing.field.category': 'Category',
             'addListing.field.condition': 'Condition',
             'addListing.field.color': 'Color',
@@ -186,6 +189,55 @@ export const SettingsProvider = ({ children }) => {
             'product.estimateTransport': 'Estimate Transport',
             'product.soldBy': 'Sold by',
             'product.buyNow': 'Buy Now',
+            'time.ago': 'ago',
+            'time.justNow': 'just now',
+            // Personal Information
+            'personalInfo.title': 'Personal Information',
+            'personalInfo.changePhoto': 'Change Photo',
+            'personalInfo.fullName': 'Full Name',
+            'personalInfo.phone': 'Phone Number',
+            'personalInfo.city': 'City',
+            'personalInfo.bio': 'Bio',
+            'personalInfo.bioOptional': 'Optional',
+            'personalInfo.bioPlaceholder': 'Tell us a little about yourself...',
+            'personalInfo.save': 'Save Changes',
+            'personalInfo.saving': 'Saving...',
+
+            // My Listings
+            'myListings.title': 'My Listings',
+            'myListings.active': 'Active',
+            'myListings.sold': 'Sold',
+            'myListings.loading': 'Loading your listings...',
+            'myListings.noListings': 'No listings found.',
+            'myListings.create': 'Create a new listing',
+            'myListings.live': 'Live',
+            'myListings.pending': 'Pending',
+            'myListings.views': 'views',
+            'myListings.observers': 'observers',
+            'myListings.edit': 'Edit',
+            'myListings.markSold': 'Mark Sold',
+            'myListings.boost': 'Boost',
+            'myListings.deleteConfirm': 'Are you sure you want to delete this listing? This cannot be undone.',
+            'myListings.markSoldConfirm': 'Mark this item as sold?',
+            'myListings.boostFeature': 'Boost feature coming soon!',
+
+            // Password & Security
+            'security.title': 'Password & Security',
+            'security.loginMethods': 'Login Methods',
+            'security.changeEmail': 'Change Email',
+            'security.changePassword': 'Change Password',
+            'security.updatePhone': 'Update Phone Number',
+            'security.lastUpdated': 'Last updated',
+            'security.securityOptions': 'Security Options',
+            'security.2fa': 'Two-Factor Authentication',
+            'security.2faDesc': 'Recommended for security',
+            'security.biometric': 'Biometric Login',
+            'security.biometricDesc': 'FaceID or TouchID',
+            'security.2faDisclaimer': 'Turning on Two-Factor Authentication will require a verification code sent to your email or phone.',
+            'security.newPassword': 'New Password',
+            'security.confirmPassword': 'Confirm Password',
+            'security.updatePassword': 'Update Password',
+            'security.passwordUpdated': 'Password updated successfully',
         },
         pl: {
             // Navigation
@@ -224,6 +276,54 @@ export const SettingsProvider = ({ children }) => {
             'profile.privacyPolicy': 'Polityka Prywatności',
             'profile.logout': 'Wyloguj',
             'profile.memberSince': 'Członek od',
+
+            // Personal Information
+            'personalInfo.title': 'Dane Osobiste',
+            'personalInfo.changePhoto': 'Zmień Zdjęcie',
+            'personalInfo.fullName': 'Imię i Nazwisko',
+            'personalInfo.phone': 'Numer Telefonu',
+            'personalInfo.city': 'Miasto',
+            'personalInfo.bio': 'O mnie',
+            'personalInfo.bioOptional': 'Opcjonalne',
+            'personalInfo.bioPlaceholder': 'Napisz kilka słów o sobie...',
+            'personalInfo.save': 'Zapisz Zmiany',
+            'personalInfo.saving': 'Zapisywanie...',
+
+            // My Listings
+            'myListings.title': 'Moje Ogłoszenia',
+            'myListings.active': 'Aktywne',
+            'myListings.sold': 'Sprzedane',
+            'myListings.loading': 'Ładowanie ogłoszeń...',
+            'myListings.noListings': 'Brak ogłoszeń.',
+            'myListings.create': 'Dodaj nowe ogłoszenie',
+            'myListings.live': 'Aktywne',
+            'myListings.pending': 'Oczekujące',
+            'myListings.views': 'wyświetleń',
+            'myListings.observers': 'obserwujących',
+            'myListings.edit': 'Edytuj',
+            'myListings.markSold': 'Oznacz jako sprzedane',
+            'myListings.boost': 'Promuj',
+            'myListings.deleteConfirm': 'Czy na pewno chcesz usunąć to ogłoszenie? Tej operacji nie można cofnąć.',
+            'myListings.markSoldConfirm': 'Oznaczyć przedmiot jako sprzedany?',
+            'myListings.boostFeature': 'Funkcja promowania wkrótce dostępna!',
+
+            // Password & Security
+            'security.title': 'Hasło i Bezpieczeństwo',
+            'security.loginMethods': 'Metody Logowania',
+            'security.changeEmail': 'Zmień Email',
+            'security.changePassword': 'Zmień Hasło',
+            'security.updatePhone': 'Zmień Numer Telefonu',
+            'security.lastUpdated': 'Ostatnia aktualizacja',
+            'security.securityOptions': 'Opcje Bezpieczeństwa',
+            'security.2fa': 'Uwierzytelnianie Dwuskładnikowe',
+            'security.2faDesc': 'Zalecane dla bezpieczeństwa',
+            'security.biometric': 'Logowanie Biometryczne',
+            'security.biometricDesc': 'FaceID lub TouchID',
+            'security.2faDisclaimer': 'Włączenie 2FA będzie wymagało kodu weryfikacyjnego wysłanego na email lub telefon przy logowaniu z nowego urządzenia.',
+            'security.newPassword': 'Nowe Hasło',
+            'security.confirmPassword': 'Potwierdź Hasło',
+            'security.updatePassword': 'Zaktualizuj Hasło',
+            'security.passwordUpdated': 'Hasło zostało zaktualizowane pomyślnie',
 
             // Favorites
             'favorites.title': 'Ulubione',
@@ -279,6 +379,9 @@ export const SettingsProvider = ({ children }) => {
             'addListing.field.description': 'Opis',
             'addListing.descriptionPlaceholder': 'Opisz stan, markę, wiek i ewentualne wady...',
             'addListing.field.price': 'Cena',
+            'addListing.field.height': 'Wysokość (cm)',
+            'addListing.field.width': 'Szerokość (cm)',
+            'addListing.field.depth': 'Głębokość (cm)',
             'addListing.field.category': 'Kategoria',
             'addListing.field.condition': 'Stan',
             'addListing.field.color': 'Kolor',
@@ -329,6 +432,8 @@ export const SettingsProvider = ({ children }) => {
             'product.estimateTransport': 'Oszacuj Transport',
             'product.soldBy': 'Sprzedawane przez',
             'product.buyNow': 'Kup Teraz',
+            'time.ago': 'temu',
+            'time.justNow': 'przed chwilą',
         }
     };
 
@@ -342,16 +447,31 @@ export const SettingsProvider = ({ children }) => {
         if (isNaN(numericPrice)) return price;
 
         if (language === 'pl') {
-            // Simple conversion rate for demo: 1 USD = 4 PLN
-            // You might want to remove this if prices are stored in mixed currencies
-            const val = numericPrice * 4;
-            return `${val.toFixed(2)} zł`;
+            return `${numericPrice.toFixed(2)} zł`;
         }
         return `$${numericPrice.toFixed(2)}`;
     };
 
+    // Helper for dimensions
+    const formatDimension = (val) => {
+        if (val === undefined || val === null || val === '') return '—';
+        const num = parseFloat(val);
+        if (isNaN(num)) return val;
+
+        // Ensure we always have a language, default to 'pl' if missing
+        const activeLang = language || 'pl';
+
+        if (activeLang === 'pl') {
+            return `${Math.round(num)} cm`;
+        }
+
+        // Conversion to inches for English
+        const inches = num / 2.54;
+        return `${inches.toFixed(1)}"`;
+    };
+
     return (
-        <SettingsContext.Provider value={{ theme, toggleTheme, language, toggleLanguage, t, formatPrice }}>
+        <SettingsContext.Provider value={{ theme, toggleTheme, language, toggleLanguage, t, formatPrice, formatDimension }}>
             {children}
         </SettingsContext.Provider>
     );

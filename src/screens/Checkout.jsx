@@ -12,6 +12,7 @@ const Checkout = () => {
     const { user } = useAuth();
     const { t, formatPrice } = useSettings();
 
+
     const passedProduct = location.state?.product;
 
     const [deliveryMethod, setDeliveryMethod] = useState('courier');
@@ -314,9 +315,9 @@ const Checkout = () => {
                             </>
                         )}
                     </button>
-                </div>
-            </div>
-        </div>
+                </div >
+            </div >
+        </div >
     );
 };
 

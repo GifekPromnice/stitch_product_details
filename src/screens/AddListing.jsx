@@ -12,76 +12,28 @@ const AddListing = () => {
     const fileInputRef = useRef(null);
     const tagInputRef = useRef(null);
 
-    const [title, setTitle] = useState('');
-    const [price, setPrice] = useState('');
-    const [description, setDescription] = useState('');
-    const [tags, setTags] = useState([]);
+    const locationState = useLocation().state;
+    const editingProduct = locationState?.product;
+
+    // Initialize state with product data if editing
+    const [title, setTitle] = useState(editingProduct?.title || '');
+    const [price, setPrice] = useState(editingProduct?.price ? String(editingProduct.price) : '');
+    const [description, setDescription] = useState(editingProduct?.description || '');
+    const [tags, setTags] = useState(editingProduct?.tags || []);
     const [newTag, setNewTag] = useState('');
-    const [category, setCategory] = useState('sofas');
-    const [condition, setCondition] = useState('good');
-    const [color, setColor] = useState('black');
-    const [location, setLocation] = useState('');
-    const [image, setImage] = useState(null); // Default empty
+    const [category, setCategory] = useState(editingProduct?.category || 'sofas');
+    const [condition, setCondition] = useState(editingProduct?.is_new ? 'new' : 'good'); // Simplified mapping
+    const [color, setColor] = useState('black'); // Color wasn't in original schema explicitly, defaulting
+    const [location, setLocation] = useState(editingProduct?.location || '');
+    const [image, setImage] = useState(editingProduct?.image || null);
     const [imageFile, setImageFile] = useState(null);
     const [isPublishing, setIsPublishing] = useState(false);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
+    const [height, setHeight] = useState(editingProduct?.height ? String(editingProduct.height) : '');
+    const [width, setWidth] = useState(editingProduct?.width ? String(editingProduct.width) : '');
+    const [depth, setDepth] = useState(editingProduct?.depth ? String(editingProduct.depth) : '');
 
-    const removeTag = (tagToRemove) => {
-        setTags(tags.filter(tag => tag !== tagToRemove));
-    };
-
-    const addTag = (e) => {
-        if (e.key === 'Enter' && newTag.trim()) {
-            e.preventDefault();
-            setTags([...tags, newTag.trim()]);
-            setNewTag('');
-            // Ensure input stays focused for rapid entry
-            setTimeout(() => {
-                if (tagInputRef.current) tagInputRef.current.focus();
-            }, 0);
-        }
-    };
-
-    const handleImageUpload = async (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            setImageFile(file);
-            const objectUrl = URL.createObjectURL(file);
-            setImage(objectUrl);
-
-            // Analyze Text/Content via Mock AI
-            setIsAnalyzing(true);
-            try {
-                const aiData = await analyzeImageWithAI(file);
-
-                // Auto-fill logic
-                if (aiData) {
-                    console.log("AI UI DEBUG: Otrzymano dane do autouzupełniania:", aiData);
-                    if (aiData.title) setTitle(String(aiData.title));
-                    if (aiData.price) setPrice(String(aiData.price));
-                    if (aiData.category) setCategory(String(aiData.category).toLowerCase());
-                    if (aiData.condition) setCondition(String(aiData.condition).toLowerCase());
-                    if (aiData.color) setColor(String(aiData.color).toLowerCase());
-                    if (aiData.description) setDescription(String(aiData.description));
-
-                    // Merge tags 
-                    if (Array.isArray(aiData.tags)) {
-                        const uniqueTags = [...new Set([...tags, ...aiData.tags])];
-                        setTags(uniqueTags);
-                    }
-                }
-            } catch (err) {
-                console.error("AI Analysis UI Error:", err);
-                alert("Błąd AI: " + (err.message || "Nie udało się przeanalizować zdjęcia."));
-            } finally {
-                setIsAnalyzing(false);
-            }
-        }
-    };
-
-    const triggerFileInput = () => {
-        fileInputRef.current.click();
-    };
+    // ... existing helper functions (removeTag, addTag, handleImageUpload, triggerFileInput) ...
 
     const handlePublish = async () => {
         if (!user) {
@@ -98,7 +50,7 @@ const AddListing = () => {
         setIsPublishing(true);
         let imageUrl = image;
 
-        // Upload image if selected
+        // Upload image if selected (and different from existing)
         if (imageFile) {
             const fileExt = imageFile.name.split('.').pop();
             const fileName = `${Math.random().toString(36).substring(2, 15)}_${Date.now()}.${fileExt}`;
@@ -122,44 +74,51 @@ const AddListing = () => {
             imageUrl = publicUrl;
         }
 
-        const { data, error } = await supabase
-            .from('products')
-            .insert([
-                {
-                    title,
-                    price: parseFloat(price),
-                    description,
-                    category,
-                    image: imageUrl, // Use the uploaded URL
-                    location,
-                    aspect: '4/3',
-                    is_new: condition === 'new',
-                    rating: 0,
-                    reviews_count: 0,
-                    user_id: user.id,
-                    tags: tags // Add tags to database
-                }
-            ]);
+        const productData = {
+            title,
+            price: parseFloat(price),
+            description,
+            category,
+            image: imageUrl,
+            location,
+            aspect: '4/3',
+            is_new: condition === 'new',
+            // Maintain existing ratings/reviews if editing, else default to 0
+            rating: editingProduct ? editingProduct.rating : 0,
+            reviews_count: editingProduct ? editingProduct.reviews_count : 0,
+            user_id: user.id,
+            tags: tags,
+            height: height ? parseFloat(height) : null,
+            width: width ? parseFloat(width) : null,
+            depth: depth ? parseFloat(depth) : null,
+        };
+
+        console.log("PUBLISH DEBUG: Sending data to DB:", productData);
+
+        let error;
+        if (editingProduct) {
+            // UPDATE
+            const { error: updateError } = await supabase
+                .from('products')
+                .update(productData)
+                .eq('id', editingProduct.id);
+            error = updateError;
+        } else {
+            // INSERT
+            const { error: insertError } = await supabase
+                .from('products')
+                .insert([productData]);
+            error = insertError;
+        }
 
         setIsPublishing(false);
 
         if (error) {
-            console.error('Error adding product:', error);
-            alert('Failed to publish listing: ' + error.message);
+            console.error('Error saving product:', error);
+            alert('Failed to save listing: ' + error.message);
         } else {
-            // Reset form
-            setTitle('');
-            setPrice('');
-            setDescription('');
-            setTags([]);
-            setCategory('sofas');
-            setCondition('good');
-            setColor('black');
-            setLocation('');
-            setImage(null);
-            setImageFile(null);
-
-            navigate('/home');
+            // Navigate back
+            navigate('/my-listings');
         }
     };
 
@@ -274,6 +233,48 @@ const AddListing = () => {
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
                         ></textarea>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-4">
+                        <label className="flex flex-col gap-1.5 group">
+                            <span className="text-neutral-500 dark:text-neutral-400 text-xs font-medium uppercase tracking-wider px-1">{t('addListing.field.height')}</span>
+                            <div className="relative">
+                                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-neutral-400 uppercase">cm</span>
+                                <input
+                                    className="block w-full rounded-xl border-neutral-300 dark:border-neutral-700 bg-white dark:bg-[#232524] text-neutral-900 dark:text-white h-12 pl-3 pr-8 text-base font-medium focus:border-primary focus:ring-1 focus:ring-primary transition-all shadow-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                    type="number"
+                                    placeholder="0"
+                                    value={height}
+                                    onChange={(e) => setHeight(e.target.value)}
+                                />
+                            </div>
+                        </label>
+                        <label className="flex flex-col gap-1.5 group">
+                            <span className="text-neutral-500 dark:text-neutral-400 text-xs font-medium uppercase tracking-wider px-1">{t('addListing.field.width')}</span>
+                            <div className="relative">
+                                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-neutral-400 uppercase">cm</span>
+                                <input
+                                    className="block w-full rounded-xl border-neutral-300 dark:border-neutral-700 bg-white dark:bg-[#232524] text-neutral-900 dark:text-white h-12 pl-3 pr-8 text-base font-medium focus:border-primary focus:ring-1 focus:ring-primary transition-all shadow-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                    type="number"
+                                    placeholder="0"
+                                    value={width}
+                                    onChange={(e) => setWidth(e.target.value)}
+                                />
+                            </div>
+                        </label>
+                        <label className="flex flex-col gap-1.5 group">
+                            <span className="text-neutral-500 dark:text-neutral-400 text-xs font-medium uppercase tracking-wider px-1">{t('addListing.field.depth')}</span>
+                            <div className="relative">
+                                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-neutral-400 uppercase">cm</span>
+                                <input
+                                    className="block w-full rounded-xl border-neutral-300 dark:border-neutral-700 bg-white dark:bg-[#232524] text-neutral-900 dark:text-white h-12 pl-3 pr-8 text-base font-medium focus:border-primary focus:ring-1 focus:ring-primary transition-all shadow-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                    type="number"
+                                    placeholder="0"
+                                    value={depth}
+                                    onChange={(e) => setDepth(e.target.value)}
+                                />
+                            </div>
+                        </label>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">

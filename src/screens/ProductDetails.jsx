@@ -5,40 +5,53 @@ import { useSettings } from '../context/SettingsContext';
 const ProductDetails = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { t, formatPrice } = useSettings();
+    const { t, formatPrice, formatDimension } = useSettings();
     const { id } = useParams();
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     const passedProduct = location.state?.product;
 
-    // Mock data supplemented by passed data
+    // Format relative time helper
+    const formatTimeListed = (dateString) => {
+        if (!dateString) return t('time.justNow');
+        const date = new Date(dateString);
+        const now = new Date();
+        const diffInSeconds = Math.floor((now - date) / 1000);
+
+        if (diffInSeconds < 60) return t('time.justNow');
+        const diffInMinutes = Math.floor(diffInSeconds / 60);
+        if (diffInMinutes < 60) return `${diffInMinutes}m ${t('time.ago')}`;
+        const diffInHours = Math.floor(diffInMinutes / 60);
+        if (diffInHours < 24) return `${diffInHours}h ${t('time.ago')}`;
+        const diffInDays = Math.floor(diffInHours / 24);
+        return `${diffInDays}d ${t('time.ago')}`;
+    };
+
     const product = useMemo(() => {
-        const baseProduct = {
-            title: passedProduct?.title || 'Vintage Velvet Armchair',
-            price: passedProduct?.price || 120.00,
-            originalPrice: (passedProduct?.price ? passedProduct.price * 1.5 : 180.00),
-            location: passedProduct?.location || 'Brooklyn, NY',
-            condition: 'Good Condition',
-            timeListed: 'Listed 2h ago',
+        console.log("PRODUCT DETAILS DEBUG v2: Dane z lokacji:", passedProduct);
+        return {
+            title: passedProduct?.title || '',
+            price: passedProduct?.price || 0,
+            originalPrice: passedProduct?.price ? (passedProduct.price * 1.2) : 0,
+            location: passedProduct?.location || 'Brak lokalizacji',
+            condition: passedProduct?.is_new ? t('cond.new') : t('cond.good'),
+            timeListed: formatTimeListed(passedProduct?.created_at),
             seller: {
-                name: 'Sarah J.',
-                rating: 4.8,
-                image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDRjBy5olySuBu-5aexKNm5gVzcaLVENlzMbx-eDhuhKvO1XxKLTh_gP-anraJdzXADlPSisSJdJm6FBU5zvj2inKqVkQCRQsbCkJQYUp-ohxlu73dGky0GaBcgG6bwvsAw_BERre9BPYg2kq2wzxJcoAVqlYRxoIkfQSNo4MMhuX66q4W5D19pjp2e_EkaeocBeACUM2IzuO1M2P9l7tExubYFO1fEfNqK95q6x4ys42VAsQTNID9FBxr9-UgOHRAMDWxmCIVnKzZs"
+                name: passedProduct?.seller_username || 'Użytkownik',
+                rating: 5.0,
+                image: "https://ui-avatars.com/api/?background=random&name=" + (passedProduct?.seller_username || 'U')
             },
-            images: passedProduct?.image
-                ? [passedProduct.image]
-                : [
-                    "https://lh3.googleusercontent.com/aida-public/AB6AXuBnL8q_KkKo5Zi5VoxcxzycrSt4lkiv-ZEldyK0qLnqvnNJgAI18mVpuV3YiZep8yuZGbu71VY0fxvyija031i5kiQQUAJ36Uqkkxi1Q4VJhF6CLlm6G6_b7ADtf0oOml8Yb0iyskMbt3RPrNTLpLJ-51U0Gcavj-w77FFZBUvzTXpydTS8yxf5GXJAUS-kS8_-Btq5JDrezeQf3K9Kh5VnHF3h6C8kNxIcL7ZoEM679z3Du-QZ3Bn_zKqNDWXEnfyr8nURQjHyKOo_",
-                    "https://lh3.googleusercontent.com/aida-public/AB6AXuBnL8q_KkKo5Zi5VoxcxzycrSt4lkiv-ZEldyK0qLnqvnNJgAI18mVpuV3YiZep8yuZGbu71VY0fxvyija031i5kiQQUAJ36Uqkkxi1Q4VJhF6CLlm6G6_b7ADtf0oOml8Yb0iyskMbt3RPrNTLpLJ-51U0Gcavj-w77FFZBUvzTXpydTS8yxf5GXJAUS-kS8_-Btq5JDrezeQf3K9Kh5VnHF3h6C8kNxIcL7ZoEM679z3Du-QZ3Bn_zKqNDWXEnfyr8nURQjHyKOo_",
-                    "https://lh3.googleusercontent.com/aida-public/AB6AXuBnL8q_KkKo5Zi5VoxcxzycrSt4lkiv-ZEldyK0qLnqvnNJgAI18mVpuV3YiZep8yuZGbu71VY0fxvyija031i5kiQQUAJ36Uqkkxi1Q4VJhF6CLlm6G6_b7ADtf0oOml8Yb0iyskMbt3RPrNTLpLJ-51U0Gcavj-w77FFZBUvzTXpydTS8yxf5GXJAUS-kS8_-Btq5JDrezeQf3K9Kh5VnHF3h6C8kNxIcL7ZoEM679z3Du-QZ3Bn_zKqNDWXEnfyr8nURQjHyKOo_"
-                ],
-            dimensions: { height: '32"', width: '28"', depth: '30"' },
-            tags: ['Velvet', 'Armchair', 'Green', 'Vintage', 'Comfortable'],
-            description: passedProduct?.title ? `Excellent quality ${passedProduct.title}. A beautiful piece for any home.` : 'Beautiful mid-century modern style velvet armchair in a rich emerald green. Perfect accent piece for a living room or reading nook.',
+            images: [passedProduct?.image].filter(Boolean),
+            dimensions: {
+                height: passedProduct?.height,
+                width: passedProduct?.width,
+                depth: passedProduct?.depth
+            },
+            tags: Array.isArray(passedProduct?.tags) ? passedProduct.tags : [],
+            description: passedProduct?.description || 'Brak opisu',
             mapImage: "https://lh3.googleusercontent.com/aida-public/AB6AXuAv416prnqJ93spioHVTa2lPQ4Y4I9NxkbED4cysFMsqRvAgm1aKCTjGWjub7grvVkyhcGsis7Gn_c0psDoV9M1EfEHdqybSjbMMxalTY6ckvZzAXDxDKpy7OuEL0R6vT-Jld6q9WFtaA2ZEhPqO7aJsTzJMi47Sv_iuyop0eWo3IeToaGqdYatdZznm-sNp2_kZAfkVvfhPzbPpw6BGSK8wpLc9IaMOuvxVo0o7BzFs83BoA541SswaC5laH-YfHUFTCSGOVm56rJE"
         };
-        return baseProduct;
-    }, [passedProduct]);
+    }, [passedProduct, t]);
 
     const handleScroll = (e) => {
         const width = e.target.offsetWidth;
@@ -130,7 +143,7 @@ const ProductDetails = () => {
                             <span className="material-symbols-outlined text-primary text-[20px]">height</span>
                             <div className="flex flex-col">
                                 <span className="text-[10px] text-gray-400 uppercase tracking-wider font-bold">{t('product.height')}</span>
-                                <span className="text-sm font-bold text-gray-900 dark:text-white">{product.dimensions.height}</span>
+                                <span className="text-sm font-bold text-gray-900 dark:text-white">{formatDimension(product.dimensions.height)}</span>
                             </div>
                         </div>
                         <div className="w-px h-8 bg-gray-100 dark:bg-gray-800"></div>
@@ -138,7 +151,7 @@ const ProductDetails = () => {
                             <span className="material-symbols-outlined text-primary text-[20px]">straighten</span>
                             <div className="flex flex-col">
                                 <span className="text-[10px] text-gray-400 uppercase tracking-wider font-bold">{t('product.width')}</span>
-                                <span className="text-sm font-bold text-gray-900 dark:text-white">{product.dimensions.width}</span>
+                                <span className="text-sm font-bold text-gray-900 dark:text-white">{formatDimension(product.dimensions.width)}</span>
                             </div>
                         </div>
                         <div className="w-px h-8 bg-gray-100 dark:bg-gray-800"></div>
@@ -146,7 +159,7 @@ const ProductDetails = () => {
                             <span className="material-symbols-outlined text-primary text-[20px]">deployed_code</span>
                             <div className="flex flex-col">
                                 <span className="text-[10px] text-gray-400 uppercase tracking-wider font-bold">{t('product.depth')}</span>
-                                <span className="text-sm font-bold text-gray-900 dark:text-white">{product.dimensions.depth}</span>
+                                <span className="text-sm font-bold text-gray-900 dark:text-white">{formatDimension(product.dimensions.depth)}</span>
                             </div>
                         </div>
                     </div>
