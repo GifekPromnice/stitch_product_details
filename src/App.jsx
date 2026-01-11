@@ -60,6 +60,7 @@ function App() {
                         <Route path="/admin" element={<AdminLayout />}>
                             <Route index element={<Navigate to="/admin/dashboard" replace />} />
                             <Route path="dashboard" element={<Dashboard />} />
+                            <Route path="orders" element={<AdminOrders />} />
                             <Route path="listings" element={<AdminListings />} />
                             <Route path="users" element={<AdminUsers />} />
                             {/* Placeholder for future admin pages */}

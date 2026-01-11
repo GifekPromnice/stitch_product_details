@@ -77,6 +77,7 @@ const AdminLayout = () => {
 
     const navLinks = [
         { name: 'Dashboard', icon: 'dashboard', path: '/admin/dashboard' },
+        { name: 'Orders', icon: 'shopping_bag', path: '/admin/orders' },
         { name: 'Listings', icon: 'inventory_2', path: '/admin/listings' },
         { name: 'Users', icon: 'group', path: '/admin/users' },
         { name: 'Transactions', icon: 'payments', path: '/admin/transactions' },
