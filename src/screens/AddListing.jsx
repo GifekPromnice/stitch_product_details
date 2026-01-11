@@ -142,11 +142,9 @@ const AddListing = () => {
                     setCategory(data.category || 'Tables');
                     setCondition(data.condition || 'Good');
                     setColor(data.color || 'Brown');
-                    setDimensions({
-                        height: data.height || '',
-                        width: data.width || '',
-                        depth: data.depth || ''
-                    });
+                    setHeight(data.height || '');
+                    setWidth(data.width || '');
+                    setDepth(data.depth || '');
                     setTags(data.tags || []);
                 }
                 setIsAnalyzing(false);
